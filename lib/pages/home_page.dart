@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:learningapp/widgets/customAppBar.dart';
+import 'package:learningapp/widgets/practiseTile.dart';
+import 'package:learningapp/widgets/previousLearned.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: Customappbar(title: "Username"),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 3, 8, 3),
+            child: Text(
+              "Ready To learn?",
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 3, 8, 18),
+            child: Text(
+              "Continue where you left of ",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+
+          SizedBox(
+            height: 180,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: const [
+                Previouslearned(
+                  title: "Maths",
+                  subtitle: "Subtitle1",
+                  progress: 0.9,
+                  color: Colors.purple,
+                  icon: Icons.numbers,
+                ),
+                Previouslearned(
+                  title: "English",
+                  subtitle: "Subtitle",
+                  progress: 0.6,
+                  color: Colors.blue,
+                  icon: Icons.language,
+                ),
+                Previouslearned(
+                  title: "Computer",
+                  subtitle: "Data Structure",
+                  progress: 0.4,
+                  color: Colors.orange,
+                  icon: Icons.computer,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 8, 3),
+            child: Text(
+              "Practice",
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            ),
+          ),
+          SizedBox(height: 15),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              children: const [
+                PracticeTile(
+                  title: "Maths",
+                  subtitle: "Subtitle1",
+                  progress: 0.5,
+                ),
+                PracticeTile(
+                  title: "English",
+                  subtitle: "Subtitle2",
+                  progress: 0.35,
+                ),
+                PracticeTile(
+                  title: "Computer Science",
+                  subtitle: "Subtitle3",
+                  progress: 0.65,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

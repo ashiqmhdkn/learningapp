@@ -17,7 +17,7 @@ class UnitPage extends ConsumerWidget {
     final units = ref.watch(unitsProvider((className, subjectTitle)));
 
     return Scaffold(
-      appBar: AppBar(title: Text('$subjectTitle')),
+      appBar: AppBar(title: Text('$subjectTitle'),),
       body: GridView.builder(
         itemCount: units.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

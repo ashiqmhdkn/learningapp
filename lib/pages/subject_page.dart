@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/pages/home_page.dart';
+import 'package:learningapp/pages/register.dart';
+import 'package:learningapp/pages/settingsPage.dart';
 import 'package:learningapp/providers/subject_provider.dart';
 import 'package:learningapp/widgets/subject_tittle.dart';
 
@@ -43,18 +46,43 @@ class SubjectPage extends ConsumerWidget {
                 ? const Center(child: CircularProgressIndicator())
                 : GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.9,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.9,
+                        ),
                     itemCount: subjectItems.length, // ✅ FIXED
                     itemBuilder: (context, index) {
                       final subject = subjectItems[index];
                       return SubjectTile(subject: subject);
                     },
                   ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) {
+                    return HomePage();
+                  },
+                ),
+              );
+            },
+            child: Text("Test"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) {
+                    return SettingsPage();
+                  },
+                ),
+              );
+            },
+            child: Text("Settings"),
           ),
         ],
       ),
