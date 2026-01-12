@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/pages/settingsPage.dart';
 
 class Customappbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -12,7 +13,15 @@ class Customappbar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) {
+                  return SettingsPage();
+                },
+              ),
+            );
+          },
           icon: CircleAvatar(
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),

@@ -4,9 +4,9 @@ import 'package:learningapp/widgets/customTextBox.dart';
 
 class Register extends StatelessWidget {
   Register({super.key});
-  TextEditingController _emailcontroller = TextEditingController();
-  TextEditingController _namecontroller = TextEditingController();
-  TextEditingController _passwordcontroller = TextEditingController();
+  final TextEditingController _emailcontroller = TextEditingController();
+  final TextEditingController _namecontroller = TextEditingController();
+  final TextEditingController _passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

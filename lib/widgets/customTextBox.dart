@@ -24,6 +24,7 @@ class Customtextbox extends StatelessWidget {
         fillColor: Colors.white,
         filled: true,
         hintText: hinttext,
+        hintStyle: TextStyle(color: Colors.black),
       ),
     );
   }

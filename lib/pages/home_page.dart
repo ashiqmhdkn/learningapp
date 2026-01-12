@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
+
 import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
 
@@ -10,6 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Customappbar(title: "Username"),
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,8 +37,17 @@ class HomePage extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: const [
+              children: [
                 Previouslearned(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return Videoplayback();
+                        },
+                      ),
+                    );
+                  },
                   title: "Maths",
                   subtitle: "Subtitle1",
                   progress: 0.9,
@@ -43,6 +55,15 @@ class HomePage extends StatelessWidget {
                   icon: Icons.numbers,
                 ),
                 Previouslearned(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return Videoplayback();
+                        },
+                      ),
+                    );
+                  },
                   title: "English",
                   subtitle: "Subtitle",
                   progress: 0.6,
@@ -50,6 +71,15 @@ class HomePage extends StatelessWidget {
                   icon: Icons.language,
                 ),
                 Previouslearned(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return Videoplayback();
+                        },
+                      ),
+                    );
+                  },
                   title: "Computer",
                   subtitle: "Data Structure",
                   progress: 0.4,
