@@ -2,57 +2,54 @@ import 'package:flutter/material.dart';
 
 class PracticeTile extends StatelessWidget {
   final String title;
-  final String subtitle;
-  final double progress;
-
+  final String backGroundImage;
   const PracticeTile({
     super.key,
     required this.title,
-    required this.subtitle,
-    required this.progress,
+    required this.backGroundImage,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.book, color: Colors.white),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+    return SizedBox(
+      height: 270,
+      child: Container(
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    backGroundImage.toString(),
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
                   ),
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: CircularProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.white24,
-              color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

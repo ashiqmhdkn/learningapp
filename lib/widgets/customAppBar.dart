@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/pages/settingsPage.dart';
+import 'package:learningapp/pages/profilePage.dart';
 
 class Customappbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -17,13 +17,13 @@ class Customappbar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) {
-                  return SettingsPage();
+                  return Profilepage();
                 },
               ),
             );
           },
           icon: CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundImage: AssetImage("lib/assets/image.png"),
           ),
         ),
       ],

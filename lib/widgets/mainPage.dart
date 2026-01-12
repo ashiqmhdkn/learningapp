@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register.dart';
-import 'package:learningapp/pages/new_content_upload_page.dart'; // Add this import
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -14,13 +13,7 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int _currentIndex = 0;
 
-  // Added NewContentUploadPage to the pages list
-  final _pages = [
-    HomePage(),
-    Profilepage(),
-    const NewContentUploadPage(), // Your upload page
-    Register(),
-  ];
+  final _pages = [HomePage(), CourseSubjectPage(), Register()];
 
   @override
   Widget build(BuildContext context) {

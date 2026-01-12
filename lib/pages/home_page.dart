@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
+import 'package:learningapp/widgets/practiceTIle2.dart';
 
 import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
@@ -104,21 +105,18 @@ class HomePage extends StatelessWidget {
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
               ),
-              children: const [
-                PracticeTile(
+              children: [
+                PracticeTile2(
                   title: "Maths",
-                  subtitle: "Subtitle1",
-                  progress: 0.5,
+                  backGroundImage: 'lib/assets/maths.jpeg',
                 ),
                 PracticeTile(
-                  title: "English",
-                  subtitle: "Subtitle2",
-                  progress: 0.35,
+                  title: "physics",
+                  backGroundImage: 'lib/assets/physics.jpeg',
                 ),
                 PracticeTile(
-                  title: "Computer Science",
-                  subtitle: "Subtitle3",
-                  progress: 0.65,
+                  title: "Biology",
+                  backGroundImage: 'lib/assets/biology.jpeg',
                 ),
               ],
             ),

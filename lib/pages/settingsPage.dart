@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/state/themeState.dart';
+import 'package:learningapp/widgets/darkOrLight.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
