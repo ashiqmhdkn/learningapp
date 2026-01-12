@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/pages/profilePage.dart';
+import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
@@ -107,6 +109,15 @@ class HomePage extends StatelessWidget {
               ),
               children: [
                 PracticeTile2(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) {
+                          return UnitsPage(unitName: "Maths");
+                        },
+                      ),
+                    );
+                  },
                   title: "Maths",
                   backGroundImage: 'lib/assets/maths.jpeg',
                 ),

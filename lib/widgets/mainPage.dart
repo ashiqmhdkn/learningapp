@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
+import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register.dart';
 
 class Mainpage extends StatefulWidget {
@@ -13,7 +14,7 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int _currentIndex = 0;
 
-  final _pages = [HomePage(), CourseSubjectPage(), Register()];
+  final _pages = [HomePage(), CourseSubjectPage(), Register(), Profilepage()];
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +39,9 @@ class _MainpageState extends State<Mainpage> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.person),
-            icon: Icon(Icons.person_outline, size: 24),
-            label: "Profile",
+            activeIcon: Icon(Icons.book),
+            icon: Icon(Icons.book_outlined, size: 24),
+            label: "Courses",
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.cloud_upload),
@@ -48,9 +49,9 @@ class _MainpageState extends State<Mainpage> {
             label: "Upload",
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.book),
-            icon: Icon(Icons.book_outlined, size: 24),
-            label: "Courses",
+            activeIcon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline, size: 24),
+            label: "Profile",
           ),
         ],
       ),
