@@ -33,19 +33,24 @@ class _MainpageState extends State<Mainpage> {
         },
         items: const [
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.home_filled),
+            activeIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined, size: 24),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.book_online),
-            icon: Icon(Icons.book, size: 24),
+            activeIcon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline, size: 24),
+            label: "Profile",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.cloud_upload),
+            icon: Icon(Icons.cloud_upload_outlined, size: 24),
+            label: "Upload",
+          ),
+          BottomNavigationBarItem(
+            activeIcon: Icon(Icons.book),
+            icon: Icon(Icons.book_outlined, size: 24),
             label: "Courses",
-          ),
-          BottomNavigationBarItem(
-            activeIcon: Icon(Icons.home_filled),
-            icon: Icon(Icons.home_outlined, size: 24),
-            label: "Home",
           ),
         ],
       ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/pages/register.dart';
 import 'package:learningapp/pages/settingsPage.dart';
 import 'package:learningapp/providers/subject_provider.dart';
 import 'package:learningapp/widgets/mainPage.dart';
