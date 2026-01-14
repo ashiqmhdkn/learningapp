@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/widgets/calender.dart';
 import 'package:learningapp/widgets/courseCompletionPieChart.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/darkOrLight.dart';
@@ -15,32 +16,29 @@ class Profilepage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+            const SizedBox(height: 20),
+
+            // Profile Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircleAvatar(
+                  radius: 70,
+                  backgroundImage: AssetImage('lib/assets/image.png'),
+                ),
+                const SizedBox(width: 60),
+                Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundImage: AssetImage('lib/assets/image.png'),
-                        ),
-                        SizedBox(width: 60),
-                        Column(
-                          children: [
-                            Customprimarytext(text: "Name", fontValue: 25),
-                            Customprimarytext(text: "Class XII", fontValue: 15),
-                          ],
-                        ),
-                      ],
-                    ),
+                    Customprimarytext(text: "Name", fontValue: 25),
+                    Customprimarytext(text: "Class XII", fontValue: 15),
                   ],
                 ),
-              ),
+              ],
             ),
-            SizedBox(height: 20),
+
+            const SizedBox(height: 20),
+
+            // Scores Row
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -49,7 +47,7 @@ class Profilepage extends StatelessWidget {
                   mark: 99,
                   subject: "Computer",
                 ),
-                SizedBox(width: 40),
+                const SizedBox(width: 40),
                 Handlscorecontainer(
                   text: "Lowest Score",
                   mark: 20,
@@ -57,10 +55,28 @@ class Profilepage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+
+            const SizedBox(height: 10),
+
+            // Streak Widget
             SizedBox(height: 150, width: double.infinity, child: Streak()),
+
+            const SizedBox(height: 10),
+
+            // Calendar Widget
+            CalendarWidget(
+              initialDate: DateTime.now(),
+              onDateSelected: (date) {
+                print('Selected date: $date');
+              },
+            ),
+
+            const SizedBox(height: 10),
+
+            // Course Completion Chart
             Coursecompletionpiechart(),
-            SizedBox(height: 10),
+
+            const SizedBox(height: 10),
           ],
         ),
       ),
