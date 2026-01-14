@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
@@ -113,7 +112,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return UnitsPage(unitName: "Maths");
+                          return Unitspage(unitName: "unitName");
                         },
                       ),
                     );

@@ -32,7 +32,7 @@ class Subjectspage extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) {
-                    return UnitsPage(unitName: item["title"]!);
+                    return Unitspage(unitName: item["title"]!);
                   },
                 ),
               );

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
+import 'package:learningapp/pages/new_content_upload_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
-import 'package:learningapp/pages/register.dart';
+
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -14,7 +15,12 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int _currentIndex = 0;
 
-  final _pages = [HomePage(), CourseSubjectPage(), Register(), Profilepage()];
+  final _pages = [
+    HomePage(),
+    CourseSubjectPage(),
+    NewContentUploadPage(),
+    Profilepage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
