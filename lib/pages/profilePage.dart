@@ -12,13 +12,10 @@ class Profilepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [Darkorlight()]),
+      appBar: AppBar(actions: [Darkorlight()], scrolledUnderElevation: 0),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
-
-            // Profile Header
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -37,8 +34,6 @@ class Profilepage extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-
-            // Scores Row
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -64,11 +59,14 @@ class Profilepage extends StatelessWidget {
             const SizedBox(height: 10),
 
             // Calendar Widget
-            CalendarWidget(
-              initialDate: DateTime.now(),
-              onDateSelected: (date) {
-                print('Selected date: $date');
-              },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CalendarWidget(
+                initialDate: DateTime.now(),
+                onDateSelected: (date) {
+                  print('Selected date: $date');
+                },
+              ),
             ),
 
             const SizedBox(height: 10),

@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Unitspage(unitName: "unitName");
+                          return Unitspage(unitName: "Maths");
                         },
                       ),
                     );
