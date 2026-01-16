@@ -6,7 +6,6 @@ class NewContentUploadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text("New Content Upload"),
         centerTitle: true,
@@ -29,7 +28,7 @@ class NewContentUploadPage extends StatelessWidget {
               onChanged: (value) {},
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white,
+
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -45,7 +44,7 @@ class NewContentUploadPage extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: "Enter content name",
                 filled: true,
-                fillColor: Colors.white,
+
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -61,7 +60,6 @@ class NewContentUploadPage extends StatelessWidget {
               height: 160,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.grey),
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';

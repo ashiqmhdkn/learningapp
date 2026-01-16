@@ -56,7 +56,7 @@ class _MainpageState extends State<Mainpage> {
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.person),
             icon: Icon(Icons.person_outline, size: 24),
-            label: "Profile",
+            label: "Admin",
           ),
         ],
       ),
