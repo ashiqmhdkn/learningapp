@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/api/login.dart';
+import 'package:learningapp/api/loginapi.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
@@ -54,7 +54,7 @@ class Login_page extends ConsumerWidget {
               Custombuttonone(
                 text: authState == null ? 'Sign In' : 'Signing...',
                 onTap: () {
-                  ref.read(authControllerProvider.notifier).login(
+                  ref.read(authControllerProvider.notifier).loginAPI(
                             _emailcontroller.text,
                             _passwordcontroller.text,
                           ).then((_) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learningapp/pages/login_page.dart';
-import 'package:learningapp/api/register.dart';
+import 'package:learningapp/api/registerapi.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
@@ -88,7 +88,7 @@ class _RegisterState extends State<Register> {
               text: 'SignUp',
               onTap: () async {
                 try {
-                  final jwt = await register(
+                  final jwt = await registerApi(
                     _emailcontroller.text,
                     _passwordcontroller.text,
                     _namecontroller.text,
@@ -101,7 +101,9 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   );
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => Login_page()),
+                  );
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Registration failed: $e')),
