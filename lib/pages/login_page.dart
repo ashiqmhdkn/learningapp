@@ -73,7 +73,7 @@ class Login_page extends ConsumerWidget {
               Custombuttonone(
                 text: 'Go to Register',
                 onTap: () {
-                  GoRouter.of(context).go('/register');
+                  context.push('/register');
                 },
               ),
             ],

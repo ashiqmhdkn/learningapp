@@ -109,21 +109,21 @@ class HomePage extends StatelessWidget {
               children: [
                 PracticeTile2(
                   onTap: () {
-                   GoRouter.of(context).go('/units/Maths');
+                   context.push('/units/Maths');
                   },
                   title: "Maths",
                   backGroundImage: 'lib/assets/maths.jpeg',
                 ),
                 PracticeTile2(
                   onTap: () {
-                    GoRouter.of(context).go('/units/Maths');
+                    context.push('/units/Maths');
                   },
                   title: "physics",
                   backGroundImage: 'lib/assets/physics.jpeg',
                 ),
                 PracticeTile2(
                   onTap: () {
-                    GoRouter.of(context).go('/units/Maths');
+                    context.push('/units/Maths');
                   },
                   title: "Biology",
                   backGroundImage: 'lib/assets/biology.jpeg',

@@ -18,28 +18,28 @@ class CourseSubjectPage extends StatelessWidget {
           children: [
             PracticeTile2(
               onTap: () {
-                GoRouter.of(context).go('/subjects/Class 9');
+                context.push('/subjects/Class 9');
               },
               title: 'Class 9 ',
               backGroundImage: 'lib/assets/image.png',
             ),
             PracticeTile2(
               onTap: () {
-               GoRouter.of(context).go('/subjects/Class 9');
+               context.push('/subjects/Class 9');
               },
               title: 'Class 10 ',
               backGroundImage: 'lib/assets/image.png',
             ),
             PracticeTile2(
               onTap: () {
-               GoRouter.of(context).go('/subjects/Class 9');
+               context.push('/subjects/Class 9');
               },
               title: 'Class 11 ',
               backGroundImage: 'lib/assets/image.png',
             ),
             PracticeTile2(
               onTap: () {
-                GoRouter.of(context).go('/subjects/Class 9');
+                context.push('/subjects/Class 9');
               },
               title: 'Class 12 ',
               backGroundImage: 'lib/assets/image.png',
