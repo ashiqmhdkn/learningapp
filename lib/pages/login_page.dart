@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/api/loginapi.dart';
+import 'package:learningapp/api/login.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Login_page extends ConsumerWidget {
@@ -54,15 +55,15 @@ class Login_page extends ConsumerWidget {
               Custombuttonone(
                 text: authState == null ? 'Sign In' : 'Signing...',
                 onTap: () {
-                  ref.read(authControllerProvider.notifier).loginAPI(
-                            _emailcontroller.text,
-                            _passwordcontroller.text,
-                          ).then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Logged in Successfully!")),
-                            );
-                              Navigator.of(context).pushReplacementNamed('/');  
-                          });
+                  ref.read(authControllerProvider.notifier).login(
+                      _emailcontroller.text,
+                      _passwordcontroller.text,
+                    ).then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Logged in Successfully!")),
+                      );
+                      Navigator.of(context).pushReplacementNamed('/');
+                    });
                 },
               ),
 
