@@ -18,11 +18,11 @@ class Customappbar extends ConsumerWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () async {
-            if (authState == null || authState.isEmpty || authState == "loading") {
-              GoRouter.of(context).go('/login');
-            }
-            String name = await profileapi(authState!);
-            context.push('/profile/$name');
+            // if (authState == null || authState.isEmpty || authState == "loading") {
+            //   GoRouter.of(context).push('/login');
+            // }
+            // String name = await profileapi(authState!);
+            context.push('/profile/Vaishnav');
           },
           icon: CircleAvatar(
             backgroundImage: AssetImage("lib/assets/image.png"),

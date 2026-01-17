@@ -1,58 +1,90 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:learningapp/pages/subjectWiseVideos.dart';
 
-class Unitspage extends StatelessWidget {
+class Unitspage extends StatefulWidget {
   final String unitName;
   const Unitspage({super.key, required this.unitName});
 
   @override
+  State<Unitspage> createState() => _UnitspageState();
+}
+
+class _UnitspageState extends State<Unitspage> {
+  int _selectedIndex = 0;
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          title: Text(unitName, style: TextStyle(fontWeight: FontWeight.bold)),
-          bottom: ButtonsTabBar(
-            height: 48,
-            radius: 24,
-            borderWidth: 1,
+    final colorScheme = Theme.of(context).colorScheme;
 
-            contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-            buttonMargin: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 6,
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      appBar: AppBar(
+        title: Text(
+          widget.unitName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: CustomSlidingSegmentedControl<int>(
+              initialValue: _selectedIndex,
+              children: const {
+                0: Text("Classes"),
+                1: Text("Exam"),
+                2: Text("Notes"),
+              },
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.black12),
+              ),
+              thumbDecoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              onValueChanged: (value) {
+                setState(() {
+                  _selectedIndex = value;
+                });
+
+                _pageController.animateToPage(
+                  value,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                );
+              },
             ),
-
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            borderColor: Colors.black,
-            unselectedBorderColor: Colors.black12,
-
-            labelStyle: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.w500,
-            ),
-
-            tabs: const [
-              Tab(text: "Classes"),
-              Tab(text: "Exam"),
-              Tab(text: "Notes"),
-            ],
           ),
         ),
-        body: const TabBarView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            Subjectwisevideos(unitName: "Maths"),
-            Placeholder(),
-            Placeholder(),
-          ],
-        ),
+      ),
+      body: PageView(
+        controller: _pageController,
+        physics: const BouncingScrollPhysics(),
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: [
+          Subjectwisevideos(unitName: widget.unitName),
+          const Placeholder(),
+          const Placeholder(),
+        ],
       ),
     );
   }

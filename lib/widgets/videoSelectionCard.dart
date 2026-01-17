@@ -22,7 +22,7 @@ class Videoselectioncard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 199, 199, 199),
+            color: Theme.of(context).colorScheme.tertiary,
             borderRadius: BorderRadius.circular(10),
           ),
           height: 100,
@@ -51,16 +51,9 @@ class Videoselectioncard extends StatelessWidget {
                   SizedBox(height: 8),
                   Text(
                     title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
-                  ),
+                  Text(subtitle, style: TextStyle(fontSize: 14)),
                 ],
               ),
             ],

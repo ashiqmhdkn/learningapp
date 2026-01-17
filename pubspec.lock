@@ -121,14 +121,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.12.2"
-  buttons_tabbar:
-    dependency: "direct main"
-    description:
-      name: buttons_tabbar
-      sha256: "6ce4a6015d90500b4c610fa08bc79957516d3303763c68587f20b0263866c0a8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.15"
   characters:
     dependency: transitive
     description:
@@ -265,6 +257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0+8.4.0"
+  custom_sliding_segmented_control:
+    dependency: "direct main"
+    description:
+      name: custom_sliding_segmented_control
+      sha256: bc747b1500284bff36fc8c61774c9a3ca35c1dca4d570141c8a2569b4f984bf3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.5"
   dart_jsonwebtoken:
     dependency: "direct main"
     description:
@@ -408,6 +408,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "17.0.1"
+  google_nav_bar:
+    dependency: "direct main"
+    description:
+      name: google_nav_bar
+      sha256: bb12dd21514ee1b041ab3127673e2fd85e693337df308f7f2b75cd1e8e92eaf4
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.7"
   graphs:
     dependency: transitive
     description:

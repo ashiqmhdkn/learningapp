@@ -10,7 +10,7 @@ class Subjectwisevideos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      
+
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
@@ -48,6 +48,62 @@ class Subjectwisevideos extends StatelessWidget {
               Videoselectioncard(
                 title: "Linear Algebra",
                 subtitle: "Part 3",
+                imagelocation: 'lib/assets/maths.jpeg',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) {
+                        return Videoplayback();
+                      },
+                    ),
+                  );
+                },
+              ),
+              Videoselectioncard(
+                title: "Linear Algebra",
+                subtitle: "Part 4",
+                imagelocation: 'lib/assets/maths.jpeg',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) {
+                        return Videoplayback();
+                      },
+                    ),
+                  );
+                },
+              ),
+              Videoselectioncard(
+                title: "Linear Algebra",
+                subtitle: "Part 5",
+                imagelocation: 'lib/assets/maths.jpeg',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) {
+                        return Videoplayback();
+                      },
+                    ),
+                  );
+                },
+              ),
+              Videoselectioncard(
+                title: "Linear Algebra",
+                subtitle: "Part 6",
+                imagelocation: 'lib/assets/maths.jpeg',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) {
+                        return Videoplayback();
+                      },
+                    ),
+                  );
+                },
+              ),
+              Videoselectioncard(
+                title: "Linear Algebra",
+                subtitle: "Part 7",
                 imagelocation: 'lib/assets/maths.jpeg',
                 onTap: () {
                   Navigator.of(context).push(

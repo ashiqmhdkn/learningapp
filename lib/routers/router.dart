@@ -3,6 +3,7 @@ import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/pages/subject_page.dart';
+import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/unit_page.dart';
 import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/widgets/mainPage.dart';
@@ -36,7 +37,7 @@ final router = GoRouter(
       path: "/subjects/:courseName",
       builder: (context, state) {
         final courseName = state.pathParameters['courseName']!;
-        return SubjectPage(className: courseName);
+        return Subjectspage(courseName: courseName);
       },
     ),
     GoRoute(

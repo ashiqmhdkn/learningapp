@@ -6,7 +6,7 @@ import 'package:learningapp/widgets/practiceTIle2.dart';
 class Subjectspage extends StatelessWidget {
   final String courseName;
 
-  const Subjectspage({super.key, required this.courseName, required String couruseName});
+  const Subjectspage({super.key, required this.courseName});
 
   @override
   Widget build(BuildContext context) {
