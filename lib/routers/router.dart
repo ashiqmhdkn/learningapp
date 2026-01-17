@@ -23,21 +23,28 @@ final router = GoRouter(
         return UnitPage(className: className, subjectTitle: subjectTitle);
       },
     ),
-    GoRoute(path: "/login", builder: (context, state) =>  Login_page()),
-    GoRoute(path: "/register", builder: (context, state) =>  Register()),
-    GoRoute(path: "/profile/:username", builder: (context, state) { 
-      final username = state.pathParameters['username']!;
-      return Profilepage(username: username);
-    }),
-    GoRoute(path: "/subjects/:courseName", builder: (context, state){ 
-      final courseName = state.pathParameters['courseName']!;
-      return SubjectPage(className: courseName);
-    }),
-    GoRoute(path: "/units/:unitName", builder: (context, state){ 
-      final unitName = state.pathParameters['unitName']!;
-      return Unitspage(unitName: unitName);
-    }),
-
-
+    GoRoute(path: "/login", builder: (context, state) => Login_page()),
+    GoRoute(path: "/register", builder: (context, state) => Register()),
+    GoRoute(
+      path: "/profile/:username",
+      builder: (context, state) {
+        final username = state.pathParameters['username']!;
+        return Profilepage(username: username);
+      },
+    ),
+    GoRoute(
+      path: "/subjects/:courseName",
+      builder: (context, state) {
+        final courseName = state.pathParameters['courseName']!;
+        return SubjectPage(className: courseName);
+      },
+    ),
+    GoRoute(
+      path: "/units/:unitName",
+      builder: (context, state) {
+        final unitName = state.pathParameters['unitName']!;
+        return Unitspage(unitName: unitName);
+      },
+    ),
   ],
 );
