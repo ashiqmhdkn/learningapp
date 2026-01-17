@@ -25,7 +25,10 @@ final router = GoRouter(
     ),
     GoRoute(path: "/login", builder: (context, state) =>  Login_page()),
     GoRoute(path: "/register", builder: (context, state) =>  Register()),
-    GoRoute(path: "/profile", builder: (context, state) =>  Profilepage()),
+    GoRoute(path: "/profile/:username", builder: (context, state) { 
+      final username = state.pathParameters['username']!;
+      return Profilepage(username: username);
+    }),
     GoRoute(path: "/subjects/:courseName", builder: (context, state){ 
       final courseName = state.pathParameters['courseName']!;
       return SubjectPage(className: courseName);

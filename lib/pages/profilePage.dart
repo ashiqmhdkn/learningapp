@@ -7,7 +7,8 @@ import 'package:learningapp/widgets/hAndLScoreContainer.dart';
 import 'package:learningapp/widgets/streak.dart';
 
 class Profilepage extends StatelessWidget {
-  const Profilepage({super.key});
+  final String username;
+  const Profilepage({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Profilepage extends StatelessWidget {
                 const SizedBox(width: 60),
                 Column(
                   children: [
-                    Customprimarytext(text: "Name", fontValue: 25),
+                    Customprimarytext(text: username, fontValue: 25),
                     Customprimarytext(text: "Class XII", fontValue: 15),
                   ],
                 ),

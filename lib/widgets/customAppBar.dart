@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learningapp/pages/profilePage.dart';
+import 'package:learningapp/api/profileapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 
-class Customappbar extends StatelessWidget implements PreferredSizeWidget {
+class Customappbar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
 
-  const 
-  Customappbar({super.key, required this.title});
+  const Customappbar({super.key, required this.title});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
     return AppBar(
       scrolledUnderElevation: 0,
       title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
       actions: [
         IconButton(
-          onPressed: () {
-            GoRouter.of(context).go('/profile');
+          onPressed: () async {
+            if (authState == null || authState.isEmpty || authState == "loading") {
+              GoRouter.of(context).go('/login');
+            }
+            String name = await profileapi(authState!);
+            GoRouter.of(context).go('/profile/$name');
           },
           icon: CircleAvatar(
             backgroundImage: AssetImage("lib/assets/image.png"),
