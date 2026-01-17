@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
-
 import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
-import 'package:learningapp/pages/login_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,13 +16,7 @@ class HomePage extends StatelessWidget {
       appBar: Customappbar(title: "Username"),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) {
-                return Login_page();
-              },
-            ),
-          );
+          GoRouter.of(context).go('/login');
         },
 
         child: Icon(Icons.login),
@@ -123,22 +116,22 @@ class HomePage extends StatelessWidget {
               children: [
                 PracticeTile2(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) {
-                          return Unitspage(unitName: "Maths");
-                        },
-                      ),
-                    );
+                   GoRouter.of(context).go('/units/Maths');
                   },
                   title: "Maths",
                   backGroundImage: 'lib/assets/maths.jpeg',
                 ),
-                PracticeTile(
+                PracticeTile2(
+                  onTap: () {
+                    GoRouter.of(context).go('/units/Maths');
+                  },
                   title: "physics",
                   backGroundImage: 'lib/assets/physics.jpeg',
                 ),
-                PracticeTile(
+                PracticeTile2(
+                  onTap: () {
+                    GoRouter.of(context).go('/units/Maths');
+                  },
                   title: "Biology",
                   backGroundImage: 'lib/assets/biology.jpeg',
                 ),

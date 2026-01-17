@@ -6,11 +6,13 @@ import 'package:learningapp/widgets/mainPage.dart';
 import 'package:learningapp/widgets/subject_tittle.dart';
 
 class SubjectPage extends ConsumerWidget {
-  const SubjectPage({super.key});
+  final String className;
+  const SubjectPage({super.key, required this.className});
+  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final subjectItems = ref.watch(subjectsProvider('Class 9'));
+    final subjectItems = ref.watch(subjectsProvider(className));
 
     return Scaffold(
       appBar: AppBar(

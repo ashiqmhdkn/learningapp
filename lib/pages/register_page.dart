@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/api/registerapi.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
@@ -102,9 +103,7 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     );
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => Login_page()),
-                    );
+                GoRouter.of(context).go('/login');
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Registration failed: $e')),

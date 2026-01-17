@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/routers/router.dart';
 import 'package:learningapp/state/themeState.dart';
 void main(){
-  runApp(const ProviderScope(child: MyApp()));
+   runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {

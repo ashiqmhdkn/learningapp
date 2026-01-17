@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/profilePage.dart';
 
 class Customappbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
-  const Customappbar({super.key, required this.title});
+  const 
+  Customappbar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +16,7 @@ class Customappbar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) {
-                  return Profilepage();
-                },
-              ),
-            );
+            GoRouter.of(context).go('/profile');
           },
           icon: CircleAvatar(
             backgroundImage: AssetImage("lib/assets/image.png"),

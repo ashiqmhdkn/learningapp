@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/login.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
@@ -62,7 +63,7 @@ class Login_page extends ConsumerWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Logged in Successfully!")),
                       );
-                      Navigator.of(context).pushReplacementNamed('/');
+                      GoRouter.of(context).go('/');
                     });
                 },
               ),
@@ -72,9 +73,7 @@ class Login_page extends ConsumerWidget {
               Custombuttonone(
                 text: 'Go to Register',
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => Register()),
-                  );
+                  GoRouter.of(context).go('/register');
                 },
               ),
             ],
