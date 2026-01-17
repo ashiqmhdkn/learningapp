@@ -6,6 +6,7 @@ import 'package:learningapp/widgets/practiceTIle2.dart';
 
 import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
+import 'package:learningapp/pages/login.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,6 +15,19 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Customappbar(title: "Username"),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) {
+                return Login();
+              },
+            ),
+          );
+        },
+
+        child: Icon(Icons.login),
+      ),
 
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +75,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Videoplayback();
+                              return Videoplayback();
                         },
                       ),
                     );

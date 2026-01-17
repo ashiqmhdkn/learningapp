@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/api/login.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
-class Register extends StatelessWidget {
-  Register({super.key});
+class Login extends StatelessWidget {
+  Login({super.key});
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
@@ -12,7 +13,7 @@ class Register extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Register",
+          "Login",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
@@ -26,11 +27,11 @@ class Register extends StatelessWidget {
               radius: 100,
             ),
             SizedBox(height: 30),
-            Customtextbox(
-              hinttext: 'User name',
-              textController: _namecontroller,
-              textFieldIcon: Icons.person,
-            ),
+            // Customtextbox(
+            //   hinttext: 'User name',
+            //   textController: _namecontroller,
+            //   textFieldIcon: Icons.person,
+            // ),
             SizedBox(height: 15),
             Customtextbox(
               hinttext: 'Email',
@@ -44,7 +45,14 @@ class Register extends StatelessWidget {
               textFieldIcon: Icons.password_rounded,
             ),
             SizedBox(height: 15),
-            Custombuttonone(text: 'SignUp', onTap: () {}),
+            Custombuttonone(text: 'SignUp', onTap: () async{
+              try {
+                final jwt = await login(_emailcontroller.text, _passwordcontroller.text);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login successful: ${jwt.payload}')));
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+              }
+            }),
           ],
         ),
       ),
