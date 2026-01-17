@@ -14,14 +14,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Customappbar(title: "Username"),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          GoRouter.of(context).go('/login');
-        },
-
-        child: Icon(Icons.login),
-      ),
-
+      
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
