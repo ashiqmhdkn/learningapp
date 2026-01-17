@@ -22,7 +22,7 @@ class Customappbar extends ConsumerWidget implements PreferredSizeWidget {
               GoRouter.of(context).go('/login');
             }
             String name = await profileapi(authState!);
-            GoRouter.of(context).go('/profile/$name');
+            context.push('/profile/$name');
           },
           icon: CircleAvatar(
             backgroundImage: AssetImage("lib/assets/image.png"),
