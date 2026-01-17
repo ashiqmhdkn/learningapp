@@ -1,10 +1,9 @@
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'dart:io';
 
 Future<String> loginApi(String email, String password) async {
-  final primaryUrl = dotenv.env['PRIMARY_URL']!;
+  final primaryUrl = 'https://api.crescentlearning.org';
   final uri = Uri.parse('$primaryUrl/login');
 
   final response = await http.post(
