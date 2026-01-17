@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/widgets/customButtonOne.dart';
-import 'package:learningapp/widgets/customTextBox.dart';
 
 class Upload extends StatelessWidget {
   const Upload({super.key});

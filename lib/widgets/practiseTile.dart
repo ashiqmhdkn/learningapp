@@ -16,7 +16,7 @@ class PracticeTile extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

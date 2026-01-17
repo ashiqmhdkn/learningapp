@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/admin/admin_pages/admin_dashboard.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
 import 'package:learningapp/pages/new_content_upload_page.dart';
-import 'package:learningapp/pages/profilePage.dart';
-
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -19,7 +18,7 @@ class _MainpageState extends State<Mainpage> {
     HomePage(),
     CourseSubjectPage(),
     NewContentUploadPage(),
-    Profilepage(),
+    AdminDashboard(),
   ];
 
   @override
@@ -30,8 +29,8 @@ class _MainpageState extends State<Mainpage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         backgroundColor: Theme.of(context).colorScheme.surface,
-        selectedItemColor: Theme.of(context).colorScheme.secondary,
-        unselectedItemColor: Theme.of(context).colorScheme.tertiary,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
           setState(() {
@@ -57,7 +56,7 @@ class _MainpageState extends State<Mainpage> {
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.person),
             icon: Icon(Icons.person_outline, size: 24),
-            label: "Profile",
+            label: "Admin",
           ),
         ],
       ),

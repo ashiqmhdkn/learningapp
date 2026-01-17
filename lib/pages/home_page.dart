@@ -6,7 +6,7 @@ import 'package:learningapp/widgets/practiceTIle2.dart';
 
 import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
-import 'package:learningapp/pages/login.dart';
+import 'package:learningapp/pages/login_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (ctx) {
-                return Login();
+                return Login_page();
               },
             ),
           );
@@ -126,7 +126,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Unitspage(unitName: "unitName");
+                          return Unitspage(unitName: "Maths");
                         },
                       ),
                     );

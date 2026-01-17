@@ -18,7 +18,7 @@ class Handlscorecontainer extends StatelessWidget {
       width: 130,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.primary,
       ),
       child: Column(
         children: [
