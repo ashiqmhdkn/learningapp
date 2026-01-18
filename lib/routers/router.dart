@@ -21,6 +21,7 @@ final router = GoRouter(
     GoRoute(
       path: "/updateProfilePage",
       builder: (context, state) => UpdateProfilePage(),
+      
     ),
     GoRoute(
       path: "/upload",

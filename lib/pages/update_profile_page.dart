@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/controller/authcontroller.dart';
+import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
-class UpdateProfilePage extends StatelessWidget {
-  const UpdateProfilePage({super.key});
+class UpdateProfilePage extends ConsumerWidget {
+  final User user;
+  const UpdateProfilePage({super.key, required this.user});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _phoneController = TextEditingController();
-    TextEditingController _DateofbirthController = TextEditingController();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = authControllerProvider.watch(ref);
+    TextEditingController _nameController = TextEditingController(text: user.username);
+    TextEditingController _emailController = TextEditingController(text: user.email);
+    TextEditingController _phoneController = TextEditingController(text: user.phone.toString());
+    DropdownButtonFormField _roleDropdown = DropdownButtonFormField(
+      items: ['student', 'teacher', 'admin']
+          .map((role) => DropdownMenuItem(
+                value: role,
+                child: Text(role),
+              ))
+          .toList(),
+      value: user.role,
+      onChanged: (value) {
+        _
+      },
+    );
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -77,12 +93,19 @@ class UpdateProfilePage extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            Customprimarytext(text: "Date Of Birth", fontValue: 15),
+            Customprimarytext(text: "Role", fontValue: 15),
 
-            Customtextbox(
-              hinttext: "DD / MM / YYYY",
-              textController: _DateofbirthController,
-              textFieldIcon: Icons.calendar_month,
+            DropdownButton<String>(
+              items: ['student', 'teacher', 'admin']
+                  .map((role) => DropdownMenuItem(
+                        value: role,
+                        child: Text(role),
+                      ))
+                  .toList(),
+              value: user.role,
+              onChanged: (value) {
+                // Handle role change
+              },
             ),
             const SizedBox(height: 30),
             Center(

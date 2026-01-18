@@ -3,8 +3,8 @@ class User {
   final String username;
   final String password;
   final String email;
-  final String role; // 'student' or 'teacher'
-  final String course; // e.g., 'email', 'google'
+  final String role;
+  final int phone; // 'student' or 'teacher'; // e.g., 'email', 'google'
   final DateTime loginTime; // last login timestamp
 
   User({
@@ -13,7 +13,7 @@ class User {
     required this.password,
     required this.email,
     required this.role,
-    required this.course,
+    required this.phone,
     required this.loginTime,
   });
 }

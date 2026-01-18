@@ -20,7 +20,7 @@ class _VideoplaybackState extends State<Videoplayback> {
 
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+        'https://media.crescentlearning.org/courses/subjects/units/videos/song.mp4',
       ),
     );
     _videoPlayerController.initialize().then((_) {
