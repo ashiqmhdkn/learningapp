@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:learningapp/admin/admin_pages/admin_dashboard.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_landing.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_students.dart';
 import 'package:learningapp/mentor/mentorPages/students_marks.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_landing.dart'; // NEW: Added import
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
@@ -18,14 +20,22 @@ class _MainpageState extends State<Mainpage>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   int _previousIndex = 0;
-
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
 
+  // OLD CODE - COMMENTED OUT:
+  // final _pages = const [
+  //   HomePage(),
+  //   CourseSubjectPage(),
+  //   AdminDashboard(),
+  //   StudentsMarks(),
+  // ];
+
+  // NEW CODE:
   final _pages = const [
     HomePage(),
     CourseSubjectPage(),
-    AdminDashboard(),
+    MentorLandingPage(), // Changed from AdminDashboard to MentorLandingPage
     StudentsMarks(),
   ];
 
@@ -59,7 +69,6 @@ class _MainpageState extends State<Mainpage>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _controller.forward(from: 0);
-
     setState(() {});
   }
 
@@ -94,7 +103,8 @@ class _MainpageState extends State<Mainpage>
           tabs: const [
             GButton(icon: Icons.home_outlined, text: 'Home'),
             GButton(icon: Icons.book_outlined, text: 'Courses'),
-            GButton(icon: Icons.person_outline, text: 'Admin'),
+            // GButton(icon: Icons.person_outline, text: 'Admin'), // OLD CODE
+            GButton(icon: Icons.school_outlined, text: 'Mentor'), // NEW CODE
             GButton(icon: Icons.grade_outlined, text: 'Marks'),
           ],
         ),
