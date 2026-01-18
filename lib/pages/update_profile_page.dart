@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/controller/authcontroller.dart';
+import 'package:learningapp/controller/usercontroller.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
@@ -66,8 +67,12 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         role: _selectedRole,
       );
 
-      // Call your auth controller to update profile
-      await ref.read(authControllerProvider.notifier).updateProfile(updatedUser);
+      // Call your user controller to update profile
+      await ref.read(userControllerProvider.notifier).updateProfile(
+        email: updatedUser.email,
+        phone: updatedUser.phone.toString(),
+        role: updatedUser.role,
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -159,22 +164,27 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             const SizedBox(height: 16),
             Customprimarytext(text: "Phone Number", fontValue: 15),
             TextFormField(
-              controller: _phoneController,
               decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.phone),
                 hintText: "Phone Number",
-                prefixIcon: Icon(Icons.phone),
               ),
+              controller: _phoneController,
               keyboardType: TextInputType.phone,
             ),
 
             const SizedBox(height: 16),
             Customprimarytext(text: "Email Address", fontValue: 15),
             TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(
-                hintText: "Email Address",
-                prefixIcon: Icon(Icons.mail),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              controller: _emailController,    
+              hintText: "Email Address",
+              prefixIcon: Icon(Icons.mail),),
               keyboardType: TextInputType.emailAddress,
             ),
 

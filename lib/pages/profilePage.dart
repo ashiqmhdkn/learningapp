@@ -47,10 +47,15 @@ class Profilepage extends ConsumerWidget {
                           ),
                         ),
                         onPressed: () async{
-                          context.push('/login');
+                          
                           var tokon=SharedPreferences.getInstance().then((prefs) {
                             return prefs.getString('auth_token') ?? '';
                           });
+                          if (authState == null || authState == "loading") {
+                            // User is not logged in, navigate to login page
+                            GoRouter.of(context).go('/login');
+                            return;
+                          }
                           User user = await profileapi(await tokon);
                           GoRouter.of(context)
                               .go('/editProfile', extra: user);
