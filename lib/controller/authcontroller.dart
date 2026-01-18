@@ -19,3 +19,4 @@ class AuthController extends Notifier<String?> {
 
 final authControllerProvider =
     NotifierProvider<AuthController, String?>(() => AuthController());
+    

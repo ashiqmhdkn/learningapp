@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
@@ -19,11 +20,6 @@ final router = GoRouter(
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => Register()),
     GoRoute(
-      path: "/updateProfilePage",
-      builder: (context, state) => UpdateProfilePage(),
-      
-    ),
-    GoRoute(
       path: "/upload",
       builder: (context, state) => NewContentUploadPage(),
     ),
@@ -35,7 +31,12 @@ final router = GoRouter(
         return Profilepage(username: username);
       },
     ),
+    GoRoute(path:"/editProfile",builder: (context,state) {
+      final user = state.extra as User;
+      return UpdateProfilePage(user: user);
+    }),
     GoRoute(
+
       path: "/subjects/:courseName",
       builder: (context, state) {
         final courseName = state.pathParameters['courseName']!;

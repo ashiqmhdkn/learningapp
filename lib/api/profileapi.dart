@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:learningapp/models/user_model.dart';
 
-Future<String> profileapi(String token) async {
+Future<User> profileapi(String token) async {
 
 final primaryUrl = 'https://api.crescentlearning.org';
 final uri = Uri.parse('$primaryUrl/profile');
@@ -20,7 +20,7 @@ final response = await http.get(
   final Map<String, dynamic> data = jsonDecode(response.body);
   try {
     print(data);
-    return data['user']['name'];
+    return data["user"];
   } catch (e) {
     print('Error extracting token: $e');
   }
@@ -41,8 +41,7 @@ final response = await http.put(
     'name': user.username,
     'email': user.email,
     'role': user.role,
-    'phone': user.phone,
-    'password': user.password,
+    'phone': user.phone
   }),
 );
 
