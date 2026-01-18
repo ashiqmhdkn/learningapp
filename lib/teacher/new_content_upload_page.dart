@@ -23,7 +23,7 @@ class NewContentUploadPage extends StatelessWidget {
               items: const [
                 DropdownMenuItem(value: "Exam", child: Text("Exam")),
                 DropdownMenuItem(value: "Video", child: Text("Video")),
-                DropdownMenuItem(value: "Unit", child: Text("Unit")),
+                DropdownMenuItem(value: "Notes", child: Text("Notes")),
               ],
               onChanged: (value) {},
               decoration: InputDecoration(

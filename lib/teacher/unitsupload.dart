@@ -1,48 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/subjectWiseVideos.dart';
+import './providers/unitcontroller.dart';
 
-class Unitspage extends StatefulWidget {
+class Unitsupload extends ConsumerWidget {
   final String unitName;
-  const Unitspage({super.key, required this.unitName});
+  const Unitsupload({super.key, required this.unitName});
 
   @override
-  State<Unitspage> createState() => _UnitspageState();
-}
-
-class _UnitspageState extends State<Unitspage> {
-  int _selectedIndex = 0;
-  late final PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: _selectedIndex);
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedIndex = ref.watch(unitsControllerProvider);
+    final controller = ref.read(unitsControllerProvider.notifier);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          widget.unitName,
+          unitName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: colorScheme.primary,
+            child: IconButton(
+              iconSize: 24,
+              onPressed: () {
+                context.push('/upload');
+              },
+              icon: const Icon(Icons.add),
+            ),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: CustomSlidingSegmentedControl<int>(
-              initialValue: _selectedIndex,
+              initialValue: selectedIndex,
               children: const {
                 0: Text("Classes"),
                 1: Text("Exam"),
@@ -50,38 +48,25 @@ class _UnitspageState extends State<Unitspage> {
               },
               decoration: BoxDecoration(
                 color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.black12),
+                // borderRadius: BorderRadius.circular(15),
+                // border: Border.all(color: Colors.black12),
               ),
               thumbDecoration: BoxDecoration(
                 color: colorScheme.primary,
+
                 borderRadius: BorderRadius.circular(15),
               ),
-              onValueChanged: (value) {
-                setState(() {
-                  _selectedIndex = value;
-                });
-
-                _pageController.animateToPage(
-                  value,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                );
-              },
+              onValueChanged: controller.setIndex,
             ),
           ),
         ),
       ),
       body: PageView(
-        controller: _pageController,
+        controller: controller.pageController,
         physics: const BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onPageChanged: controller.pageChanged,
         children: [
-          Subjectwisevideos(unitName: widget.unitName),
+          Subjectwisevideos(unitName: unitName),
           const Placeholder(),
           const Placeholder(),
         ],
