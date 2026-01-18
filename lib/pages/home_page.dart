@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learningapp/pages/unitsPage.dart';
+import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
-import 'package:learningapp/widgets/practiseTile.dart';
 import 'package:learningapp/widgets/previousLearned.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Customappbar(title: "Username"),
-      
+
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -61,7 +60,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                              return Videoplayback();
+                          return Videoplayback();
                         },
                       ),
                     );
@@ -109,21 +108,21 @@ class HomePage extends StatelessWidget {
               children: [
                 PracticeTile2(
                   onTap: () {
-                   context.push('/units/Maths');
+                    context.push('/chapters/Maths');
                   },
                   title: "Maths",
                   backGroundImage: 'lib/assets/maths.jpeg',
                 ),
                 PracticeTile2(
                   onTap: () {
-                    context.push('/units/Maths');
+                    context.push('/chapters/Physics');
                   },
                   title: "physics",
                   backGroundImage: 'lib/assets/physics.jpeg',
                 ),
                 PracticeTile2(
                   onTap: () {
-                    context.push('/units/Maths');
+                    context.push('/chapters/Biology');
                   },
                   title: "Biology",
                   backGroundImage: 'lib/assets/biology.jpeg',

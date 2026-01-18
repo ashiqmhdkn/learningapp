@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/pages/unitsPage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
 
@@ -29,13 +29,7 @@ class Subjectspage extends StatelessWidget {
             title: item["title"]!,
             backGroundImage: item["image"]!,
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) {
-                    return Unitspage(unitName: item["title"]!);
-                  },
-                ),
-              );
+              context.push('/chapters/${item['title']}');
             },
           );
         },

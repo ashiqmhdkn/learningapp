@@ -18,7 +18,7 @@ class Customtextbox extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(
           textFieldIcon,
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(17)),
         fillColor: Colors.white,

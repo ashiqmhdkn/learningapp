@@ -90,7 +90,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.tertiary,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -106,8 +106,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           // Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(
-              color: Color(0xFF2196F3),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -152,7 +152,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             child: Text(
                               day,
                               style: TextStyle(
-                                color: Colors.grey[600],
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -192,7 +192,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             height: 40,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? const Color(0xFF7C9FF5)
+                                  ? Theme.of(context).colorScheme.primary
                                   : Colors.transparent,
                               shape: BoxShape.circle,
                             ),
@@ -203,8 +203,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   color: isSelected
                                       ? Colors.white
                                       : isCurrentMonth
-                                      ? Colors.black87
-                                      : Colors.grey[400],
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.primary,
                                   fontSize: 14,
                                   fontWeight: isSelected
                                       ? FontWeight.w600

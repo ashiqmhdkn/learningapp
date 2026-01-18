@@ -18,9 +18,13 @@ class Studentinfotile extends StatelessWidget {
       height: 85,
       child: Card(
         shadowColor: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.tertiary,
         child: Center(
           child: ListTile(
-            leading: CircleAvatar(radius: 25, backgroundColor: Colors.white),
+            leading: CircleAvatar(
+              radius: 25,
+              backgroundImage: AssetImage("lib/assets/image.png"),
+            ),
             title: Text(name),
             trailing: SizedBox(
               width: 40,

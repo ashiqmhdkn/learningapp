@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/widgets/calender.dart';
 import 'package:learningapp/widgets/courseCompletionPieChart.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
@@ -29,6 +30,37 @@ class Profilepage extends StatelessWidget {
                   children: [
                     Customprimarytext(text: username, fontValue: 25),
                     Customprimarytext(text: "Class XII", fontValue: 15),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      height: 30,
+                      width: 90,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.tertiary,
+                          ),
+                        ),
+                        onPressed: () {
+                          context.push("/updateProfilePage");
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.edit,
+                              size: 12,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            Text(
+                              "Edit",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],

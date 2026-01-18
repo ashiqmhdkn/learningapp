@@ -17,7 +17,13 @@ class Custombuttonone extends StatelessWidget {
             Theme.of(context).colorScheme.secondary,
           ),
         ),
-        child: Text(text, style: TextStyle(color: Colors.white, fontSize: 18)),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.tertiary,
+            fontSize: 18,
+          ),
+        ),
       ),
     );
   }

@@ -1,9 +1,10 @@
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
-import 'package:learningapp/pages/unitsPage.dart';
+import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/mainPage.dart';
@@ -17,7 +18,14 @@ final router = GoRouter(
     /// UNITS PAGE
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => Register()),
-    GoRoute(path: "/upload", builder: (context, state) => NewContentUploadPage()),
+    GoRoute(
+      path: "/updateProfilePage",
+      builder: (context, state) => UpdateProfilePage(),
+    ),
+    GoRoute(
+      path: "/upload",
+      builder: (context, state) => NewContentUploadPage(),
+    ),
 
     GoRoute(
       path: "/profile/:username",
@@ -38,6 +46,13 @@ final router = GoRouter(
       builder: (context, state) {
         final unitName = state.pathParameters['unitName']!;
         return Unitsupload(unitName: unitName);
+      },
+    ),
+    GoRoute(
+      path: "/chapters/:name",
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        return ChatpersUnits(name: name);
       },
     ),
   ],
