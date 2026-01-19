@@ -4,15 +4,16 @@ import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
 import 'package:learningapp/mentor/mentorPages/students_marks.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
+import 'package:learningapp/pages/login_page.dart';
 
-class Mainpage extends StatefulWidget {
-  const Mainpage({super.key});
+class StudentNavbar extends StatefulWidget {
+  const StudentNavbar({super.key});
 
   @override
-  State<Mainpage> createState() => _MainpageState();
+  State<StudentNavbar> createState() => _StudentNavbarState();
 }
 
-class _MainpageState extends State<Mainpage>
+class _StudentNavbarState extends State<StudentNavbar>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   int _previousIndex = 0;
@@ -28,11 +29,11 @@ class _MainpageState extends State<Mainpage>
   // ];
 
   // NEW CODE:
-  final _pages = const [
+  final _pages = [
     HomePage(),
     CourseSubjectPage(),
     MentorStudentsList(),
-    StudentsMarks(),
+    Login_page(),
   ];
 
   @override

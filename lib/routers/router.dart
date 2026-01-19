@@ -11,13 +11,13 @@ import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
 import 'package:learningapp/teacher/teachernav.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
-import 'package:learningapp/widgets/mainPage.dart';
+import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/",
+  initialLocation: "/login",
   routes: [
     /// HOME → SUBJECTS
-    GoRoute(path: '/', builder: (context, state) => const Mainpage()),
+    GoRoute(path: '/', builder: (context, state) => const StudentNavbar()),
 
     /// UNITS PAGE
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
