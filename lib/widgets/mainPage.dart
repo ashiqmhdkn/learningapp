@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:learningapp/admin/admin_pages/admin_dashboard.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_landing.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_students.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
 import 'package:learningapp/mentor/mentorPages/students_marks.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_landing.dart'; // NEW: Added import
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/teacher/new_content_upload_page.dart';
 
 class Mainpage extends StatefulWidget {
   const Mainpage({super.key});
@@ -35,7 +31,7 @@ class _MainpageState extends State<Mainpage>
   final _pages = const [
     HomePage(),
     CourseSubjectPage(),
-    MentorLandingPage(), // Changed from AdminDashboard to MentorLandingPage
+    MentorStudentsList(),
     StudentsMarks(),
   ];
 

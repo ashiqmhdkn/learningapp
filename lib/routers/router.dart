@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
@@ -53,6 +54,13 @@ final router = GoRouter(
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         return ChatpersUnits(name: name);
+      },
+    ),
+    GoRoute(
+      path: "/mentorStudentIndividual/:name",
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        return MentorStudentIndividual(name: name);
       },
     ),
   ],

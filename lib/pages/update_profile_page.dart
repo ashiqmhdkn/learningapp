@@ -84,7 +84,25 @@ class UpdateProfilePage extends StatelessWidget {
               textController: _DateofbirthController,
               textFieldIcon: Icons.calendar_month,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 14),
+            Customprimarytext(text: "Role", fontValue: 15),
+            DropdownButtonFormField<String>(
+              initialValue: "Student",
+              items: const [
+                DropdownMenuItem(value: "Admin", child: Text("Admin")),
+                DropdownMenuItem(value: "Student", child: Text("Student")),
+                DropdownMenuItem(value: "Mentor", child: Text("Mentor")),
+              ],
+              onChanged: (value) {},
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(17),
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+
             Center(
               child: Custombuttonone(text: "Save Changes", onTap: () {}),
             ),
