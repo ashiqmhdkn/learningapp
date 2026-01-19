@@ -1,57 +1,150 @@
+// import 'dart:convert';
+// import 'dart:io';
+// import 'package:http/http.dart' as http;
+// import 'package:learningapp/models/user_model.dart';
+
+// Future<User> profileapi(String token) async {
+
+// final primaryUrl = 'https://api.crescentlearning.org';
+// final uri = Uri.parse('$primaryUrl/profile');
+
+// final response = await http.get(
+//   uri,
+//   headers: {
+//     HttpHeaders.contentTypeHeader: 'application/json',
+//     'Accept': 'application/json',
+//     HttpHeaders.authorizationHeader: 'Bearer $token',
+//   },
+// );
+
+//   final Map<String, dynamic> data = jsonDecode(response.body);
+//   try {
+//     print(data);
+//     return data["user"];
+//   } catch (e) {
+//     print('Error extracting token: $e');
+//   }
+
+//   throw Exception("Token not found in response");
+// }
+// Future<String> profileupdate(String token,User user) async {
+// final primaryUrl = 'https://api.crescentlearning.org';
+// final uri = Uri.parse('$primaryUrl/profile');
+// final response = await http.put(
+//   uri,
+//   headers: {
+//     HttpHeaders.contentTypeHeader: 'application/json',
+//     'Accept': 'application/json',
+//     HttpHeaders.authorizationHeader: token,
+//   },
+//   body: jsonEncode({
+//     'name': user.username,
+//     'email': user.email,
+//     'role': user.role,
+//     'phone': user.phone
+//   }),
+// );
+
+//   final Map<String, dynamic> data = jsonDecode(response.body);
+//   try {
+//     print(data);
+//     return data['message'];
+//   } catch (e) {
+//     print('Error extracting token: $e');
+//   }
+
+//   throw Exception("Token not found in response");
+// }
+// api/profileapi.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:learningapp/models/user_model.dart';
 
+const String baseUrl = 'https://api.crescentlearning.org';
+
+// Fetch user profile
 Future<User> profileapi(String token) async {
+  final uri = Uri.parse('$baseUrl/profile');
 
-final primaryUrl = 'https://api.crescentlearning.org';
-final uri = Uri.parse('$primaryUrl/profile');
-
-final response = await http.get(
-  uri,
-  headers: {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    'Accept': 'application/json',
-    HttpHeaders.authorizationHeader: 'Bearer $token',
-  },
-);
-
-  final Map<String, dynamic> data = jsonDecode(response.body);
   try {
-    print(data);
-    return data["user"];
-  } catch (e) {
-    print('Error extracting token: $e');
-  }
+    final response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        'Accept': 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
 
-  throw Exception("Token not found in response");
+    print('Profile API Response: ${response.statusCode}');
+    print('Profile API Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      
+      if (data.containsKey('user')) {
+        return User.fromJson(data['user']);
+      } else {
+        throw Exception('User data not found in response');
+      }
+    } else if (response.statusCode == 401) {
+      throw Exception('Unauthorized: Invalid or expired token');
+    } else {
+      final Map<String, dynamic> error = jsonDecode(response.body);
+      throw Exception(error['error'] ?? 'Failed to fetch profile');
+    }
+  } catch (e) {
+    print('Error in profileapi: $e');
+    rethrow;
+  }
 }
-Future<String> profileupdate(String token,User user) async {
-final primaryUrl = 'https://api.crescentlearning.org';
-final uri = Uri.parse('$primaryUrl/profile');
-final response = await http.put(
-  uri,
-  headers: {
-    HttpHeaders.contentTypeHeader: 'application/json',
-    'Accept': 'application/json',
-    HttpHeaders.authorizationHeader: token,
-  },
-  body: jsonEncode({
-    'name': user.username,
-    'email': user.email,
-    'role': user.role,
-    'phone': user.phone
-  }),
-);
 
-  final Map<String, dynamic> data = jsonDecode(response.body);
+// Update user profile
+Future<String> profileupdate(String token, User user) async {
+  final uri = Uri.parse('$baseUrl/profile');
+
   try {
-    print(data);
-    return data['message'];
-  } catch (e) {
-    print('Error extracting token: $e');
-  }
+    final response = await http.put(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        'Accept': 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+      body: jsonEncode({
+        'name': user.username,
+        'email': user.email,
+        'role': user.role,
+        'phone': user.phone,
+      }),
+    );
 
-  throw Exception("Token not found in response");
+    print('Profile Update Response: ${response.statusCode}');
+    print('Profile Update Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      
+      if (data.containsKey('success') && data['success'] == true) {
+        return 'Profile updated successfully';
+      } else if (data.containsKey('message')) {
+        return data['message'];
+      } else {
+        return 'Profile updated';
+      }
+    } else if (response.statusCode == 401) {
+      throw Exception('Unauthorized: Invalid or expired token');
+    } else if (response.statusCode == 400) {
+      final Map<String, dynamic> error = jsonDecode(response.body);
+      throw Exception(error['error'] ?? 'Invalid request');
+    } else {
+      final Map<String, dynamic> error = jsonDecode(response.body);
+      throw Exception(error['error'] ?? 'Failed to update profile');
+    }
+  } catch (e) {
+    print('Error in profileupdate: $e');
+    rethrow;
+  }
 }

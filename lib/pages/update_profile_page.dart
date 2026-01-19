@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:learningapp/api/profileapi.dart';
 import 'package:learningapp/controller/authcontroller.dart';
-import 'package:learningapp/controller/usercontroller.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
@@ -66,13 +67,10 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
         phone: int.tryParse(_phoneController.text.trim()) ?? widget.user.phone,
         role: _selectedRole,
       );
+      final token = ref.read(authControllerProvider);
 
       // Call your user controller to update profile
-      await ref.read(userControllerProvider.notifier).updateProfile(
-        email: updatedUser.email,
-        phone: updatedUser.phone.toString(),
-        role: updatedUser.role,
-      );
+      await profileupdate(token!, updatedUser);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -81,7 +79,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        context.go('/');
       }
     } catch (e) {
       if (mounted) {
@@ -91,6 +89,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
       if (mounted) {
         setState(() => _isLoading = false);
       }
+      context.go('/');
     }
   }
 

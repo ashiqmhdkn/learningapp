@@ -20,7 +20,7 @@
 // models/user_model.dart
 
 class User {
-  final String userId;
+  final String? userId;
   final String username;
   final String email;
   final int phone;
@@ -28,7 +28,7 @@ class User {
   final DateTime? lastLogin;
 
   User({
-    required this.userId,
+    this.userId,
     required this.username,
     required this.email,
     required this.phone,
