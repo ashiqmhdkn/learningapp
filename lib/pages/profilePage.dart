@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/api/profileapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
+import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/widgets/calender.dart';
 import 'package:learningapp/widgets/courseCompletionPieChart.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/darkOrLight.dart';
 import 'package:learningapp/widgets/hAndLScoreContainer.dart';
 import 'package:learningapp/widgets/streak.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Profilepage extends StatelessWidget {
+class Profilepage extends ConsumerWidget {
   final String username;
   const Profilepage({super.key, required this.username});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(actions: [Darkorlight()], scrolledUnderElevation: 0),
       body: SingleChildScrollView(
@@ -40,8 +46,15 @@ class Profilepage extends StatelessWidget {
                             Theme.of(context).colorScheme.tertiary,
                           ),
                         ),
-                        onPressed: () {
-                          context.push("/updateProfilePage");
+                        onPressed: () async{
+                          
+                          var token = await SharedPreferences.getInstance().then((prefs) {
+                            return prefs.getString('auth_token') ?? '';
+                          });
+                          print("Token in profile page: $token");
+                          User user = await profileapi(token);
+                          GoRouter.of(context)
+                              .go('/editProfile', extra: user);
                         },
                         child: Row(
                           children: [

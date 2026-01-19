@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/login.dart';
+import 'package:learningapp/api/profileapi.dart';
+import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
@@ -54,17 +56,23 @@ class Login_page extends ConsumerWidget {
 
               // LOGIN BUTTON
               Custombuttonone(
-                text: authState == null ? 'Sign In' : 'Signing...',
-                onTap: () {
-                  ref.read(authControllerProvider.notifier).login(
+                text: authState == "loading" ? 'Signing In...' : 'Sign In',
+                onTap: () async {
+                  FocusScope.of(context).unfocus();
+                  String token = await ref.read(authControllerProvider.notifier).login(
                       _emailcontroller.text,
                       _passwordcontroller.text,
-                    ).then((_) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Logged in Successfully!")),
-                      );
-                      GoRouter.of(context).go('/');
-                    });
+                    );
+
+                     User person = await profileapi(token);
+                      if (person.role == 'admin') {
+                        GoRouter.of(context).go('/adminnav');
+                      } else if (person.role == 'teacher') {
+                        GoRouter.of(context).go('/teachernav');
+                      } else {
+                        GoRouter.of(context).go('/');
+                      }
+                    
                 },
               ),
 

@@ -1,21 +1,91 @@
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:learningapp/api/login.dart';
+
+// class AuthController extends Notifier<String?> {
+//   @override
+//   String? build() => null;
+
+//   Future<void> login(String email, String password) async {
+//     state = "loading";
+//     try {
+//       final token = await loginApi(email, password);
+//       state = token;
+//     } catch (e) {
+//       state = null;
+//       rethrow;
+//     }
+//   }
+// }
+
+// final authControllerProvider =
+//     NotifierProvider<AuthController, String?>(() => AuthController());
+    // controller/authcontroller.dart
+// Handles ONLY authentication (login, logout, token management)
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learningapp/api/login.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../api/login.dart';
 
-class AuthController extends Notifier<String?> {
-  @override
-  String? build() => null;
+class AuthController extends StateNotifier<String?> {
+  AuthController() : super(null);
 
-  Future<void> login(String email, String password) async {
+  static const String baseUrl = 'https://api.domain.in';
+
+  // Initialize - check if user is already logged in
+  Future<void> initialize() async {
+    final token = await _getToken();
+    if (token != null) {
+      state = token;
+    }
+  }
+
+  // Login
+  Future<String> login(String email, String password) async {
     state = "loading";
     try {
       final token = await loginApi(email, password);
+      await _saveToken(token);
       state = token;
+      return token;
     } catch (e) {
       state = null;
       rethrow;
     }
   }
+
+  // Logout
+  Future<void> logout() async {
+    await _removeToken();
+    state = null;
+  }
+
+  // Token management
+  Future<void> _saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
+  }
+
+  Future<String?> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
+
+  Future<void> _removeToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+  }
+
+  // Public method to get current token
+  Future<String?> getToken() => _getToken();
 }
 
-final authControllerProvider =
-    NotifierProvider<AuthController, String?>(() => AuthController());
+final authControllerProvider = StateNotifierProvider<AuthController, String?>((ref) {
+  return AuthController();
+});
+
+// Convenience provider
+final isAuthenticatedProvider = Provider<bool>((ref) {
+  final token = ref.watch(authControllerProvider);
+  return token != null && token != "loading";
+});
