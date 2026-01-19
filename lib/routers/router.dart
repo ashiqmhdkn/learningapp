@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/adminnav.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
@@ -13,17 +14,19 @@ import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/mainPage.dart';
 
 final router = GoRouter(
-  initialLocation: "/login",
+  initialLocation: "/",
   routes: [
     /// HOME → SUBJECTS
     GoRoute(path: '/', builder: (context, state) => const Mainpage()),
-
 
     /// UNITS PAGE
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
-    GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
+    GoRoute(
+      path: "/teachernav",
+      builder: (context, state) => const Teachernav(),
+    ),
     GoRoute(
       path: "/upload",
       builder: (context, state) => NewContentUploadPage(),
@@ -36,12 +39,14 @@ final router = GoRouter(
         return Profilepage(username: username);
       },
     ),
-    GoRoute(path:"/editProfile",builder: (context,state) {
-      final user = state.extra as User;
-      return UpdateProfilePage(user: user);
-    }),
     GoRoute(
-
+      path: "/editProfile",
+      builder: (context, state) {
+        final user = state.extra as User;
+        return UpdateProfilePage(user: user);
+      },
+    ),
+    GoRoute(
       path: "/subjects/:courseName",
       builder: (context, state) {
         final courseName = state.pathParameters['courseName']!;
