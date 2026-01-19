@@ -41,12 +41,13 @@ class AuthController extends StateNotifier<String?> {
   }
 
   // Login
-  Future<void> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     state = "loading";
     try {
       final token = await loginApi(email, password);
       await _saveToken(token);
       state = token;
+      return token;
     } catch (e) {
       state = null;
       rethrow;
