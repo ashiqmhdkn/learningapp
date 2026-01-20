@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/adminnav.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
@@ -11,15 +12,14 @@ import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
 import 'package:learningapp/teacher/teachernav.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
-import 'package:learningapp/widgets/mainPage.dart';
+import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
   initialLocation: "/splash",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     /// HOME → SUBJECTS
-    GoRoute(path: '/', builder: (context, state) => const Mainpage()),
-
+    GoRoute(path: '/', builder: (context, state) => const StudentNavbar()),
 
     /// UNITS PAGE
     GoRoute(path: "/login", builder: (context, state) =>  Login_page()),
@@ -53,6 +53,13 @@ final router = GoRouter(
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         return ChatpersUnits(name: name);
+      },
+    ),
+    GoRoute(
+      path: "/mentorStudentIndividual/:name",
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        return MentorStudentIndividual(name: name);
       },
     ),
   ],

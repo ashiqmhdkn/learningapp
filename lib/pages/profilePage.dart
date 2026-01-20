@@ -54,7 +54,7 @@ class Profilepage extends ConsumerWidget {
                           print("Token in profile page: $token");
                           User user = await profileapi(token);
                           GoRouter.of(context)
-                              .go('/editProfile', extra: user);
+                              .push('/editProfile', extra: user);
                         },
                         child: Row(
                           children: [

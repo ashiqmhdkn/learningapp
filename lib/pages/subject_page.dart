@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/pages/settingsPage.dart';
 import 'package:learningapp/providers/subject_provider.dart';
-import 'package:learningapp/widgets/mainPage.dart';
+import 'package:learningapp/widgets/student_navbar.dart';
 import 'package:learningapp/widgets/subject_tittle.dart';
 
 class SubjectPage extends ConsumerWidget {
   final String className;
   const SubjectPage({super.key, required this.className});
-  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +65,7 @@ class SubjectPage extends ConsumerWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) {
-                    return Mainpage();
+                    return StudentNavbar();
                   },
                 ),
               );

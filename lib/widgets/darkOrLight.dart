@@ -13,8 +13,8 @@ class Darkorlight extends ConsumerWidget {
     return IconButton(
       tooltip: 'Toggle Theme',
       icon: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-      onPressed: () {
-        ref.read(themeProvider.notifier).toggleTheme();
+      onPressed: () async {
+        await ref.read(themeProvider.notifier).toggleTheme();
       },
     );
   }

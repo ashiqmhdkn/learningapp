@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:learningapp/admin/admin_pages/admin_dashboard.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_landing.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_students.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
 import 'package:learningapp/mentor/mentorPages/students_marks.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_landing.dart'; // NEW: Added import
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/teacher/new_content_upload_page.dart';
+import 'package:learningapp/pages/login_page.dart';
 
-class Mainpage extends StatefulWidget {
-  const Mainpage({super.key});
+class StudentNavbar extends StatefulWidget {
+  const StudentNavbar({super.key});
 
   @override
-  State<Mainpage> createState() => _MainpageState();
+  State<StudentNavbar> createState() => _StudentNavbarState();
 }
 
-class _MainpageState extends State<Mainpage>
+class _StudentNavbarState extends State<StudentNavbar>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   int _previousIndex = 0;
@@ -32,11 +29,11 @@ class _MainpageState extends State<Mainpage>
   // ];
 
   // NEW CODE:
-  final _pages = const [
+  final _pages = [
     HomePage(),
     CourseSubjectPage(),
-    MentorLandingPage(), // Changed from AdminDashboard to MentorLandingPage
-    StudentsMarks(),
+    MentorStudentsList(),
+    Login_page(),
   ];
 
   @override

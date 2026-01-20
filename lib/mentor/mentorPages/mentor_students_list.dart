@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learningapp/mentor/mentorWidgets/student_info_tile.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 
-class MentorStudents extends StatelessWidget {
-  const MentorStudents({super.key});
+class MentorStudentsList extends StatelessWidget {
+  const MentorStudentsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,9 @@ class MentorStudents extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: Studentinfotile(
+              onTap: () {
+                context.push("/mentorStudentIndividual/Name ${index + 1}");
+              },
               name: "Name ${index + 1}",
               progress: (index + 58),
               flag: 0,
