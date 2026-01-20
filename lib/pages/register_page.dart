@@ -19,7 +19,7 @@ class _RegisterState extends State<Register> {
 
   // Role dropdown state
   String? _selectedRole;
-  final List<String> _roles = ['Student', 'Teacher', 'Admin'];
+  final List<String> _roles = ['student', 'teacher', 'admin'];
 
   @override
   Widget build(BuildContext context) {

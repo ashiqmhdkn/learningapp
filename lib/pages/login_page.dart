@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learningapp/api/login.dart';
 import 'package:learningapp/api/profileapi.dart';
 import 'package:learningapp/models/user_model.dart';
-import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 import 'package:learningapp/controller/authcontroller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Login_page extends ConsumerWidget {
-  Login_page({super.key});
+ Login_page({super.key});
 
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();

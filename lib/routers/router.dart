@@ -5,6 +5,7 @@ import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register_page.dart';
+import 'package:learningapp/pages/splash.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
@@ -13,25 +14,21 @@ import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/mainPage.dart';
 
 final router = GoRouter(
-  initialLocation: "/login",
+  initialLocation: "/splash",
   routes: [
+    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     /// HOME → SUBJECTS
     GoRoute(path: '/', builder: (context, state) => const Mainpage()),
 
 
     /// UNITS PAGE
-    GoRoute(path: "/login", builder: (context, state) => Login_page()),
-    GoRoute(path: "/register", builder: (context, state) => Register()),
+    GoRoute(path: "/login", builder: (context, state) =>  Login_page()),
+    GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
-    GoRoute(
-      path: "/upload",
-      builder: (context, state) => NewContentUploadPage(),
-    ),
+    GoRoute(path: "/upload",builder: (context, state) => const NewContentUploadPage(),),
 
-    GoRoute(
-      path: "/profile/:username",
-      builder: (context, state) {
+    GoRoute(path: "/profile/:username",builder: (context, state) {
         final username = state.pathParameters['username']!;
         return Profilepage(username: username);
       },
@@ -40,23 +37,19 @@ final router = GoRouter(
       final user = state.extra as User;
       return UpdateProfilePage(user: user);
     }),
-    GoRoute(
-
-      path: "/subjects/:courseName",
+    GoRoute(path: "/subjects/:courseName",
       builder: (context, state) {
         final courseName = state.pathParameters['courseName']!;
         return Subjectspage(courseName: courseName);
       },
     ),
-    GoRoute(
-      path: "/units/:unitName",
+    GoRoute(path: "/units/:unitName",
       builder: (context, state) {
         final unitName = state.pathParameters['unitName']!;
         return Unitsupload(unitName: unitName);
       },
     ),
-    GoRoute(
-      path: "/chapters/:name",
+    GoRoute(path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         return ChatpersUnits(name: name);
