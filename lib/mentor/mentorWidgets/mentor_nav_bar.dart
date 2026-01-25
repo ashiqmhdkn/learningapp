@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:learningapp/mentor/mentorPages/batch_division.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_landing.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
+import 'package:learningapp/mentor/mentorPages/mentors_exams.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/pages/profilePage.dart';
-import 'package:learningapp/pages/student_notifications.dart';
+import 'package:learningapp/pages/login_page.dart';
 
-class StudentNavbar extends StatefulWidget {
-  const StudentNavbar({super.key});
+class MentorNavBar extends StatefulWidget {
+  const MentorNavBar({super.key});
 
   @override
-  State<StudentNavbar> createState() => _StudentNavbarState();
+  State<MentorNavBar> createState() => _MentorNavBarState();
 }
 
-class _StudentNavbarState extends State<StudentNavbar>
+class _MentorNavBarState extends State<MentorNavBar>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   int _previousIndex = 0;
@@ -30,10 +33,10 @@ class _StudentNavbarState extends State<StudentNavbar>
 
   // NEW CODE:
   final _pages = [
-    HomePage(),
-    CourseSubjectPage(),
-    StudentNotifications(),
-    Profilepage(username: "Vaishnav"),
+    MentorLandingPage(),
+    MentorStudentsList(),
+    ExamsPage(),
+    BatchDivision(),
   ];
 
   @override
@@ -41,7 +44,7 @@ class _StudentNavbarState extends State<StudentNavbar>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
     );
     _slideAnimation = const AlwaysStoppedAnimation(Offset.zero);
   }
@@ -98,11 +101,11 @@ class _StudentNavbarState extends State<StudentNavbar>
           tabBackgroundColor: colorScheme.primary,
           color: colorScheme.secondary,
           tabs: const [
-            GButton(icon: Icons.home_outlined, text: 'Home'),
-            GButton(icon: Icons.book_outlined, text: 'Courses'),
             // GButton(icon: Icons.person_outline, text: 'Admin'), // OLD CODE
-            GButton(icon: Icons.notifications, text: 'Messages'), // NEW CODE
-            GButton(icon: Icons.grade_outlined, text: 'Marks'),
+            GButton(icon: Icons.home, text: 'Home'), // NEW CODE
+            GButton(icon: Icons.school_outlined, text: 'Marks'),
+            GButton(icon: Icons.grade_outlined, text: 'Exams'),
+            GButton(icon: Icons.video_call, text: 'Access'),
           ],
         ),
       ),

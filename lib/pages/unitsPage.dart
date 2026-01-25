@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/pages/subjectWiseVideos.dart';
 
 class Unitspage extends StatefulWidget {
@@ -82,7 +83,7 @@ class _UnitspageState extends State<Unitspage> {
         },
         children: [
           Subjectwisevideos(unitName: widget.unitName),
-          const Placeholder(),
+          StudentExams(),
           const Placeholder(),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/widgets/customAppBar.dart';
 
 class ExamsPage extends StatefulWidget {
   const ExamsPage({super.key});
@@ -17,22 +18,7 @@ class _ExamsPageState extends State<ExamsPage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: colorScheme.primary,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colorScheme.onPrimary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Exams',
-          style: TextStyle(
-            color: colorScheme.onPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: Customappbar(title: "Exams"),
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: 6,

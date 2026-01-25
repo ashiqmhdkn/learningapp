@@ -1,6 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/adminnav.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
+import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
+import 'package:learningapp/mentor/mentorPages/new_batch_creation.dart';
+import 'package:learningapp/mentor/mentorWidgets/mentor_nav_bar.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
 import 'package:learningapp/pages/login_page.dart';
@@ -15,52 +18,84 @@ import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/splash",
+  initialLocation: "/",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+
     /// HOME → SUBJECTS
     GoRoute(path: '/', builder: (context, state) => const StudentNavbar()),
+    GoRoute(
+      path: '/mentornavbar',
+      builder: (context, state) => const MentorNavBar(),
+    ),
 
     /// UNITS PAGE
-    GoRoute(path: "/login", builder: (context, state) =>  Login_page()),
+    GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
-    GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
-    GoRoute(path: "/upload",builder: (context, state) => const NewContentUploadPage(),),
+    GoRoute(
+      path: "/teachernav",
+      builder: (context, state) => const Teachernav(),
+    ),
+    GoRoute(
+      path: "/upload",
+      builder: (context, state) => const NewContentUploadPage(),
+    ),
 
-    GoRoute(path: "/profile/:username",builder: (context, state) {
+    GoRoute(
+      path: "/profile/:username",
+      builder: (context, state) {
         final username = state.pathParameters['username']!;
         return Profilepage(username: username);
       },
     ),
-    GoRoute(path:"/editProfile",builder: (context,state) {
-      final user = state.extra as User;
-      return UpdateProfilePage(user: user);
-    }),
-    GoRoute(path: "/subjects/:courseName",
+    GoRoute(
+      path: "/editProfile",
+      builder: (context, state) {
+        final user = state.extra as User;
+        return UpdateProfilePage(user: user);
+      },
+    ),
+    GoRoute(
+      path: "/subjects/:courseName",
       builder: (context, state) {
         final courseName = state.pathParameters['courseName']!;
         return Subjectspage(courseName: courseName);
       },
     ),
-    GoRoute(path: "/units/:unitName",
+    GoRoute(
+      path: "/units/:unitName",
       builder: (context, state) {
         final unitName = state.pathParameters['unitName']!;
         return Unitsupload(unitName: unitName);
       },
     ),
-    GoRoute(path: "/chapters/:name",
+    GoRoute(
+      path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         return ChatpersUnits(name: name);
       },
     ),
+
+    //Mentor routes
     GoRoute(
       path: "/mentorStudentIndividual/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         return MentorStudentIndividual(name: name);
       },
+    ),
+    GoRoute(
+      path: "/mentorvideoaccess/:name",
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        return MentorVideoAccess(name: name);
+      },
+    ),
+    GoRoute(
+      path: "/newbatchcreation",
+      builder: (context, state) => NewBatchCreation(),
     ),
   ],
 );
