@@ -26,7 +26,7 @@ final router = GoRouter(
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
-    GoRoute(path: "/upload",builder: (context, state) => const NewContentUploadPage(),),
+    GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
 
     GoRoute(path: "/profile/:username",builder: (context, state) {
         final username = state.pathParameters['username']!;
