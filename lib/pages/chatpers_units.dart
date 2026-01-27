@@ -1,6 +1,7 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/widgets/lesson_card.dart';
 
 final List<Lesson> lessons = List.generate(
@@ -53,7 +54,7 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: CustomSlidingSegmentedControl<int>(
               initialValue: _selectedIndex,
-              children: const {0: Text("Units"), 1: Text("Exam")},
+              children: const {0: Text("Units"), 1: Text("Exams")},
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(15),
@@ -81,10 +82,7 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [
-          _unitsGrid(context),
-          const Center(child: Placeholder()),
-        ],
+        children: [_unitsGrid(context), StudentExams()],
       ),
     );
   }

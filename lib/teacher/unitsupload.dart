@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/pages/subjectWiseVideos.dart';
 import './providers/unitcontroller.dart';
 
@@ -43,7 +44,7 @@ class Unitsupload extends ConsumerWidget {
               initialValue: selectedIndex,
               children: const {
                 0: Text("Classes"),
-                1: Text("Exam"),
+                1: Text("Exams"),
                 2: Text("Notes"),
               },
               decoration: BoxDecoration(
@@ -67,7 +68,7 @@ class Unitsupload extends ConsumerWidget {
         onPageChanged: controller.pageChanged,
         children: [
           Subjectwisevideos(unitName: unitName),
-          const Placeholder(),
+          StudentExams(),
           const Placeholder(),
         ],
       ),
