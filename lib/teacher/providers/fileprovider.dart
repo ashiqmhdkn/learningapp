@@ -41,6 +41,9 @@ class FileNotifier extends StateNotifier<FileState> {
       state = state.copyWith(selectedFile: File(result.files.single.path!));
     }
   }
+    void clear() {
+    state = FileState(selectedFile: null, isUploading: false);
+  }
 
   Future<String> upload(String unitname, String subjectId) async {
     if (state.selectedFile == null) return "not attached image";

@@ -14,6 +14,7 @@ import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
 import 'package:learningapp/teacher/teachernav.dart';
+import 'package:learningapp/teacher/units_botton.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
@@ -41,7 +42,7 @@ final router = GoRouter(
     ),
     GoRoute(
       path: "/upload",
-      builder: (context, state) => const NewContentUploadPage(),
+      builder: (context, state) => NewContentUploadPage(),
     ),
 
     GoRoute(
@@ -76,7 +77,7 @@ final router = GoRouter(
       path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-        return ChatpersUnits(name: name);
+        return Chatpersteachers(name: name);
       },
     ),
 
