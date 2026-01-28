@@ -21,7 +21,7 @@ class UnitUploadbottomsheet extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("UNIT",style: TextStyle(fontSize: 26),),
+              Center(child: Text("Unit Upload",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
               const SizedBox(height: 6),
               const Text("Name"),
               const SizedBox(height: 6),

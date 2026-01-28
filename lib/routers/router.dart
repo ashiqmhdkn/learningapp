@@ -19,12 +19,13 @@ import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/",
+  initialLocation: "/teachernav",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
 
     /// HOME → SUBJECTS
     GoRoute(path: '/', builder: (context, state) => const StudentNavbar()),
+
     GoRoute(
       path: '/mentornavbar',
       builder: (context, state) => const MentorNavBar(),
