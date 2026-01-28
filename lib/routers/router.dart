@@ -13,17 +13,20 @@ import 'package:learningapp/pages/splash.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
+import 'package:learningapp/teacher/teachernav.dart';
+import 'package:learningapp/teacher/units_botton.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/test.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/test",
+  initialLocation: "/teachernav",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
 
     /// HOME → SUBJECTS
     GoRoute(path: '/', builder: (context, state) => const StudentNavbar()),
+
     GoRoute(
       path: '/mentornavbar',
       builder: (context, state) => const MentorNavBar(),
@@ -33,10 +36,15 @@ final router = GoRouter(
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
-
+    GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
+    GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
+    GoRoute(
+      path: "/teachernav",
+      builder: (context, state) => const Teachernav(),
+    ),
     GoRoute(
       path: "/upload",
-      builder: (context, state) => const NewContentUploadPage(),
+      builder: (context, state) => NewContentUploadPage(),
     ),
 
     GoRoute(
@@ -71,7 +79,7 @@ final router = GoRouter(
       path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-        return ChatpersUnits(name: name);
+        return Chatpersteachers(name: name);
       },
     ),
 
