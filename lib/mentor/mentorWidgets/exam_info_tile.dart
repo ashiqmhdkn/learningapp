@@ -13,6 +13,7 @@ class ExamInfoTile extends StatelessWidget {
     return SizedBox(
       height: 85,
       child: Card(
+        elevation: 3,
         shadowColor: Theme.of(context).colorScheme.secondary,
         color: Theme.of(context).colorScheme.tertiary,
         child: Center(

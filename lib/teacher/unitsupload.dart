@@ -49,8 +49,10 @@ class Unitsupload extends ConsumerWidget {
               },
               decoration: BoxDecoration(
                 color: colorScheme.surface,
-                // borderRadius: BorderRadius.circular(15),
-                // border: Border.all(color: Colors.black12),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
               ),
               thumbDecoration: BoxDecoration(
                 color: colorScheme.primary,

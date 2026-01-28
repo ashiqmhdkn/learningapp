@@ -32,49 +32,54 @@ class Profilepage extends ConsumerWidget {
                   backgroundImage: AssetImage('lib/assets/image.png'),
                 ),
                 const SizedBox(width: 60),
-                Column(
-                  children: [
-                    Customprimarytext(text: username, fontValue: 25),
-                    Customprimarytext(text: "Class XII", fontValue: 15),
-                    SizedBox(height: 5),
-                    SizedBox(
-                      height: 30,
-                      width: 90,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStatePropertyAll(
-                            Theme.of(context).colorScheme.tertiary,
-                          ),
-                        ),
-                        onPressed: () async{
-                          
-                          var token = await SharedPreferences.getInstance().then((prefs) {
-                            return prefs.getString('auth_token') ?? '';
-                          });
-                          print("Token in profile page: $token");
-                          User user = await profileapi(token);
-                          GoRouter.of(context)
-                              .push('/editProfile', extra: user);
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              size: 12,
-                              color: Theme.of(context).colorScheme.secondary,
+                Flexible(
+                  child: Column(
+                    children: [
+                      Customprimarytext(text: username, fontValue: 25),
+                      Customprimarytext(text: "Class XII", fontValue: 15),
+                      SizedBox(height: 5),
+                      SizedBox(
+                        height: 30,
+                        width: 90,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).colorScheme.tertiary,
                             ),
-                            Text(
-                              "Edit",
-                              style: TextStyle(
-                                fontSize: 12,
+                          ),
+                          onPressed: () async {
+                            var token = await SharedPreferences.getInstance()
+                                .then((prefs) {
+                                  return prefs.getString('auth_token') ?? '';
+                                });
+                            print("Token in profile page: $token");
+                            User user = await profileapi(token);
+                            GoRouter.of(
+                              context,
+                            ).push('/editProfile', extra: user);
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                                size: 12,
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
-                            ),
-                          ],
+                              Text(
+                                "Edit",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

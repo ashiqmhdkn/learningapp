@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/widgets/customBoldText.dart';
+import 'package:flutter/widgets.dart';
 
-class BatchTile extends StatelessWidget {
+class StaffInfoTile extends StatelessWidget {
   final String name;
+  final String role;
   final VoidCallback onTap;
-  const BatchTile({super.key, required this.name, required this.onTap});
+  const StaffInfoTile({
+    super.key,
+    required this.name,
+    required this.role,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +24,11 @@ class BatchTile extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             child: ListTile(
-              title: Customboldtext(text: name, fontValue: 17),
-              trailing: Icon(Icons.arrow_right),
+              leading: CircleAvatar(
+                radius: 25,
+                backgroundImage: AssetImage("lib/assets/image.png"),
+              ),
+              title: Text(name),
             ),
           ),
         ),

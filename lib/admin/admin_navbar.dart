@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:learningapp/admin/admin_pages/admin_courses.dart';
 import 'package:learningapp/admin/admin_pages/admin_dashboard.dart';
+import 'package:learningapp/admin/admin_pages/admin_payments.dart';
+import 'package:learningapp/admin/admin_pages/admin_staff.dart';
 
 class Adminnav extends StatefulWidget {
   const Adminnav({super.key});
@@ -25,16 +28,14 @@ class _AdminnavState extends State<Adminnav>
   // ];
 
   // NEW CODE:
-  final _pages = const [
-    AdminDashboard(),
-  ];
+  final _pages = const [AdminDashboard(), AdminCourses(), AdminStaff(),AdminPayments()];
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
     );
     _slideAnimation = const AlwaysStoppedAnimation(Offset.zero);
   }
@@ -91,7 +92,10 @@ class _AdminnavState extends State<Adminnav>
           tabBackgroundColor: colorScheme.primary,
           color: colorScheme.secondary,
           tabs: const [
-            GButton(icon: Icons.person_outline, text: 'Admin'), // OLD CODE
+            GButton(icon: Icons.home, text: 'Home'),
+            GButton(icon: Icons.book_outlined, text: 'Courses'),
+            GButton(icon: Icons.person, text: 'Staff'),
+            GButton(icon: Icons.monetization_on, text: 'Payments'),
           ],
         ),
       ),

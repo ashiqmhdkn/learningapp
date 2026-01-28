@@ -31,6 +31,7 @@ class NewContentUploadPage extends StatelessWidget {
 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
+                  
                 ),
               ),
             ),

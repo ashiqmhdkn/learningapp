@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
 import 'package:learningapp/pages/coursePage.dart';
 import 'package:learningapp/pages/home_page.dart';
 import 'package:learningapp/pages/profilePage.dart';

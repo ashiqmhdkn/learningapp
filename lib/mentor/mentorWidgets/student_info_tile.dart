@@ -5,13 +5,13 @@ class Studentinfotile extends StatelessWidget {
   final String name;
   final double progress;
   final int flag;
-   final VoidCallback onTap;
+  final VoidCallback onTap;
   const Studentinfotile({
     super.key,
     required this.name,
     required this.progress,
     required this.flag,
-    required this.onTap
+    required this.onTap,
   });
 
   @override
@@ -19,6 +19,7 @@ class Studentinfotile extends StatelessWidget {
     return SizedBox(
       height: 85,
       child: Card(
+        elevation: 3,
         shadowColor: Theme.of(context).colorScheme.secondary,
         color: Theme.of(context).colorScheme.tertiary,
         child: Center(
