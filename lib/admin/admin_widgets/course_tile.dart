@@ -14,6 +14,8 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String baseUrl = "https://media.crescentlearning.org/";
+     print(backGroundImage);
     return SizedBox(
       height: 210,
       child: Container(
@@ -24,7 +26,10 @@ class CourseTile extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(backGroundImage, fit: BoxFit.fill),
+             
+              Image.network(baseUrl+backGroundImage, 
+              //fit: BoxFit.fill,
+              scale: 1,),
               Positioned(
                 top: 8,
                 right: 8,
