@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_navbar.dart';
+
 import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
 import 'package:learningapp/mentor/mentorPages/new_batch_creation.dart';
@@ -13,14 +14,13 @@ import 'package:learningapp/pages/splash.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
-import 'package:learningapp/teacher/teachernav.dart';
 import 'package:learningapp/teacher/units_botton.dart';
 import 'package:learningapp/teacher/unitsupload.dart';
 import 'package:learningapp/test.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/teachernav",
+  initialLocation: "/test",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
 
@@ -36,12 +36,12 @@ final router = GoRouter(
     GoRoute(path: "/login", builder: (context, state) => Login_page()),
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
-    GoRoute(path: "/teachernav", builder: (context, state) => const Teachernav()),
+    GoRoute(path: "/test", builder: (context, state) => const Test()),
     GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
-    GoRoute(
-      path: "/teachernav",
-      builder: (context, state) => const Teachernav(),
-    ),
+    // GoRoute(
+    //   path: "/teachernav",
+    //   builder: (context, state) => const Teachernav(),
+    // ),
     GoRoute(
       path: "/upload",
       builder: (context, state) => NewContentUploadPage(),
@@ -102,8 +102,5 @@ final router = GoRouter(
       path: "/newbatchcreation",
       builder: (context, state) => NewBatchCreation(),
     ),
-
-    // For testing
-    GoRoute(path: '/test', builder: (context, state) => const Test()),
   ],
 );
