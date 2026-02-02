@@ -15,7 +15,7 @@ class CourseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String baseUrl = "https://media.crescentlearning.org/";
-     print(backGroundImage);
+     print(baseUrl+backGroundImage);
     return SizedBox(
       height: 210,
       child: Container(

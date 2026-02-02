@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/admin/admin_pages/admin_create_course.dart';
 import 'package:learningapp/admin/admin_widgets/course_tile.dart';
 import 'package:learningapp/api/coursesapi.dart';
 import 'package:learningapp/models/course_model.dart';
@@ -18,7 +19,9 @@ class AdminCourses extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.push("/newbatchcreation");
+          showBottomSheet(context: context, 
+  showDragHandle: true, // safe here
+  enableDrag: true,  builder:(context)=> Coursebottomsheet());
         },
         icon: const Icon(Icons.add),
         label: const Text("New Course"),
