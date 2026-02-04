@@ -44,8 +44,15 @@ class AdminCourses extends ConsumerWidget {
               title: course.title,
               backGroundImage: course.course_image,
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AdminSubjects(courseid: course.course_id as String)));
-              }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AdminSubjects(courseid: course.course_id as String),
+                  ),
+                );
+              },
+              onDelete: () {},
             );
           },
         ),

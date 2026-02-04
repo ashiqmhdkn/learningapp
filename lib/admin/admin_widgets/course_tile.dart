@@ -5,23 +5,24 @@ class CourseTile extends StatelessWidget {
   final String backGroundImage;
   final VoidCallback onTap;
   final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   const CourseTile({
     super.key,
     required this.title,
     required this.backGroundImage,
     required this.onTap,
-    required this .onEdit
+    required this.onEdit,
+    required this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     final String baseUrl = "https://media.crescentlearning.org/";
-     print(baseUrl+backGroundImage);
+
     return GestureDetector(
-      onTap: () => onTap(),
+      onTap: onTap,
       child: SizedBox(
-      
         height: 210,
         child: Container(
           margin: const EdgeInsets.all(16),
@@ -31,71 +32,25 @@ class CourseTile extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-               
-                Image.network(baseUrl+backGroundImage, 
-                //fit: BoxFit.fill,
-                scale: 1,),
+                Image.network(baseUrl + backGroundImage, fit: BoxFit.cover),
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: PopupMenuButton<String>(
-                    borderRadius: BorderRadius.circular(16),
-                    elevation: 6,
-                    color: Theme.of(context).colorScheme.surface,
-                    icon: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.35),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.edit,
-                        size: 20,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildCircleButton(
+                        context,
+                        icon: Icons.edit,
                         color: Theme.of(context).colorScheme.primary,
+                        onTap: onEdit,
                       ),
-                    ),
-                    onSelected: (value) {
-                      if (value == 'update') {
-                        // handle update
-                      } else if (value == 'delete') {
-                        // handle delete
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        onTap: () => onEdit(),
-                        value: 'update',
-                        child: Row(
-                          children: const [
-                            Icon(Icons.edit, size: 18),
-                            SizedBox(width: 10),
-                            Text(
-                              'Update',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuDivider(height: 8),
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 18,
-                              color: Colors.red,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Delete',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(width: 8),
+                      _buildCircleButton(
+                        context,
+                        icon: Icons.delete_outline,
+                        color: Colors.red,
+                        onTap: onDelete,
                       ),
                     ],
                   ),
@@ -125,6 +80,25 @@ class CourseTile extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCircleButton(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.35),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, size: 20, color: color),
       ),
     );
   }
