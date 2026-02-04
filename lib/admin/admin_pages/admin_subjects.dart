@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learningapp/admin/admin_pages/admin_subjects.dart';
 import 'package:learningapp/admin/admin_widgets/add_course.dart';
 import 'package:learningapp/admin/admin_widgets/course_tile.dart';
 import 'package:learningapp/admin/admin_widgets/edit_course.dart';
 import 'package:learningapp/providers/courses_provider.dart';
+import 'package:learningapp/providers/subject_provider.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 
-class AdminCourses extends ConsumerWidget {
-  const AdminCourses({super.key});
+class AdminSubjects extends ConsumerWidget {
+  final String courseid;
+ AdminSubjects({super.key ,required this.courseid});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final coursesAsync = ref.watch(coursesNotifierProvider);
+    final Subjectsread= ref.watch(subjectsNotifierProvider);
+    ref.read(subjectsNotifierProvider.notifier).setcourse_id(courseid);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton.extended(
@@ -27,25 +29,17 @@ class AdminCourses extends ConsumerWidget {
         icon: const Icon(Icons.add),
         label: const Text("New Course"),
       ),
-      appBar: Customappbar(title: "Courses"),
-      body: coursesAsync.when(
-        data: (courses) => ListView.builder(
-          itemCount: courses.length,
+      appBar: Customappbar(title: "Subjects"),
+      body: Subjectsread.when(
+        data: (subjects) => ListView.builder(
+          itemCount: subjects.length,
           itemBuilder: (context, index) {
-            final course = courses[index];
+            final subject = subjects[index];
             return CourseTile(
-              onEdit: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => EditCourse(course: course),
-                );
-              },
-              title: course.title,
-              backGroundImage: course.course_image,
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AdminSubjects(courseid: course.course_id as String)));
-              }
+              onEdit: () {},
+              title: subject.title,
+              backGroundImage: subject.subject_image,
+              onTap: () => print("Tapped ${subject.title}"),
             );
           },
         ),

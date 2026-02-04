@@ -14,12 +14,11 @@ class SubjectTile extends StatelessWidget {
         child: Center(
           child: Column(children: [
             Image.network(
-              subject.image,
+              subject.subject_image,
               width: 40,
               height: 40,
             ),
             Text(subject.title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-            Text('${subject.units.length} Units'),
           
           ],),
         ),
