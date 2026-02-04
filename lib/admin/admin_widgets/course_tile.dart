@@ -4,12 +4,14 @@ class CourseTile extends StatelessWidget {
   final String title;
   final String backGroundImage;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
 
   const CourseTile({
     super.key,
     required this.title,
     required this.backGroundImage,
     required this.onTap,
+    required this .onEdit
   });
 
   @override
@@ -58,6 +60,7 @@ class CourseTile extends StatelessWidget {
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
+                      onTap: () => onEdit(),
                       value: 'update',
                       child: Row(
                         children: const [
