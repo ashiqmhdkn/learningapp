@@ -14,7 +14,6 @@ class AddSubject extends ConsumerStatefulWidget {
 class _AddSubjectState extends ConsumerState<AddSubject> {
   String subjectImage = "";
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
   bool _isUploading = false;
 
   Future<void> _pickFile(BuildContext context) async {
@@ -29,7 +28,6 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
   @override
   void dispose() {
     _titleController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -40,7 +38,7 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
         Navigator.pop(context);
       },
       builder: (context) => SizedBox(
-        height: 500,
+        height: 400,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
@@ -61,20 +59,6 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
                   controller: _titleController,
                   decoration: InputDecoration(
                     hintText: "Enter Subject name",
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text("Description"),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: _descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: "Enter Subject Description",
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -152,19 +136,16 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: _isUploading ? null : () async {
-                          if (subjectImage != "" &&
-                              _descriptionController.text.isNotEmpty &&
-                              _titleController.text.isNotEmpty) {
+                          if (subjectImage != "" &&_titleController.text.isNotEmpty) {
                             setState(() {
                               _isUploading = true;
                             });
 
                             final result = await ref
                                 .read(subjectsNotifierProvider.notifier)
-                                .createSubject(
+                                .createSubject(      
                                   title: _titleController.text,
                                   subjectImage: subjectImage,
-                                  description: _descriptionController.text,
                                 );
 
                             setState(() {

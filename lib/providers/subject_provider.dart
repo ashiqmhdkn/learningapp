@@ -19,9 +19,8 @@ void setcourse_id(String course){
 course_id=course;
 }
   // Create new subject
-  Future<bool> createCourse({
+  Future<bool> createSubject({
     required String title,
-    required String description,
     required String subjectImage,
   }) async {
     final token = ref.read(authTokenProvider);
@@ -30,7 +29,7 @@ course_id=course;
       final success = await subjectspost(
         token: token,
         title: title,
-        description: description,
+        course_id:course_id,
         subjectImage: subjectImage,
       );
       
@@ -47,11 +46,10 @@ course_id=course;
   }
 
   // Update existing subject
-  Future<bool> updateCourse({
+  Future<bool> updateSubject({
     required String subjectId,
     required String title,
-    required String description,
-    String? subjectImage,
+    required String? subjectImage,
   }) async {
     final token = ref.read(authTokenProvider);
     
@@ -75,7 +73,7 @@ course_id=course;
   }
 
   // Delete subject
-  Future<bool> deleteCourse({
+  Future<bool> deleteSubject({
     required String subjectId,
   }) async {
     final token = ref.read(authTokenProvider);

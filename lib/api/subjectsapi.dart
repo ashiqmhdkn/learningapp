@@ -47,14 +47,14 @@ Future<List<Subject>> subjectsget(String token) async {
 Future<bool> subjectspost({
   required String token,
   required String title,
-  required String description,
+  required String course_id,
   required String subjectImage,
 }) async {
   final uri = Uri.parse('$baseUrl/subjects');
   try {
     final request = http.MultipartRequest('POST', uri)
       ..fields['title'] = title
-      ..fields['description'] = description
+      ..fields['course_id'] = course_id
       ..files.add(await http.MultipartFile.fromPath('subject_image', subjectImage))
       ..headers['Authorization'] = 'Bearer $token'
       ..headers['Accept'] = 'application/json';
