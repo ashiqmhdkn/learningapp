@@ -2,6 +2,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
+import 'package:learningapp/teacher/add_units.dart';
 import 'package:learningapp/teacher/unitsuploadbottomsheet.dart';
 import 'package:learningapp/widgets/lesson_card.dart';
 
@@ -16,7 +17,8 @@ final List<Lesson> lessons = List.generate(
 
 class Chatpersteachers extends StatefulWidget {
   final String name;
-  const Chatpersteachers({super.key, required this.name});
+  final String subject_id;
+  const Chatpersteachers({super.key, required this.name,required this.subject_id});
 
   @override
   State<Chatpersteachers> createState() => _ChatpersteachersState();
@@ -50,16 +52,16 @@ class _ChatpersteachersState extends State<Chatpersteachers> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (context) => UnitUploadbottomsheet(),
-  );
-          },
-        ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => AddUnit(),
+              );
+            },
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
