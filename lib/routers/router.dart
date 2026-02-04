@@ -15,7 +15,7 @@ import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/new_content_upload_page.dart';
 import 'package:learningapp/teacher/units_botton.dart';
-import 'package:learningapp/teacher/unitsupload.dart';
+import 'package:learningapp/teacher/add_units.dart';
 import 'package:learningapp/test.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
@@ -37,15 +37,15 @@ final router = GoRouter(
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/test", builder: (context, state) => const Test()),
-    GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
+    // GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
     // GoRoute(
     //   path: "/teachernav",
     //   builder: (context, state) => const Teachernav(),
     // ),
-    GoRoute(
-      path: "/upload",
-      builder: (context, state) => NewContentUploadPage(),
-    ),
+    // GoRoute(
+    //   path: "/upload",
+    //   builder: (context, state) => NewContentUploadPage(),
+    // ),
 
     GoRoute(
       path: "/profile/:username",
@@ -69,20 +69,26 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: "/units/:unitName",
+      path: "/addunits",
       builder: (context, state) {
-        final unitName = state.pathParameters['unitName']!;
-        return Unitsupload(unitName: unitName);
+        return AddUnit();
       },
     ),
     GoRoute(
       path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-        return Chatpersteachers(name: name);
+        return ChatpersUnits(name: name);
       },
     ),
-
+GoRoute(
+      path: "/chapterupdate/:name:subjct_id",
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        final subject_id=state.pathParameters['subject_id']!;
+        return Chatpersteachers(name: name ,subject_id: subject_id,);
+      },
+    ),
     //Mentor routes
     GoRoute(
       path: "/mentorStudentIndividual/:name",
