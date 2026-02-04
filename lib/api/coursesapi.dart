@@ -2,13 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:learningapp/models/course_model.dart';
-import 'package:learningapp/models/user_model.dart';
 
 const String baseUrl = 'https://api.crescentlearning.org';
 
+// GET - Fetch all courses
 Future<List<Course>> coursesget(String token) async {
   final uri = Uri.parse('$baseUrl/courses');
-
   try {
     final response = await http.get(
       uri,
@@ -18,10 +17,10 @@ Future<List<Course>> coursesget(String token) async {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-
-    print('Profile API Response: ${response.statusCode}');
-    print('Profile API Body: ${response.body}');
-
+    
+    print('GET Courses Response: ${response.statusCode}');
+    print('GET Courses Body: ${response.body}');
+    
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       if (data.containsKey('courses')) {
@@ -30,7 +29,7 @@ Future<List<Course>> coursesget(String token) async {
             .map((item) => Course.fromJson(item as Map<String, dynamic>))
             .toList();
       } else {
-        throw Exception('User data not found in response');
+        throw Exception('Courses data not found in response');
       }
     } else if (response.statusCode == 401) {
       throw Exception('Unauthorized: Invalid or expired token');
@@ -39,44 +38,118 @@ Future<List<Course>> coursesget(String token) async {
       throw Exception(error['error'] ?? 'Failed to fetch courses');
     }
   } catch (e) {
-    print('Error in courses: $e');
+    print('Error in coursesget: $e');
     rethrow;
   }
 }
-Future<String> coursespost({
-   required String token,
+
+// POST - Create new course
+Future<bool> coursespost({
+  required String token,
   required String title,
   required String description,
   required String courseImage,
-}
-) async {
+}) async {
   final uri = Uri.parse('$baseUrl/courses');
-
   try {
     final request = http.MultipartRequest('POST', uri)
       ..fields['title'] = title
       ..fields['description'] = description
-      ..files.add(await http.MultipartFile.fromPath('course_image',courseImage))
+      ..files.add(await http.MultipartFile.fromPath('course_image', courseImage))
       ..headers['Authorization'] = 'Bearer $token'
       ..headers['Accept'] = 'application/json';
-final streamed = await request.send();
-final res = await http.Response.fromStream(streamed);
 
-print("Status: ${res.statusCode}");
-print("Body: ${res.body}");
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    
+    print("POST Status: ${res.statusCode}");
+    print("POST Body: ${res.body}");
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final Map<String, dynamic> data = jsonDecode(res.body);
+      return data['success'] == true;
+    } else {
+      print("Server error: ${res.statusCode} ${res.reasonPhrase}, Body: ${res.body}");
+      return false;
+    }
+  } catch (e) {
+    print('Error in coursespost: $e');
+    return false;
+  }
+}
+
+// PUT - Update existing course
+Future<bool> coursesPut({
+  required String token,
+  required String courseId,
+  required String title,
+  required String description,
+  String? courseImage,
+}) async {
+  final uri = Uri.parse('$baseUrl/courses/$courseId');
+  try {
+    final request = http.MultipartRequest('PUT', uri)
+      ..fields['title'] = title
+      ..fields['description'] = description
+      ..headers['Authorization'] = 'Bearer $token'
+      ..headers['Accept'] = 'application/json';
+
+    // Only add image if provided
+    if (courseImage != null && courseImage.isNotEmpty) {
+      request.files.add(
+        await http.MultipartFile.fromPath('course_image', courseImage)
+      );
+    }
+
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    
+    print("PUT Status: ${res.statusCode}");
+    print("PUT Body: ${res.body}");
 
     if (res.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(res.body);
-
-      if (data['success'] == true && data.containsKey('message') && data.containsKey('course_id')) {
-        return data['success'] as String;
-      } else {
-        throw Exception("Upload failed: ${res.body}");
-      }
+      return data['success'] == true;
     } else {
-      throw Exception("Server error: ${res.statusCode} ${res.reasonPhrase}, Body: ${res.body}");
+      print("Server error: ${res.statusCode}, Body: ${res.body}");
+      return false;
     }
   } catch (e) {
-    throw Exception("File upload error: $e");
+    print('Error in coursesPut: $e');
+    return false;
+  }
+}
+
+// DELETE - Delete course
+Future<bool> coursesDelete({
+  required String token,
+  required String courseId,
+}) async {
+  final uri = Uri.parse('$baseUrl/courses/$courseId');
+  try {
+    final request = http.Request('DELETE', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..headers['Accept'] = 'application/json'
+      ..headers['Content-Type'] = 'application/json';
+
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    
+    print("DELETE Status: ${res.statusCode}");
+    print("DELETE Body: ${res.body}");
+
+    if (res.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(res.body);
+      return data['success'] == true;
+    } else if (res.statusCode == 404) {
+      print("Course not found");
+      return false;
+    } else {
+      print("Server error: ${res.statusCode}, Body: ${res.body}");
+      return false;
+    }
+  } catch (e) {
+    print('Error in coursesDelete: $e');
+    return false;
   }
 }
