@@ -1,30 +1,27 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
+import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
-import 'package:learningapp/teacher/unitsuploadbottomsheet.dart';
-import 'package:learningapp/widgets/lesson_card.dart';
+import 'package:learningapp/widgets/edit_unit_card.dart';
 
-final List<Lesson> lessons = List.generate(
-  16,
-  (index) => Lesson(
-    title: 'Linear Algebra',
-    part: 'Part ${index + 1}',
-    thumbnail: 'lib/assets/physics.jpeg',
-  ),
-);
-
-class Chatpersteachers extends StatefulWidget {
-  final String name;
-  final String subject_id;
-  const Chatpersteachers({super.key, required this.name,required this.subject_id});
+class Chatpersteachers extends ConsumerStatefulWidget {
+  final String subjectId;
+  final String subjectName;
+  
+  const Chatpersteachers({
+    super.key,
+    required this.subjectId,
+    required this.subjectName,
+  });
 
   @override
-  State<Chatpersteachers> createState() => _ChatpersteachersState();
+  ConsumerState<Chatpersteachers> createState() => _ChatpersteachersState();
 }
 
-class _ChatpersteachersState extends State<Chatpersteachers> {
+class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
   int _selectedIndex = 0;
   late final PageController _pageController;
 
@@ -48,12 +45,12 @@ class _ChatpersteachersState extends State<Chatpersteachers> {
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          widget.name,
+          widget.subjectName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -69,7 +66,10 @@ class _ChatpersteachersState extends State<Chatpersteachers> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: CustomSlidingSegmentedControl<int>(
               initialValue: _selectedIndex,
-              children: const {0: Text("Units"), 1: Text("Exams")},
+              children: const {
+                0: Text("Units"),
+                1: Text("Exams"),
+              },
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(15),
@@ -97,31 +97,119 @@ class _ChatpersteachersState extends State<Chatpersteachers> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [_unitsGrid(context), StudentExams()],
+        children: [
+          _buildUnitsGrid(),
+          const StudentExams(),
+        ],
       ),
     );
   }
 
-  Widget _unitsGrid(BuildContext context) {
+  Widget _buildUnitsGrid() {
+    // Watch the family provider with subjectId
+    final unitsAsync = ref.watch(unitsNotifierProvider);
+    ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId);
+
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 1,
-        ),
-        itemCount: lessons.length,
-        itemBuilder: (context, index) {
-          return LessonCard(
-            lesson: lessons[index],
-            onTap: () {
-              context.push('/units/${lessons[index].title}');
+      child: unitsAsync.when(
+        data: (units) {
+          if (units.isEmpty) {
+            return const Center(
+              child: Text('No units available'),
+            );
+          }
+          
+          return GridView.builder(
+            physics: const BouncingScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1,
+            ),
+            itemCount: units.length,
+            itemBuilder: (context, index) {
+              final unit = units[index];
+              return EditUnitCard(
+                title: unit.title,
+                image: "https://media.crescentlearning.org/"+unit.unit_image,
+                onDelete: () async {
+                //   final confirmed = await showDialog<bool>(
+                //     context: context,
+                //     builder: (context) => AlertDialog(
+                //       title: const Text('Delete Unit'),
+                //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+                //       actions: [
+                //         TextButton(
+                //           onPressed: () => Navigator.pop(context, false),
+                //           child: const Text('Cancel'),
+                //         ),
+                //         TextButton(
+                //           onPressed: () => Navigator.pop(context, true),
+                //           style: TextButton.styleFrom(
+                //             foregroundColor: Colors.red,
+                //           ),
+                //           child: const Text('Delete'),
+                //         ),
+                //       ],
+                //     ),
+                //   );
+
+                //   if (confirmed == true && mounted) {
+                //     final success = await ref
+                //         .read(unitsNotifierProvider(widget.subjectId).notifier)
+                //         .deleteUnit(unitId: unit.id);
+                    
+                //     if (success && mounted) {
+                //       ScaffoldMessenger.of(context).showSnackBar(
+                //         const SnackBar(content: Text('Unit deleted successfully')),
+                //       );
+                //     }
+                //   }
+                },
+                onEdit: () {
+                  // showModalBottomSheet(
+                  //   context: context,
+                  //   isScrollControlled: true,
+                  //   builder: (context) => AddUnit(
+                  //     subjectId: widget.subjectId,
+                  //     unit: unit,
+                  //   ),
+                  // );
+                },
+                onTap: () {
+                  // Navigate to lessons page
+                  context.push('/lessons/${unit.unit_id}');
+                },
+              );
             },
           );
         },
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        error: (error, stack) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                'Error: $error',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.red),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(unitsNotifierProvider);
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

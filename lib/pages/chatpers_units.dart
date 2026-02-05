@@ -2,7 +2,7 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
-import 'package:learningapp/widgets/lesson_card.dart';
+import 'package:learningapp/widgets/unit_card.dart';
 
 final List<Lesson> lessons = List.generate(
   16,
