@@ -17,11 +17,12 @@ class Customtextbox extends StatelessWidget {
       style: TextStyle(color: Colors.black),
       controller: textController,
       decoration: InputDecoration(
+        label: Text(hinttext, style: TextStyle(color: Colors.black)),
         prefixIcon: Icon(
           textFieldIcon,
           color: Theme.of(context).colorScheme.tertiary,
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(17)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         fillColor: Colors.white,
         filled: true,
         hintText: hinttext,

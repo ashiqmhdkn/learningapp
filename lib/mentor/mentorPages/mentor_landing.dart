@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:learningapp/mentor/mentorPages/mentors_exams.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_note.dart';
 import 'package:learningapp/mentor/mentorPages/mentors_modules.dart';
+import 'package:learningapp/teacher/quiz/quiz_creation.dart';
+import 'package:learningapp/widgets/customButtonOne.dart';
+import 'package:learningapp/widgets/customPrimaryText.dart';
 
 class MentorLandingPage extends StatefulWidget {
   const MentorLandingPage({super.key});
@@ -189,6 +192,20 @@ class _MentorLandingPageState extends State<MentorLandingPage> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Center(
+              child: Custombuttonone(
+                text: "Create a Quiz",
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) {
+                        return QuizCreation();
+                      },
+                    ),
+                  );
+                },
               ),
             ),
           ],

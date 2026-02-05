@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:learningapp/models/comment_model.dart';
+import 'package:learningapp/widgets/comment.dart';
 import 'package:learningapp/widgets/videoSelectionCard.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -106,6 +108,45 @@ class _VideoplaybackState extends State<Videoplayback> {
                     ],
                   ),
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                tileColor: Theme.of(context).colorScheme.tertiary,
+                leading: const Icon(Icons.comment),
+                title: const Text(
+                  "Comments",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  openCommentsSheet(
+                    context,
+                    comments: [
+                      CommentModel(
+                        id: "1",
+                        username: "Ashiq",
+                        text: "Hello",
+                        createdAt: DateTime.now(),
+                      ),
+                      CommentModel(
+                        id: "2",
+                        username: "Vishnu",
+                        text: "hai",
+                        createdAt: DateTime.now(),
+                      ),
+                    ],
+                    onSend: (text) {
+                      // temporary
+                      print("New comment: $text");
+                    },
+                  );
+                },
               ),
             ),
 

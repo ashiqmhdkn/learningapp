@@ -46,13 +46,22 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           widget.subjectName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.primary,
+              ),
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              ),
+            ),
+            child: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               showModalBottomSheet(
                 context: context,

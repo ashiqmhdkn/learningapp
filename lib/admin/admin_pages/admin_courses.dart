@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_pages/admin_subjects.dart';
 import 'package:learningapp/admin/admin_widgets/add_course.dart';
+import 'package:learningapp/admin/admin_widgets/admin_appbar.dart';
 import 'package:learningapp/admin/admin_widgets/course_tile.dart';
 import 'package:learningapp/admin/admin_widgets/edit_course.dart';
 import 'package:learningapp/providers/courses_provider.dart';
-import 'package:learningapp/widgets/customAppBar.dart';
 
 class AdminCourses extends ConsumerWidget {
   const AdminCourses({super.key});
@@ -15,19 +14,18 @@ class AdminCourses extends ConsumerWidget {
     final coursesAsync = ref.watch(coursesNotifierProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+
+      appBar: AdminAppBar(
+        title: "Courses",
+        onAddPressed: () {
           showBottomSheet(
             context: context,
-            showDragHandle: true, // safe here
+            showDragHandle: true,
             enableDrag: true,
             builder: (context) => AddCourse(),
           );
         },
-        icon: const Icon(Icons.add),
-        label: const Text("New Course"),
       ),
-      appBar: Customappbar(title: "Courses"),
       body: coursesAsync.when(
         data: (courses) => ListView.builder(
           itemCount: courses.length,
