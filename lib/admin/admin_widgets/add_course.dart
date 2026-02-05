@@ -84,8 +84,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                 const SizedBox(height: 16),
                 const Text("File"),
                 const SizedBox(height: 8),
-                
-                // Image selection/preview
+
                 if (courseImage == "")
                   GestureDetector(
                     onTap: () => _pickFile(context),
@@ -102,7 +101,10 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                           Icon(Icons.cloud_upload_outlined, size: 40),
                           SizedBox(height: 8),
                           Text("Select Image for the Course"),
-                          Text("or Browse", style: TextStyle(color: Colors.blue)),
+                          Text(
+                            "or Browse",
+                            style: TextStyle(color: Colors.blue),
+                          ),
                         ],
                       ),
                     ),
@@ -145,58 +147,81 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                     ],
                   ),
                 const SizedBox(height: 12),
-                
+
                 // Buttons
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: _isUploading ? null : () async {
-                          if (courseImage != "" &&
-                              _descriptionController.text.isNotEmpty &&
-                              _titleController.text.isNotEmpty) {
-                            setState(() {
-                              _isUploading = true;
-                            });
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.primary,
+                          ),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        ),
+                        onPressed: _isUploading
+                            ? null
+                            : () async {
+                                if (courseImage != "" &&
+                                    _descriptionController.text.isNotEmpty &&
+                                    _titleController.text.isNotEmpty) {
+                                  setState(() {
+                                    _isUploading = true;
+                                  });
 
-                            final result = await ref
-                                .read(coursesNotifierProvider.notifier)
-                                .createCourse(
-                                  title: _titleController.text,
-                                  courseImage: courseImage,
-                                  description: _descriptionController.text,
-                                );
+                                  final result = await ref
+                                      .read(coursesNotifierProvider.notifier)
+                                      .createCourse(
+                                        title: _titleController.text,
+                                        courseImage: courseImage,
+                                        description:
+                                            _descriptionController.text,
+                                      );
 
-                            setState(() {
-                              _isUploading = false;
-                            });
+                                  setState(() {
+                                    _isUploading = false;
+                                  });
 
-                            if (context.mounted) {
-                              if (result) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Course created successfully"),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-                                Navigator.pop(context);
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Failed to create course"),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              }
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please fill all fields and select a file."),
-                              ),
-                            );
-                          }
-                        },
+                                  if (context.mounted) {
+                                    if (result) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Course created successfully",
+                                          ),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                      Navigator.pop(context);
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Failed to create course",
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Please fill all fields and select a file.",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
                         child: _isUploading
                             ? const SizedBox(
                                 height: 20,
@@ -206,16 +231,34 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Text("Upload"),
+                            : const Text(
+                                "Upload",
+                                style: TextStyle(color: Colors.white),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _isUploading ? null : () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Cancel"),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.tertiary,
+                          ),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                        ),
+                        onPressed: _isUploading
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
+                        child: const Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],

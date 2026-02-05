@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
-import 'package:learningapp/teacher/editUnitdart';
 import 'package:learningapp/widgets/edit_unit_card.dart';
 
 class Chatpersteachers extends ConsumerStatefulWidget {
@@ -45,13 +44,22 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: Text(
           widget.subjectName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.primary,
+              ),
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              ),
+            ),
+            child: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -124,56 +132,56 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
             itemCount: units.length,
             itemBuilder: (context, index) {
               final unit = units[index];
-              return EditUnitCard(
-                title: unit.title,
-                image: "https://media.crescentlearning.org/" + unit.unit_image,
-                onDelete: () async {
-                  //   final confirmed = await showDialog<bool>(
-                  //     context: context,
-                  //     builder: (context) => AlertDialog(
-                  //       title: const Text('Delete Unit'),
-                  //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () => Navigator.pop(context, false),
-                  //           child: const Text('Cancel'),
-                  //         ),
-                  //         TextButton(
-                  //           onPressed: () => Navigator.pop(context, true),
-                  //           style: TextButton.styleFrom(
-                  //             foregroundColor: Colors.red,
-                  //           ),
-                  //           child: const Text('Delete'),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   );
+              // return EditUnitCard(
+              //   title: unit.title,
+              //   image: "https://media.crescentlearning.org/" + unit.unit_image,
+              //   onDelete: () async {
+              //     //   final confirmed = await showDialog<bool>(
+              //     //     context: context,
+              //     //     builder: (context) => AlertDialog(
+              //     //       title: const Text('Delete Unit'),
+              //     //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+              //     //       actions: [
+              //     //         TextButton(
+              //     //           onPressed: () => Navigator.pop(context, false),
+              //     //           child: const Text('Cancel'),
+              //     //         ),
+              //     //         TextButton(
+              //     //           onPressed: () => Navigator.pop(context, true),
+              //     //           style: TextButton.styleFrom(
+              //     //             foregroundColor: Colors.red,
+              //     //           ),
+              //     //           child: const Text('Delete'),
+              //     //         ),
+              //     //       ],
+              //     //     ),
+              //     //   );
 
-                  //   if (confirmed == true && mounted) {
-                  //     final success = await ref
-                  //         .read(unitsNotifierProvider(widget.subjectId).notifier)
-                  //         .deleteUnit(unitId: unit.id);
+              //     //   if (confirmed == true && mounted) {
+              //     //     final success = await ref
+              //     //         .read(unitsNotifierProvider(widget.subjectId).notifier)
+              //     //         .deleteUnit(unitId: unit.id);
 
-                  //     if (success && mounted) {
-                  //       ScaffoldMessenger.of(context).showSnackBar(
-                  //         const SnackBar(content: Text('Unit deleted successfully')),
-                  //       );
-                  //     }
-                  //   }
-                },
-                onEdit: () {
-                  showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (context) => EditUnit(unit: unit),
-                );
-                },
-                onTap: () {
-                  // Navigate to lessons page
-                  context.push('/lessons/${unit.unit_id}');
-                },
-              );
+              //     //     if (success && mounted) {
+              //     //       ScaffoldMessenger.of(context).showSnackBar(
+              //     //         const SnackBar(content: Text('Unit deleted successfully')),
+              //     //       );
+              //     //     }
+              //     //   }
+              //   },
+              //   onEdit: () {
+              //     showModalBottomSheet(
+              //     context: context,
+              //     isScrollControlled: true,
+              //     showDragHandle: true,
+              //     builder: (context) => EditUnit(unit: unit),
+              //   );
+              //   },
+              //   onTap: () {
+              //     // Navigate to lessons page
+              //     context.push('/lessons/${unit.unit_id}');
+              //   },
+              // );
             },
           );
         },
