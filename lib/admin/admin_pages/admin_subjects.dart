@@ -36,6 +36,9 @@ class AdminSubjects extends ConsumerWidget {
           itemBuilder: (context, index) {
             final subject = subjects[index];
             return CourseTile(
+              onDelete: () {
+                
+              },
               onEdit: () {
                 showModalBottomSheet(
                   context: context,

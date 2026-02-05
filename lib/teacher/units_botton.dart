@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
+import 'package:learningapp/teacher/editUnitdart';
 import 'package:learningapp/widgets/edit_unit_card.dart';
 
 class Chatpersteachers extends ConsumerStatefulWidget {
   final String subjectId;
   final String subjectName;
-  
+
   const Chatpersteachers({
     super.key,
     required this.subjectId,
@@ -66,10 +67,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: CustomSlidingSegmentedControl<int>(
               initialValue: _selectedIndex,
-              children: const {
-                0: Text("Units"),
-                1: Text("Exams"),
-              },
+              children: const {0: Text("Units"), 1: Text("Exams")},
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(15),
@@ -97,10 +95,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [
-          _buildUnitsGrid(),
-          const StudentExams(),
-        ],
+        children: [_buildUnitsGrid(), const StudentExams()],
       ),
     );
   }
@@ -115,11 +110,9 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
       child: unitsAsync.when(
         data: (units) {
           if (units.isEmpty) {
-            return const Center(
-              child: Text('No units available'),
-            );
+            return const Center(child: Text('No units available'));
           }
-          
+
           return GridView.builder(
             physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -133,50 +126,48 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
               final unit = units[index];
               return EditUnitCard(
                 title: unit.title,
-                image: "https://media.crescentlearning.org/"+unit.unit_image,
+                image: "https://media.crescentlearning.org/" + unit.unit_image,
                 onDelete: () async {
-                //   final confirmed = await showDialog<bool>(
-                //     context: context,
-                //     builder: (context) => AlertDialog(
-                //       title: const Text('Delete Unit'),
-                //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-                //       actions: [
-                //         TextButton(
-                //           onPressed: () => Navigator.pop(context, false),
-                //           child: const Text('Cancel'),
-                //         ),
-                //         TextButton(
-                //           onPressed: () => Navigator.pop(context, true),
-                //           style: TextButton.styleFrom(
-                //             foregroundColor: Colors.red,
-                //           ),
-                //           child: const Text('Delete'),
-                //         ),
-                //       ],
-                //     ),
-                //   );
+                  //   final confirmed = await showDialog<bool>(
+                  //     context: context,
+                  //     builder: (context) => AlertDialog(
+                  //       title: const Text('Delete Unit'),
+                  //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+                  //       actions: [
+                  //         TextButton(
+                  //           onPressed: () => Navigator.pop(context, false),
+                  //           child: const Text('Cancel'),
+                  //         ),
+                  //         TextButton(
+                  //           onPressed: () => Navigator.pop(context, true),
+                  //           style: TextButton.styleFrom(
+                  //             foregroundColor: Colors.red,
+                  //           ),
+                  //           child: const Text('Delete'),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   );
 
-                //   if (confirmed == true && mounted) {
-                //     final success = await ref
-                //         .read(unitsNotifierProvider(widget.subjectId).notifier)
-                //         .deleteUnit(unitId: unit.id);
-                    
-                //     if (success && mounted) {
-                //       ScaffoldMessenger.of(context).showSnackBar(
-                //         const SnackBar(content: Text('Unit deleted successfully')),
-                //       );
-                //     }
-                //   }
+                  //   if (confirmed == true && mounted) {
+                  //     final success = await ref
+                  //         .read(unitsNotifierProvider(widget.subjectId).notifier)
+                  //         .deleteUnit(unitId: unit.id);
+
+                  //     if (success && mounted) {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         const SnackBar(content: Text('Unit deleted successfully')),
+                  //       );
+                  //     }
+                  //   }
                 },
                 onEdit: () {
-                  // showModalBottomSheet(
-                  //   context: context,
-                  //   isScrollControlled: true,
-                  //   builder: (context) => AddUnit(
-                  //     subjectId: widget.subjectId,
-                  //     unit: unit,
-                  //   ),
-                  // );
+                  showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder: (context) => EditUnit(unit: unit),
+                );
                 },
                 onTap: () {
                   // Navigate to lessons page
@@ -186,9 +177,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
             },
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
