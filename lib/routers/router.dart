@@ -11,9 +11,9 @@ import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/pages/splash.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
+import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
-import 'package:learningapp/teacher/new_content_upload_page.dart';
-import 'package:learningapp/teacher/units_botton.dart';
+import 'package:learningapp/teacher/upate_units.dart';
 import 'package:learningapp/teacher/add_units.dart';
 import 'package:learningapp/test.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
@@ -36,6 +36,8 @@ final router = GoRouter(
     GoRoute(path: "/register", builder: (context, state) => const Register()),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/test", builder: (context, state) => const Test()),
+
+    
     // GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
     // GoRoute(
     //   path: "/teachernav",
@@ -53,6 +55,11 @@ final router = GoRouter(
         return Profilepage(username: username);
       },
     ),
+     GoRoute(path: "/units/:unitname", builder: (context, state){
+      final unitname=state.pathParameters['unitname']!;
+      return Unitspage(unitName: unitname);
+     }),
+
     GoRoute(
       path: "/editProfile",
       builder: (context, state) {
@@ -66,7 +73,7 @@ final router = GoRouter(
         final courseName = state.pathParameters['courseName']!;
         return Subjectspage(courseName: courseName);
       },
-    ),
+    ), 
     GoRoute(
       path: "/addunits",
       builder: (context, state) {

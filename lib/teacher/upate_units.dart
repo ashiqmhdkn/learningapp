@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
+import 'package:learningapp/teacher/editUnit.dart';
 import 'package:learningapp/widgets/edit_unit_card.dart';
 
 class Chatpersteachers extends ConsumerStatefulWidget {
@@ -29,6 +30,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    Future.microtask(() { ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId); });
   }
 
   @override
@@ -64,6 +66,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
+                showDragHandle: true,
                 builder: (context) => AddUnit(),
               );
             },
@@ -109,10 +112,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
   }
 
   Widget _buildUnitsGrid() {
-    // Watch the family provider with subjectId
     final unitsAsync = ref.watch(unitsNotifierProvider);
-    ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId);
-
     return Padding(
       padding: const EdgeInsets.all(12),
       child: unitsAsync.when(
@@ -132,56 +132,56 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
             itemCount: units.length,
             itemBuilder: (context, index) {
               final unit = units[index];
-              // return EditUnitCard(
-              //   title: unit.title,
-              //   image: "https://media.crescentlearning.org/" + unit.unit_image,
-              //   onDelete: () async {
-              //     //   final confirmed = await showDialog<bool>(
-              //     //     context: context,
-              //     //     builder: (context) => AlertDialog(
-              //     //       title: const Text('Delete Unit'),
-              //     //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-              //     //       actions: [
-              //     //         TextButton(
-              //     //           onPressed: () => Navigator.pop(context, false),
-              //     //           child: const Text('Cancel'),
-              //     //         ),
-              //     //         TextButton(
-              //     //           onPressed: () => Navigator.pop(context, true),
-              //     //           style: TextButton.styleFrom(
-              //     //             foregroundColor: Colors.red,
-              //     //           ),
-              //     //           child: const Text('Delete'),
-              //     //         ),
-              //     //       ],
-              //     //     ),
-              //     //   );
+              return EditUnitCard(
+                title: unit.title,
+                image: "https://media.crescentlearning.org/" + unit.unit_image,
+                onDelete: () async {
+                  //   final confirmed = await showDialog<bool>(
+                  //     context: context,
+                  //     builder: (context) => AlertDialog(
+                  //       title: const Text('Delete Unit'),
+                  //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+                  //       actions: [
+                  //         TextButton(
+                  //           onPressed: () => Navigator.pop(context, false),
+                  //           child: const Text('Cancel'),
+                  //         ),
+                  //         TextButton(
+                  //           onPressed: () => Navigator.pop(context, true),
+                  //           style: TextButton.styleFrom(
+                  //             foregroundColor: Colors.red,
+                  //           ),
+                  //           child: const Text('Delete'),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   );
 
-              //     //   if (confirmed == true && mounted) {
-              //     //     final success = await ref
-              //     //         .read(unitsNotifierProvider(widget.subjectId).notifier)
-              //     //         .deleteUnit(unitId: unit.id);
+                  //   if (confirmed == true && mounted) {
+                  //     final success = await ref
+                  //         .read(unitsNotifierProvider(widget.subjectId).notifier)
+                  //         .deleteUnit(unitId: unit.id);
 
-              //     //     if (success && mounted) {
-              //     //       ScaffoldMessenger.of(context).showSnackBar(
-              //     //         const SnackBar(content: Text('Unit deleted successfully')),
-              //     //       );
-              //     //     }
-              //     //   }
-              //   },
-              //   onEdit: () {
-              //     showModalBottomSheet(
-              //     context: context,
-              //     isScrollControlled: true,
-              //     showDragHandle: true,
-              //     builder: (context) => EditUnit(unit: unit),
-              //   );
-              //   },
-              //   onTap: () {
-              //     // Navigate to lessons page
-              //     context.push('/lessons/${unit.unit_id}');
-              //   },
-              // );
+                  //     if (success && mounted) {
+                  //       ScaffoldMessenger.of(context).showSnackBar(
+                  //         const SnackBar(content: Text('Unit deleted successfully')),
+                  //       );
+                  //     }
+                  //   }
+                },
+                onEdit: () {
+                  showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  builder: (context) => EditUnit(unit: unit),
+                );
+                },
+                onTap: () {
+                  // Navigate to lessons page
+                  context.push('/units/${unit.title}');
+                },
+              );
             },
           );
         },

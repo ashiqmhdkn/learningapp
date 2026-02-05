@@ -6,18 +6,28 @@ final authTokenProvider = Provider<String>((ref) {
   return 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzJmNjFlYmQtYTM2ZS00YTRmLTgwMjctZGFhZjMxYjg1NWYxIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzcwMjEzODk5fQ.u_z-xly9s-Glkj0WiHANps9uc05eyEu2pWMgPik63mI';
 });
 
-
 class UnitProvider extends AsyncNotifier<List<Unit>> {
+  String subject_id = "";
+
   @override
   Future<List<Unit>> build() async {
-    state = const AsyncValue.loading();
+    // Don't manually set loading state - AsyncNotifier handles this
     final token = ref.watch(authTokenProvider);
-    return unitsget(token);
+    
+    // If subject_id is empty, return empty list or throw error
+    if (subject_id.isEmpty) {
+      return [];
+    }
+    
+    return unitsget(token,subject_id);
   }
-String subject_id="";
-void setsubject_id(String subject){
-subject_id=subject;
-}
+
+  void setsubject_id(String subject) {
+    subject_id = subject;
+    // Trigger a rebuild after setting subject_id
+    ref.invalidateSelf();
+  }
+
   // Create new unit
   Future<bool> createUnit({
     required String title,
@@ -29,13 +39,13 @@ subject_id=subject;
       final success = await unitspost(
         token: token,
         title: title,
-        subject_id:subject_id,
+        subject_id: subject_id,
         unitImage: unitImage,
       );
       
       if (success) {
         // Refresh the list only if the operation was successful
-        state = await AsyncValue.guard(() => unitsget(token));
+        state = await AsyncValue.guard(() => unitsget(token,subject_id));
       }
       
       return success;
@@ -63,7 +73,7 @@ subject_id=subject;
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => unitsget(token));
+        state = await AsyncValue.guard(() => unitsget(token,subject_id));
       }
       
       return success;
@@ -86,7 +96,7 @@ subject_id=subject;
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => unitsget(token));
+        state = await AsyncValue.guard(() => unitsget(token, subject_id));
       }
       
       return success;
@@ -99,7 +109,7 @@ subject_id=subject;
   Future<void> refresh() async {
     final token = ref.read(authTokenProvider);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => unitsget(token));
+    state = await AsyncValue.guard(() => unitsget(token, subject_id));
   }
 }
 

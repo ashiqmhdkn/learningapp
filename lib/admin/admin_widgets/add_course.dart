@@ -42,7 +42,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
       builder: (context) => SizedBox(
         height: 500,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8,2,8,2),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
