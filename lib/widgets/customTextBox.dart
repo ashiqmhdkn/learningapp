@@ -17,7 +17,6 @@ class Customtextbox extends StatelessWidget {
       style: TextStyle(color: Colors.black),
       controller: textController,
       decoration: InputDecoration(
-        label: Text(hinttext, style: TextStyle(color: Colors.black)),
         prefixIcon: Icon(
           textFieldIcon,
           color: Theme.of(context).colorScheme.tertiary,

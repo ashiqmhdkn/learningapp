@@ -62,7 +62,6 @@ class _QuizCreationState extends State<QuizCreation> {
                 hinttext: "Quiz Title",
                 textController: _titleController,
                 textFieldIcon: Icons.title,
-              
               ),
               const SizedBox(height: 10),
               Customtextbox(
@@ -341,6 +340,7 @@ Widget buildMCQEditor({
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    hintText: "Option ${i + 1}",
                   ),
                 ),
               ),
