@@ -14,7 +14,6 @@ class AdminCourses extends ConsumerWidget {
     final coursesAsync = ref.watch(coursesNotifierProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-
       appBar: AdminAppBar(
         title: "Courses",
         onAddPressed: () {
@@ -27,7 +26,13 @@ class AdminCourses extends ConsumerWidget {
         },
       ),
       body: coursesAsync.when(
-        data: (courses) => ListView.builder(
+        data: (courses) {
+          if(courses.isEmpty){
+            return const Center(
+              child: const Text("No Coures Available"),
+            );
+          }
+          return ListView.builder(
           itemCount: courses.length,
           itemBuilder: (context, index) {
             final course = courses[index];
@@ -53,7 +58,7 @@ class AdminCourses extends ConsumerWidget {
               onDelete: () {},
             );
           },
-        ),
+        );},
         loading: () => Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),

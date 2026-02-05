@@ -6,6 +6,7 @@ import 'package:learningapp/admin/admin_widgets/admin_appbar.dart';
 import 'package:learningapp/admin/admin_widgets/course_tile.dart';
 import 'package:learningapp/admin/admin_widgets/edit_subject.dart';
 import 'package:learningapp/providers/subject_provider.dart';
+import 'package:learningapp/widgets/customAppBar.dart';
 
 class AdminSubjects extends ConsumerStatefulWidget {
   final String courseid;
@@ -43,7 +44,6 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
           );
         },
       ),
-      appBar: Customappbar(title: "Subjects"),
       body: subjectsState.when(
         data: (subjects) { 
            if (subjects.isEmpty) {
@@ -54,7 +54,6 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
           itemBuilder: (context, index) {
             final subject = subjects[index];
             return CourseTile(
-              onDelete: () {},
               onDelete: () {},
               onEdit: () {
                 showModalBottomSheet(
