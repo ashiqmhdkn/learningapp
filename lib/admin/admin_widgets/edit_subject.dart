@@ -59,9 +59,9 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
         Navigator.pop(context);
       },
       builder: (context) => SizedBox(
-        height: 400,
+        height: 390,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8,0,8,16),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

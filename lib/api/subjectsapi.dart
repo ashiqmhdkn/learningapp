@@ -6,8 +6,8 @@ import 'package:learningapp/models/subject_model.dart';
 const String baseUrl = 'https://api.crescentlearning.org';
 
 // GET - Fetch all subjects
-Future<List<Subject>> subjectsget(String token) async {
-  final uri = Uri.parse('$baseUrl/subjects');
+Future<List<Subject>> subjectsget({required String token,required String course_id}) async {
+  final uri = Uri.parse('$baseUrl/subjects?course_id=$course_id');
   try {
     final response = await http.get(
       uri,

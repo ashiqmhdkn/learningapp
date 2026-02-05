@@ -7,13 +7,28 @@ import 'package:learningapp/admin/admin_widgets/edit_subject.dart';
 import 'package:learningapp/providers/subject_provider.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 
-class AdminSubjects extends ConsumerWidget {
+class AdminSubjects extends ConsumerStatefulWidget {
   final String courseid;
-  AdminSubjects({super.key, required this.courseid});
+  const AdminSubjects({super.key, required this.courseid});
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final Subjectsread = ref.watch(subjectsNotifierProvider);
-    ref.read(subjectsNotifierProvider.notifier).setcourse_id(courseid);
+  ConsumerState<AdminSubjects> createState() => _AdminSubjectsState();
+}
+
+class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
+  @override
+  void initState() {
+    super.initState();
+    // Set courseId only once when widget is created
+    Future.microtask(() {
+      ref.read(subjectsNotifierProvider.notifier).setcourse_id(widget.courseid);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final subjectsState = ref.watch(subjectsNotifierProvider);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton.extended(
@@ -28,17 +43,18 @@ class AdminSubjects extends ConsumerWidget {
         icon: const Icon(Icons.add),
         label: const Text("New Subject"),
       ),
-
       appBar: Customappbar(title: "Subjects"),
-      body: Subjectsread.when(
-        data: (subjects) => ListView.builder(
+      body: subjectsState.when(
+        data: (subjects) { 
+           if (subjects.isEmpty) {
+            return const Center(child: Text('No Subjects available'));
+          }
+          return ListView.builder(
           itemCount: subjects.length,
           itemBuilder: (context, index) {
             final subject = subjects[index];
             return CourseTile(
-              onDelete: () {
-                
-              },
+              onDelete: () {},
               onEdit: () {
                 showModalBottomSheet(
                   context: context,
@@ -50,12 +66,15 @@ class AdminSubjects extends ConsumerWidget {
               title: subject.title,
               backGroundImage: subject.subject_image,
               onTap: () {
-                context.push('/chapterupdate/${subject.title}',extra: subject.subject_id);
+                context.push(
+                  '/chapterupdate/${subject.title}',
+                  extra: subject.subject_id,
+                );
               },
             );
           },
-        ),
-        loading: () => Center(child: CircularProgressIndicator()),
+        );},
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );

@@ -2,20 +2,20 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learningapp/models/course_model.dart';
-import 'package:learningapp/providers/courses_provider.dart';
+import 'package:learningapp/models/unit_model.dart';
+import 'package:learningapp/providers/unit_provider.dart';
 
-class EditCourse extends ConsumerStatefulWidget {
-  final Course course;
+class EditUnit extends ConsumerStatefulWidget {
+  final Unit unit;
   
-  const EditCourse({super.key, required this.course});
+  const EditUnit({super.key, required this.unit});
 
   @override
-  ConsumerState<EditCourse> createState() => _EditCourseState();
+  ConsumerState<EditUnit> createState() => _EditUnitState();
 }
 
-class _EditCourseState extends ConsumerState<EditCourse> {
-  String? newCourseImage; // New local image path
+class _EditUnitState extends ConsumerState<EditUnit> {
+  String? newUnitImage; // New local image path
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   bool _isUploading = false;
@@ -24,16 +24,15 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing course data
-    _titleController = TextEditingController(text: widget.course.title);
-    _descriptionController = TextEditingController(text: widget.course.description);
+    // Initialize controllers with existing unit data
+    _titleController = TextEditingController(text: widget.unit.title);
   }
 
   Future<void> _pickFile(BuildContext context) async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null && result.files.single.path != null) {
       setState(() {
-        newCourseImage = result.files.single.path!;
+        newUnitImage = result.files.single.path!;
         _keepExistingImage = false; // New image selected, don't keep old one
       });
     }
@@ -41,7 +40,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   void _removeImage() {
     setState(() {
-      newCourseImage = null;
+      newUnitImage = null;
       _keepExistingImage = false; // Remove existing image too
     });
   }
@@ -60,9 +59,9 @@ class _EditCourseState extends ConsumerState<EditCourse> {
         Navigator.pop(context);
       },
       builder: (context) => SizedBox(
-        height: 550,
+        height: 390,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8,16,8,2),
+          padding: const EdgeInsets.fromLTRB(8,2,8,8),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -70,7 +69,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
               children: [
                 const Center(
                   child: Text(
-                    "Edit Course",
+                    "Edit Unit",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -80,21 +79,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                 TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
-                    hintText: "Enter Course name",
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text("Description"),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: _descriptionController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    hintText: "Enter Course Description",
+                    hintText: "Enter Unit name",
                     filled: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -150,13 +135,13 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   Widget _buildImageWidget() {
     // If new image is selected, show it
             final String baseUrl = "https://media.crescentlearning.org/";
-    if (newCourseImage != null) {
+    if (newUnitImage != null) {
       return Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.file(
-              File(newCourseImage!),
+              File(newUnitImage!),
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -186,13 +171,13 @@ class _EditCourseState extends ConsumerState<EditCourse> {
     }
     
     // If keeping existing image, show network image
-    if (_keepExistingImage && widget.course.course_image.isNotEmpty) {
+    if (_keepExistingImage && widget.unit.unit_image.isNotEmpty) {
       return Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl+widget.course.course_image,
+              baseUrl+widget.unit.unit_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -261,7 +246,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
           children: [
             Icon(Icons.cloud_upload_outlined, size: 40),
             SizedBox(height: 8),
-            Text("Select Image for the Course"),
+            Text("Select Image for the Unit"),
             Text("or Browse", style: TextStyle(color: Colors.blue)),
           ],
         ),
@@ -280,7 +265,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
     }
 
     // Check if at least we have an image (either existing or new)
-    if (!_keepExistingImage && newCourseImage == null) {
+    if (!_keepExistingImage && newUnitImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please select an image."),
@@ -293,11 +278,10 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       _isUploading = true;
     });
 
-    final result = await ref.read(coursesNotifierProvider.notifier).updateCourse(
-          courseId: widget.course.course_id!,
+    final result = await ref.read(unitsNotifierProvider.notifier).updateUnit(
+          unitId: widget.unit.unit_id!,
           title: _titleController.text,
-          courseImage: newCourseImage, // null if keeping existing image
-          description: _descriptionController.text,
+          unitImage: newUnitImage, // null if keeping existing image
         );
 
     setState(() {
@@ -308,7 +292,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Course updated successfully"),
+            content: Text("Unit updated successfully"),
             backgroundColor: Colors.green,
           ),
         );
@@ -316,7 +300,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Failed to update course"),
+            content: Text("Failed to update unit"),
             backgroundColor: Colors.red,
           ),
         );

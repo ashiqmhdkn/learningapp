@@ -38,15 +38,16 @@ class _AddUnitState extends ConsumerState<AddUnit> {
         Navigator.pop(context);
       },
       builder: (context) => SizedBox(
-        height: 400,
+        height: 390,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(8,0,8,8),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Center(
+               const SizedBox(height: 6),
+                const Center(    
                   child: Text(
                     "Unit Upload",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

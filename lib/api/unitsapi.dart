@@ -6,8 +6,8 @@ import 'package:learningapp/models/unit_model.dart';
 const String baseUrl = 'https://api.crescentlearning.org';
 
 // GET - Fetch all units
-Future<List<Unit>> unitsget(String token) async {
-  final uri = Uri.parse('$baseUrl/units');
+Future<List<Unit>> unitsget(String token,String subject_id) async {
+  final uri = Uri.parse('$baseUrl/units?subject_id=$subject_id');
   try {
     final response = await http.get(
       uri,
@@ -18,7 +18,7 @@ Future<List<Unit>> unitsget(String token) async {
       },
     );
     
-    print('GET units Response: ${response.statusCode}');
+    print('GET units Response: ${response.statusCode} api ${uri}');
     print('GET units Body: ${response.body}');
     
     if (response.statusCode == 200) {
