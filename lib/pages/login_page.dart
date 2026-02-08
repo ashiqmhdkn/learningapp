@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/profileapi.dart';
@@ -8,7 +11,7 @@ import 'package:learningapp/controller/authcontroller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Login_page extends ConsumerWidget {
- Login_page({super.key});
+  Login_page({super.key});
 
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
@@ -24,7 +27,8 @@ class Login_page extends ConsumerWidget {
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView( // <-- FIX
+      body: SingleChildScrollView(
+        // <-- FIX
         child: Container(
           padding: const EdgeInsets.all(20),
           width: double.infinity,
@@ -51,26 +55,27 @@ class Login_page extends ConsumerWidget {
                 textFieldIcon: Icons.password_rounded,
               ),
               const SizedBox(height: 15),
-
-              // LOGIN BUTTON
               Custombuttonone(
                 text: authState == "loading" ? 'Signing In...' : 'Sign In',
                 onTap: () async {
                   FocusScope.of(context).unfocus();
-                  String token = await ref.read(authControllerProvider.notifier).login(
-                      _emailcontroller.text,
-                      _passwordcontroller.text,
-                    );
+                  final pass = hashPasswordWithSalt(
+                    _passwordcontroller.text,
+                    "y6SsdIR",
+                  );
 
-                     User person = await profileapi(token);
-                      if (person.role == 'admin') {
-                        GoRouter.of(context).go('/adminnav');
-                      } else if (person.role == 'teacher') {
-                        GoRouter.of(context).go('/teachernav');
-                      } else {
-                        GoRouter.of(context).go('/');
-                      }
-                    
+                  String token = await ref
+                      .read(authControllerProvider.notifier)
+                      .login(_emailcontroller.text, pass);
+
+                  User person = await profileapi(token);
+                  if (person.role == 'admin') {
+                    GoRouter.of(context).go('/adminnav');
+                  } else if (person.role == 'teacher') {
+                    GoRouter.of(context).go('/teachernav');
+                  } else {
+                    GoRouter.of(context).go('/');
+                  }
                 },
               ),
 
@@ -87,5 +92,12 @@ class Login_page extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String hashPasswordWithSalt(String password, String salt) {
+    final combined = password + salt;
+    final bytes = utf8.encode(combined);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

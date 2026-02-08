@@ -1,6 +1,7 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
@@ -30,7 +31,9 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
-    Future.microtask(() { ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId); });
+    Future.microtask(() {
+      ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId);
+    });
   }
 
   @override
@@ -121,68 +124,82 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
             return const Center(child: Text('No units available'));
           }
 
-          return GridView.builder(
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1,
-            ),
-            itemCount: units.length,
-            itemBuilder: (context, index) {
-              final unit = units[index];
-              return EditUnitCard(
-                title: unit.title,
-                image: "https://media.crescentlearning.org/" + unit.unit_image,
-                onDelete: () async {
-                  //   final confirmed = await showDialog<bool>(
-                  //     context: context,
-                  //     builder: (context) => AlertDialog(
-                  //       title: const Text('Delete Unit'),
-                  //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-                  //       actions: [
-                  //         TextButton(
-                  //           onPressed: () => Navigator.pop(context, false),
-                  //           child: const Text('Cancel'),
-                  //         ),
-                  //         TextButton(
-                  //           onPressed: () => Navigator.pop(context, true),
-                  //           style: TextButton.styleFrom(
-                  //             foregroundColor: Colors.red,
-                  //           ),
-                  //           child: const Text('Delete'),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   );
+          return AnimationLimiter(
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1,
+              ),
+              itemCount: units.length,
+              itemBuilder: (context, index) {
+                final unit = units[index];
+                return AnimationConfiguration.staggeredGrid(
+                  position: index,
+                  columnCount: 2,
+                  duration: const Duration(milliseconds: 500),
+                  child: SlideAnimation(
+                    verticalOffset: 50,
+                    child: FadeInAnimation(
+                      child: EditUnitCard(
+                        title: unit.title,
+                        image:
+                            "https://media.crescentlearning.org/" +
+                            unit.unit_image,
+                        onDelete: () async {
+                          //   final confirmed = await showDialog<bool>(
+                          //     context: context,
+                          //     builder: (context) => AlertDialog(
+                          //       title: const Text('Delete Unit'),
+                          //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+                          //       actions: [
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context, false),
+                          //           child: const Text('Cancel'),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context, true),
+                          //           style: TextButton.styleFrom(
+                          //             foregroundColor: Colors.red,
+                          //           ),
+                          //           child: const Text('Delete'),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
 
-                  //   if (confirmed == true && mounted) {
-                  //     final success = await ref
-                  //         .read(unitsNotifierProvider(widget.subjectId).notifier)
-                  //         .deleteUnit(unitId: unit.id);
+                          //   if (confirmed == true && mounted) {
+                          //     final success = await ref
+                          //         .read(unitsNotifierProvider(widget.subjectId).notifier)
+                          //         .deleteUnit(unitId: unit.id);
 
-                  //     if (success && mounted) {
-                  //       ScaffoldMessenger.of(context).showSnackBar(
-                  //         const SnackBar(content: Text('Unit deleted successfully')),
-                  //       );
-                  //     }
-                  //   }
-                },
-                onEdit: () {
-                  showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (context) => EditUnit(unit: unit),
+                          //     if (success && mounted) {
+                          //       ScaffoldMessenger.of(context).showSnackBar(
+                          //         const SnackBar(content: Text('Unit deleted successfully')),
+                          //       );
+                          //     }
+                          //   }
+                        },
+                        onEdit: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            showDragHandle: true,
+                            builder: (context) => EditUnit(unit: unit),
+                          );
+                        },
+                        onTap: () {
+                          // Navigate to lessons page
+                          context.push('/units/${unit.title}');
+                        },
+                      ),
+                    ),
+                  ),
                 );
-                },
-                onTap: () {
-                  // Navigate to lessons page
-                  context.push('/units/${unit.title}');
-                },
-              );
-            },
+              },
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),

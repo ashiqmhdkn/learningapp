@@ -7,7 +7,7 @@ import 'package:learningapp/providers/courses_provider.dart';
 
 class EditCourse extends ConsumerStatefulWidget {
   final Course course;
-  
+
   const EditCourse({super.key, required this.course});
 
   @override
@@ -26,7 +26,9 @@ class _EditCourseState extends ConsumerState<EditCourse> {
     super.initState();
     // Initialize controllers with existing course data
     _titleController = TextEditingController(text: widget.course.title);
-    _descriptionController = TextEditingController(text: widget.course.description);
+    _descriptionController = TextEditingController(
+      text: widget.course.description,
+    );
   }
 
   Future<void> _pickFile(BuildContext context) async {
@@ -62,7 +64,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       builder: (context) => SizedBox(
         height: 550,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8,16,8,2),
+          padding: const EdgeInsets.fromLTRB(8, 16, 8, 2),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -104,12 +106,12 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                 const SizedBox(height: 16),
                 const Text("Image"),
                 const SizedBox(height: 8),
-                
+
                 // Image display logic
                 _buildImageWidget(),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Buttons
                 Row(
                   children: [
@@ -131,9 +133,11 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _isUploading ? null : () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: _isUploading
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
                         child: const Text("Cancel"),
                       ),
                     ),
@@ -149,7 +153,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-            final String baseUrl = "https://media.crescentlearning.org/";
+    final String baseUrl = "https://media.crescentlearning.org/";
     if (newCourseImage != null) {
       return Stack(
         children: [
@@ -173,18 +177,14 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
+
     // If keeping existing image, show network image
     if (_keepExistingImage && widget.course.course_image.isNotEmpty) {
       return Stack(
@@ -192,7 +192,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl+widget.course.course_image,
+              baseUrl + widget.course.course_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -216,9 +216,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
                   ),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
               },
             ),
@@ -234,18 +232,14 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
+
     // No image - show picker
     return GestureDetector(
       onTap: () => _pickFile(context),
@@ -272,20 +266,16 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   Future<void> _handleUpdate() async {
     if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all required fields."),
-        ),
+        const SnackBar(content: Text("Please fill all required fields.")),
       );
       return;
     }
 
     // Check if at least we have an image (either existing or new)
     if (!_keepExistingImage && newCourseImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please select an image."),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please select an image.")));
       return;
     }
 
@@ -293,7 +283,9 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       _isUploading = true;
     });
 
-    final result = await ref.read(coursesNotifierProvider.notifier).updateCourse(
+    final result = await ref
+        .read(coursesNotifierProvider.notifier)
+        .updateCourse(
           courseId: widget.course.course_id!,
           title: _titleController.text,
           courseImage: newCourseImage, // null if keeping existing image

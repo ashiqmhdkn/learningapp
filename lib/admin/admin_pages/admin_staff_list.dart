@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_widgets/staff_info_tile.dart';
 import 'package:learningapp/models/staff_model.dart';
@@ -24,23 +25,33 @@ class AdminStaffList extends StatelessWidget {
         .where((staff) => staff.role == role)
         .toList();
 
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: filteredStaff.length,
-      itemBuilder: (context, index) {
-        final staff = filteredStaff[index];
+    return AnimationLimiter(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: filteredStaff.length,
+        itemBuilder: (context, index) {
+          final staff = filteredStaff[index];
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: StaffInfoTile(
-            name: staff.name,
-            role: staff.role,
-            onTap: () {
-              context.push("/profile/${staff.name}", extra: staff);
-            },
-          ),
-        );
-      },
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              child: SlideAnimation(
+                duration: const Duration(milliseconds: 400),
+                child: FadeInAnimation(
+                  child: StaffInfoTile(
+                    name: staff.name,
+                    role: staff.role,
+                    onTap: () {
+                      context.push("/profile/${staff.name}", extra: staff);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

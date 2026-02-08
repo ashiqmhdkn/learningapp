@@ -3,11 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:learningapp/mentor/mentorPages/batch_division.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_landing.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_students_list.dart';
-import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
 import 'package:learningapp/mentor/mentorPages/mentors_exams.dart';
-import 'package:learningapp/pages/coursePage.dart';
-import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/pages/login_page.dart';
 
 class MentorNavBar extends StatefulWidget {
   const MentorNavBar({super.key});

@@ -37,7 +37,6 @@ final router = GoRouter(
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/test", builder: (context, state) => const Test()),
 
-    
     // GoRoute(path: "/upload",builder: (context, state) => NewContentUploadPage(),),
     // GoRoute(
     //   path: "/teachernav",
@@ -47,7 +46,6 @@ final router = GoRouter(
     //   path: "/upload",
     //   builder: (context, state) => NewContentUploadPage(),
     // ),
-
     GoRoute(
       path: "/profile/:username",
       builder: (context, state) {
@@ -55,10 +53,13 @@ final router = GoRouter(
         return Profilepage(username: username);
       },
     ),
-     GoRoute(path: "/units/:unitname", builder: (context, state){
-      final unitname=state.pathParameters['unitname']!;
-      return Unitspage(unitName: unitname);
-     }),
+    GoRoute(
+      path: "/units/:unitname",
+      builder: (context, state) {
+        final unitname = state.pathParameters['unitname']!;
+        return Unitspage(unitName: unitname);
+      },
+    ),
 
     GoRoute(
       path: "/editProfile",
@@ -73,7 +74,7 @@ final router = GoRouter(
         final courseName = state.pathParameters['courseName']!;
         return Subjectspage(courseName: courseName);
       },
-    ), 
+    ),
     GoRoute(
       path: "/addunits",
       builder: (context, state) {
@@ -87,13 +88,13 @@ final router = GoRouter(
         return ChatpersUnits(name: name);
       },
     ),
-GoRoute(
+    GoRoute(
       path: "/chapterupdate/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-          final subject_id = state.extra as String;
+        final subject_id = state.extra as String;
         // final subject_id=state.pathParameters['subject_id']!;
-        return Chatpersteachers(subjectId: subject_id,subjectName:name);
+        return Chatpersteachers(subjectId: subject_id, subjectName: name);
       },
     ),
     //Mentor routes

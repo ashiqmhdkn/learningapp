@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/login_page.dart';
@@ -32,7 +35,9 @@ class _RegisterState extends State<Register> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+          ),
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Column(
             children: [
@@ -52,10 +57,7 @@ class _RegisterState extends State<Register> {
                 value: _selectedRole,
                 hint: const Text("Select Role"),
                 items: _roles.map((role) {
-                  return DropdownMenuItem(
-                    value: role,
-                    child: Text(role),
-                  );
+                  return DropdownMenuItem(value: role, child: Text(role));
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -82,40 +84,46 @@ class _RegisterState extends State<Register> {
                 textFieldIcon: Icons.password_rounded,
               ),
               const SizedBox(height: 15),
-        
+
               // Role drop
-        
               const SizedBox(height: 15),
               Custombuttonone(
                 text: 'SignUp',
                 onTap: () async {
                   try {
+                    final hashedPassword = hashPasswordWithSalt(
+                      _passwordcontroller.text,
+                      "y6SsdIR",
+                    );
+
                     final jwt = await registerApi(
                       _emailcontroller.text,
-                      _passwordcontroller.text,
+                      hashedPassword,
                       _namecontroller.text,
                       _selectedRole!, // Default to 'Student' if no role is selected
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Registration successful',
-                        ),
-                      ),
+                      SnackBar(content: Text('Registration successful')),
                     );
-                GoRouter.of(context).go('/login');
+                    GoRouter.of(context).go('/login');
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Registration failed: $e')),
                     );
                   }
                 },
-                
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String hashPasswordWithSalt(String password, String salt) {
+    final combined = password + salt;
+    final bytes = utf8.encode(combined);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

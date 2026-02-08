@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/admin/admin_widgets/payment_tile.dart';
 import 'package:learningapp/models/payment_model.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
@@ -19,9 +20,7 @@ class AdminPayments extends StatelessWidget {
         status: PaymentStatus.values[index % PaymentStatus.values.length],
 
         // time metadata
-        createdAt: DateTime.now().subtract(
-          Duration(hours: index * 3),
-        ),
+        createdAt: DateTime.now().subtract(Duration(hours: index * 3)),
         updatedAt: DateTime.now(),
         paidAt: index.isEven ? DateTime.now() : null,
       ),
@@ -29,26 +28,36 @@ class AdminPayments extends StatelessWidget {
 
     return Scaffold(
       appBar: Customappbar(title: "Payments"),
-      body: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: payments.length,
-        itemBuilder: (context, index) {
-          final payment = payments[index];
+      body: AnimationLimiter(
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: payments.length,
+          itemBuilder: (context, index) {
+            final payment = payments[index];
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: PaymentInfoTile(
-              studentName: payment.studentName,
-              courseName: payment.courseName,
-              amount: payment.amount,
-              status: payment.status.name,
-              time: payment.createdAt, 
-              onTap: () {
-                // future
-              },
-            ),
-          );
-        },
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  duration: const Duration(milliseconds: 400),
+                  child: FadeInAnimation(
+                    child: PaymentInfoTile(
+                      studentName: payment.studentName,
+                      courseName: payment.courseName,
+                      amount: payment.amount,
+                      status: payment.status.name,
+                      time: payment.createdAt,
+                      onTap: () {
+                        // future
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/admin/admin_pages/admin_subjects.dart';
 import 'package:learningapp/admin/admin_widgets/add_course.dart';
 import 'package:learningapp/admin/admin_widgets/admin_appbar.dart';
@@ -17,48 +18,64 @@ class AdminCourses extends ConsumerWidget {
       appBar: AdminAppBar(
         title: "Courses",
         onAddPressed: () {
-          showBottomSheet(
+          showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             showDragHandle: true,
-            enableDrag: true,
-            builder: (context) => AddCourse(),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return const AddCourse(); // NO padding here
+            },
           );
         },
       ),
       body: coursesAsync.when(
         data: (courses) {
-          if(courses.isEmpty){
-            return const Center(
-              child: const Text("No Coures Available"),
-            );
+          if (courses.isEmpty) {
+            return const Center(child: const Text("No Coures Available"));
           }
-          return ListView.builder(
-          itemCount: courses.length,
-          itemBuilder: (context, index) {
-            final course = courses[index];
-            return CourseTile(
-              onEdit: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => EditCourse(course: course),
-                );
-              },
-              title: course.title,
-              backGroundImage: course.course_image,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AdminSubjects(courseid: course.course_id as String),
+          return AnimationLimiter(
+            child: ListView.builder(
+              itemCount: courses.length,
+              itemBuilder: (context, index) {
+                final course = courses[index];
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    duration: const Duration(milliseconds: 400),
+                    child: FadeInAnimation(
+                      child: CourseTile(
+                        onEdit: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => EditCourse(course: course),
+                          );
+                        },
+                        title: course.title,
+                        backGroundImage: course.course_image,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdminSubjects(
+                                courseid: course.course_id as String,
+                              ),
+                            ),
+                          );
+                        },
+                        onDelete: () {},
+                      ),
+                    ),
                   ),
                 );
               },
-              onDelete: () {},
-            );
-          },
-        );},
+            ),
+          );
+        },
         loading: () => Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),

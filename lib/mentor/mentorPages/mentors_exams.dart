@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 
 class ExamsPage extends StatefulWidget {
@@ -9,7 +10,6 @@ class ExamsPage extends StatefulWidget {
 }
 
 class _ExamsPageState extends State<ExamsPage> {
-  // Track completion status for each exam
   List<bool> examCompleted = List.generate(6, (index) => false);
 
   @override
@@ -19,68 +19,85 @@ class _ExamsPageState extends State<ExamsPage> {
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: Customappbar(title: "Exams"),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(
-              color: colorScheme.tertiary,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              title: Text(
-                'Exam',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: colorScheme.secondary,
-                ),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Toggle Switch
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      value: examCompleted[index],
-                      onChanged: (value) {
-                        setState(() {
-                          examCompleted[index] = value;
-                        });
-                      },
-                      activeThumbColor: Colors.green,
-                      inactiveThumbColor: Colors.grey,
-                      inactiveTrackColor: Colors.grey.shade300,
+      body: AnimationLimiter(
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 400),
+                child: SlideAnimation(
+                  verticalOffset: 50,
+                  child: FadeInAnimation(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SizedBox(
+                        height: 85,
+                        child: Center(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 3,
+                            ),
+                            title: Text(
+                              'Exam ${index + 1}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.secondary,
+                              ),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Transform.scale(
+                                  scale: 0.8,
+                                  child: Switch(
+                                    value: examCompleted[index],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        examCompleted[index] = value;
+                                      });
+                                    },
+                                    activeThumbColor: Colors.green,
+                                    inactiveThumbColor: Colors.grey,
+                                    inactiveTrackColor: Colors.grey.shade300,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                  color: colorScheme.secondary,
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Opening Exam ${index + 1} details...',
+                                  ),
+                                  duration: const Duration(seconds: 1),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  // Forward Arrow
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: colorScheme.secondary,
-                    size: 20,
-                  ),
-                ],
+                ),
               ),
-              onTap: () {
-                // Navigate to exam details
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Opening Exam ${index + 1} details...'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-              },
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

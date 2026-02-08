@@ -3,16 +3,16 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/videoSelectionCard.dart';
 
-class Subjectwisevideos extends StatelessWidget {
+class SubjectWiseNotes extends StatelessWidget {
   final String unitName;
-  const Subjectwisevideos({super.key, required this.unitName});
+  const SubjectWiseNotes({super.key, required this.unitName});
 
   @override
   Widget build(BuildContext context) {
     final videos = List.generate(7, (index) {
       return {
         "title": "Linear Algebra",
-        "subtitle": "Part ${index + 1}",
+        "subtitle": "Chapter ${index + 1} Notes",
         "image": "lib/assets/maths.jpeg",
       };
     });

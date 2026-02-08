@@ -1,5 +1,6 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/widgets/unit_card.dart';
@@ -92,23 +93,35 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
   Widget _unitsGrid(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 1,
+      child: AnimationLimiter(
+        child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1,
+          ),
+          itemCount: lessons.length,
+          itemBuilder: (context, index) {
+            return AnimationConfiguration.staggeredGrid(
+              position: index,
+              columnCount: 2,
+              duration: const Duration(milliseconds: 500),
+              child: SlideAnimation(
+                verticalOffset: 50,
+                child: FadeInAnimation(
+                  child: LessonCard(
+                    lesson: lessons[index],
+                    onTap: () {
+                      context.push('/units/${lessons[index].title}');
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
         ),
-        itemCount: lessons.length,
-        itemBuilder: (context, index) {
-          return LessonCard(
-            lesson: lessons[index],
-            onTap: () {
-              context.push('/units/${lessons[index].title}');
-            },
-          );
-        },
       ),
     );
   }

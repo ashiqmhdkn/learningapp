@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_widgets/add_subject.dart';
 import 'package:learningapp/admin/admin_widgets/admin_appbar.dart';
 import 'package:learningapp/admin/admin_widgets/course_tile.dart';
 import 'package:learningapp/admin/admin_widgets/edit_subject.dart';
 import 'package:learningapp/providers/subject_provider.dart';
-import 'package:learningapp/widgets/customAppBar.dart';
 
 class AdminSubjects extends ConsumerStatefulWidget {
   final String courseid;
@@ -45,39 +45,50 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
         },
       ),
       body: subjectsState.when(
-        data: (subjects) { 
-           if (subjects.isEmpty) {
+        data: (subjects) {
+          if (subjects.isEmpty) {
             return const Center(child: Text('No Subjects available'));
           }
-          return ListView.builder(
-          itemCount: subjects.length,
-          itemBuilder: (context, index) {
-            final subject = subjects[index];
-            return CourseTile(
-              onDelete: () {},
-              onEdit: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (context) => EditSubject(subject: subject),
+          return AnimationLimiter(
+            child: ListView.builder(
+              itemCount: subjects.length,
+              itemBuilder: (context, index) {
+                final subject = subjects[index];
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    duration: const Duration(milliseconds: 400),
+                    child: FadeInAnimation(
+                      child: CourseTile(
+                        onDelete: () {},
+                        onEdit: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            showDragHandle: true,
+                            builder: (context) => EditSubject(subject: subject),
+                          );
+                        },
+                        title: subject.title,
+                        backGroundImage: subject.subject_image,
+                        onTap: () {
+                          context.push(
+                            '/chapterupdate/${subject.title}',
+                            extra: subject.subject_id,
+                          );
+                          context.push(
+                            '/chapterupdate/${subject.title}',
+                            extra: subject.subject_id,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 );
               },
-              title: subject.title,
-              backGroundImage: subject.subject_image,
-              onTap: () {
-                context.push(
-                  '/chapterupdate/${subject.title}',
-                  extra: subject.subject_id,
-                );
-                context.push(
-                  '/chapterupdate/${subject.title}',
-                  extra: subject.subject_id,
-                );
-              },
-            );
-          },
-        );},
+            ),
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
