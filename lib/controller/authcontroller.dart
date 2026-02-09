@@ -30,7 +30,6 @@ import '../api/login.dart';
 class AuthController extends StateNotifier<String?> {
   AuthController() : super(null);
 
-  static const String baseUrl = 'https://api.domain.in';
 
   // Initialize - check if user is already logged in
   Future<void> initialize() async {

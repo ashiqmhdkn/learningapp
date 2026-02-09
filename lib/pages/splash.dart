@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,27 +31,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (token == null || token == "loading") {
       // No token → go to login
-      GoRouter.of(context).go('/');
+      GoRouter.of(context).go('/login');
       return;
     }
 
     // If you need profile API call:
     final user = await profileapi(token);
-    if (user == Error()) {
-      GoRouter.of(context).go('/login');
-    } else {
-      // your existing API
-      switch (user.role) {
-        case 'admin':
-          GoRouter.of(context).go('/adminnav');
-          break;
-        case 'teacher':
-          GoRouter.of(context).go("/teachernav");
-          break;
-        default:
-          GoRouter.of(context).go('/');
-      }
-    }
+    Timer(Duration(seconds: 5),()=>context.go('/test'));
+    // if (user == Error()) {
+        // } else {
+    //   print(user);
+    //   // your existing API
+    //   switch (user.role) {
+    //     case 'admin':
+    //       GoRouter.of(context).go('/adminnav');
+    //       break;
+    //     case 'teacher':
+    //       GoRouter.of(context).go("/teachernav");
+    //       break;
+    //     case 'student':
+    //       GoRouter.of(context).go("/");
+    //       break;
+    //     default:
+    //       GoRouter.of(context).go('/login');
+    //   }
+    // }
+    //// );
   }
 
   @override
@@ -60,7 +67,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       body: Center(
         child: CircleAvatar(
           radius: 80,
-          backgroundImage: AssetImage('/lib/assets/image.png'),
+          backgroundImage: Image.asset('lib/assets/image.png').image,
         ), // simple splash loader
       ),
     );
