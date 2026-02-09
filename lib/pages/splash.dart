@@ -32,31 +32,31 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (token == null || token == "loading") {
       // No token → go to login
       GoRouter.of(context).go('/login');
-      return;
     }
-
     // If you need profile API call:
-    final user = await profileapi(token);
-    Timer(Duration(seconds: 5),()=>context.go('/test'));
-    // if (user == Error()) {
-        // } else {
-    //   print(user);
-    //   // your existing API
-    //   switch (user.role) {
-    //     case 'admin':
-    //       GoRouter.of(context).go('/adminnav');
-    //       break;
-    //     case 'teacher':
-    //       GoRouter.of(context).go("/teachernav");
-    //       break;
-    //     case 'student':
-    //       GoRouter.of(context).go("/");
-    //       break;
-    //     default:
-    //       GoRouter.of(context).go('/login');
-    //   }
-    // }
-    //// );
+    final user = await profileapi(token!);
+    // Timer(Duration(seconds: 5),()=>context.go('/test'));
+    if (user == Error()) {
+            SnackBar(content: Text("unsuccessfull user fetch"),);
+            GoRouter.of(context).go('/login');
+        } else {
+      print(user);
+      // your existing API
+      switch (user.role) {
+        case 'admin':
+          GoRouter.of(context).go('/adminnav');
+          break;
+        case 'teacher':
+          GoRouter.of(context).go("/teachernav");
+          break;
+        case 'student':
+          GoRouter.of(context).go("/");
+          break;
+        default:
+          GoRouter.of(context).go('/login');
+      }
+    }
+    // );
   }
 
   @override
