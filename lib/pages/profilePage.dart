@@ -84,50 +84,108 @@ class Profilepage extends ConsumerWidget {
               ],
             ),
 
+            const SizedBox(height: 10),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Handlscorecontainer(
-                  text: "Highest Score",
-                  mark: 99,
-                  subject: "Computer",
-                ),
-                const SizedBox(width: 40),
-                Handlscorecontainer(
-                  text: "Lowest Score",
-                  mark: 20,
-                  subject: "Chemistry",
-                ),
-              ],
+            _settingsSectionTitle("Feedback"),
+            _SettingsTile(
+              icon: Icons.star_border,
+              title: "Rate the app",
+              onTap: () {},
+            ),
+            _SettingsTile(
+              icon: Icons.flag_outlined,
+              title: "Report a problem",
+              onTap: () {},
+            ),
+
+            const SizedBox(height: 20),
+            _settingsSectionTitle("Crescent "),
+            _SettingsTile(
+              icon: Icons.description_outlined,
+              title: "Terms and conditions",
+              onTap: () {},
+            ),
+            _SettingsTile(
+              icon: Icons.lock_outline,
+              title: "Privacy policy",
+              onTap: () {},
+            ),
+
+            const SizedBox(height: 20),
+            _SettingsTile(
+              icon: Icons.logout,
+              title: "Sign out",
+              onTap: () async {
+                await ref.read(authControllerProvider.notifier).logout();
+                GoRouter.of(context).go('/login');
+              },
             ),
 
             const SizedBox(height: 10),
 
-            // Streak Widget
-            SizedBox(height: 150, width: double.infinity, child: Streak()),
-
-            const SizedBox(height: 10),
-
-            // Calendar Widget
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CalendarWidget(
-                initialDate: DateTime.now(),
-                onDateSelected: (date) {
-                  print('Selected date: $date');
-                },
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () {},
+                child: const Text(
+                  "Delete account",
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
             ),
-
-            const SizedBox(height: 10),
-
-            // Course Completion Chart
-            Coursecompletionpiechart(),
-
-            const SizedBox(height: 10),
+            SizedBox(height: 30),
           ],
         ),
+      ),
+    );
+  }
+}
+
+Widget _settingsSectionTitle(String title) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey,
+        ),
+      ),
+    ),
+  );
+}
+
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.8),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 18,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: Icon(
+            icon,
+            size: 18,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+        title: Text(title),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
       ),
     );
   }

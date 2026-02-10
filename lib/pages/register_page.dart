@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/api/registerapi.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
@@ -19,10 +17,23 @@ class _RegisterState extends State<Register> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  // Role dropdown state
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
   String? _selectedRole;
   final List<String> _roles = ['student', 'teacher', 'admin'];
+
+  @override
+  void dispose() {
+    _emailcontroller.dispose();
+    _namecontroller.dispose();
+    _passwordcontroller.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,27 +46,30 @@ class _RegisterState extends State<Register> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+          padding: const EdgeInsets.all(20),
+          width: double.infinity,
+          color: Theme.of(context).colorScheme.surface,
           child: Column(
             children: [
               const CircleAvatar(
                 backgroundImage: AssetImage('lib/assets/image.png'),
-                radius: 100,
+                radius: 80,
               ),
+
               const SizedBox(height: 30),
+
               Customtextbox(
                 hinttext: 'User name',
                 textController: _namecontroller,
-                textFieldIcon: Icons.person,
+                textFieldIcon: Icons.person_outline_rounded,
               ),
+
               const SizedBox(height: 15),
+
               DropdownButtonFormField<String>(
-                borderRadius: BorderRadius.circular(8),
                 value: _selectedRole,
                 hint: const Text("Select Role"),
+                borderRadius: BorderRadius.circular(8),
                 items: _roles.map((role) {
                   return DropdownMenuItem(value: role, child: Text(role));
                 }).toList(),
@@ -65,46 +79,122 @@ class _RegisterState extends State<Register> {
                   });
                 },
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.group),
+                  prefixIcon: const Icon(Icons.group_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
+
               const SizedBox(height: 15),
+
               Customtextbox(
                 hinttext: 'Email',
                 textController: _emailcontroller,
-                textFieldIcon: Icons.email,
+                textFieldIcon: Icons.alternate_email_rounded,
               ),
-              const SizedBox(height: 15),
-              Customtextbox(
-                hinttext: 'Password',
-                textController: _passwordcontroller,
-                textFieldIcon: Icons.password_rounded,
-              ),
-              const SizedBox(height: 15),
 
-              // Role drop
               const SizedBox(height: 15),
+              TextField(
+                controller: _passwordcontroller,
+                obscureText: _obscurePassword,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  prefixIcon: const Icon(
+                    Icons.lock_outline_rounded,
+                    color: Colors.black,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: _obscureConfirmPassword,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: "Confirm Password",
+                  prefixIcon: const Icon(
+                    Icons.lock_reset_rounded,
+                    color: Colors.black,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
               Custombuttonone(
-                text: 'SignUp',
+                text: 'Sign Up',
                 onTap: () async {
+                  if (_selectedRole == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Please select a role")),
+                    );
+                    return;
+                  }
+
+                  if (_passwordcontroller.text !=
+                      _confirmPasswordController.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Passwords do not match")),
+                    );
+                    return;
+                  }
+
                   try {
                     final hashedPassword = hashPasswordWithSalt(
                       _passwordcontroller.text,
                       "y6SsdIR",
                     );
 
-                    final jwt = await registerApi(
+                    await registerApi(
                       _emailcontroller.text,
                       hashedPassword,
                       _namecontroller.text,
-                      _selectedRole!, // Default to 'Student' if no role is selected
+                      _selectedRole!,
                     );
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Registration successful')),
+                      const SnackBar(content: Text('Registration successful')),
                     );
+
                     GoRouter.of(context).go('/login');
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(

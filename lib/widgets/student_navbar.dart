@@ -1,9 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:learningapp/models/course_info_model.dart';
 import 'package:learningapp/pages/coursePage.dart';
+import 'package:learningapp/pages/course_info_page.dart';
 import 'package:learningapp/pages/home_page.dart';
-import 'package:learningapp/pages/profilePage.dart';
 import 'package:learningapp/pages/student_notifications.dart';
+
+final dummyCourse = CourseInfoModel(
+  id: "1",
+  title: "Class 9",
+  subtitle: "Complete Class 9 Syllabus",
+  languageTag: "MAL",
+  categoryTag: "FULL SYLLABUS BATCH",
+  bannerImageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDIqG_xMwR4FqQCYDVRkqZ9n4C9kfUNA4_Qg&s",
+  educators: [
+    CourseEducator(id: "1", name: "Ashiq", imageUrl: ""),
+    CourseEducator(id: "2", name: "Vishnu", imageUrl: ""),
+    CourseEducator(id: "3", name: "Vaishnav", imageUrl: ""),
+  ],
+  batchStartDate: DateTime(2024, 7, 4),
+  enrollmentEndDate: DateTime.now().add(const Duration(days: 323)),
+  about: CourseAbout(
+    description:
+        "This batch is designed specially for State based class 9. Top educators will teach Linear Algebra, Circle, Rectangle and Square.",
+    highlights: [
+      "Linear Algebra",
+      "Maths",
+      "Circle",
+      "Trigonometry",
+      "Integration",
+    ],
+  ),
+  stats: CourseStats(
+    liveClasses: 150,
+    teachingLanguages: ["English", "Malayalam"],
+  ),
+  pricing: CoursePricing(price: 12999, currency: "₹", isFree: false),
+  isEnrolled: false,
+);
 
 class StudentNavbar extends StatefulWidget {
   const StudentNavbar({super.key});
@@ -32,7 +67,7 @@ class _StudentNavbarState extends State<StudentNavbar>
     HomePage(),
     CourseSubjectPage(),
     StudentNotifications(),
-    Profilepage(username: "Vaishnav"),
+    CourseInfoPage(course: dummyCourse),
   ];
 
   @override

@@ -10,14 +10,21 @@ import 'package:learningapp/widgets/customTextBox.dart';
 import 'package:learningapp/controller/authcontroller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Login_page extends ConsumerWidget {
-  Login_page({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
+  @override
+  ConsumerState<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
 
+  bool _obscurePassword = true;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
 
     return Scaffold(
@@ -28,37 +35,65 @@ class Login_page extends ConsumerWidget {
         ),
       ),
       body: SingleChildScrollView(
-        // <-- FIX
         child: Container(
           padding: const EdgeInsets.all(20),
           width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
+          color: Theme.of(context).colorScheme.surface,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const CircleAvatar(
                 backgroundImage: AssetImage('lib/assets/image.png'),
                 radius: 100,
               ),
               const SizedBox(height: 30),
+
               Customtextbox(
                 hinttext: 'Email',
                 textController: _emailcontroller,
-                textFieldIcon: Icons.email,
+                textFieldIcon: Icons.alternate_email_rounded,
               ),
+
               const SizedBox(height: 15),
-              Customtextbox(
-                hinttext: 'Password',
-                textController: _passwordcontroller,
-                textFieldIcon: Icons.password_rounded,
+
+              TextField(
+                controller: _passwordcontroller,
+                obscureText: _obscurePassword,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: "Password",
+                  hintStyle: const TextStyle(color: Colors.black),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
               ),
+
               const SizedBox(height: 15),
+
               Custombuttonone(
                 text: authState == "loading" ? 'Signing In...' : 'Sign In',
                 onTap: () async {
                   FocusScope.of(context).unfocus();
+
                   final pass = hashPasswordWithSalt(
                     _passwordcontroller.text,
                     "y6SsdIR",
@@ -69,6 +104,7 @@ class Login_page extends ConsumerWidget {
                       .login(_emailcontroller.text, pass);
 
                   User person = await profileapi(token);
+
                   if (person.role == 'admin') {
                     GoRouter.of(context).go('/adminnav');
                   } else if (person.role == 'teacher') {
