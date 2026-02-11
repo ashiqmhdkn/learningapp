@@ -45,7 +45,7 @@ class BaseEditor extends StatelessWidget {
 
   final VoidCallback onDelete;
 
-  const BaseEditor({
+  const BaseEditor({super.key, 
     required this.title,
     required this.children,
     required this.onDelete,

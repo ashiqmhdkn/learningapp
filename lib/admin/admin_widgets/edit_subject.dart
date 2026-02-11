@@ -279,7 +279,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
     });
 
     final result = await ref.read(subjectsNotifierProvider.notifier).updateSubject(
-          subjectId: widget.subject.subject_id!,
+          subjectId: widget.subject.subject_id,
           title: _titleController.text,
           subjectImage: newSubjectImage, // null if keeping existing image
         );

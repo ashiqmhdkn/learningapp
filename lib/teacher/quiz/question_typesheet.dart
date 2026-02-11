@@ -4,7 +4,7 @@ import 'package:learningapp/models/quiz_model.dart';
 class QuestionTypeSheet extends StatelessWidget {
   final void Function(QuestionType) onSelect;
 
-  const QuestionTypeSheet({required this.onSelect});
+  const QuestionTypeSheet({super.key, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {

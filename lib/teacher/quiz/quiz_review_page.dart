@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learningapp/models/quiz_model.dart';
 import 'package:learningapp/widgets/customBoldText.dart';
-import 'package:learningapp/widgets/customPrimaryText.dart';
 
 class QuizReviewPage extends StatelessWidget {
   final String title;

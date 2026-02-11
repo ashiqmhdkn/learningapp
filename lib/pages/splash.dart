@@ -8,7 +8,7 @@ import 'package:learningapp/controller/authcontroller.dart';
 // your AuthController
 
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -22,12 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _checkAuth() async {
-    final authController = ref.read(authControllerProvider.notifier);
-
-    // Initialize (load token from SharedPreferences)
-    await authController.initialize();
-
-    final token = ref.read(authControllerProvider);
+   final token = await ref.read(authControllerProvider.notifier).getToken();
 
     if (token == null || token == "loading") {
       // No token → go to login

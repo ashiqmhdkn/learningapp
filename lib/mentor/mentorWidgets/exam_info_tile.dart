@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:learningapp/widgets/customBoldText.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 

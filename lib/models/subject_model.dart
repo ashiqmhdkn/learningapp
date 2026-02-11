@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'unit_model.dart';
 
 class Subject {
   final String title;

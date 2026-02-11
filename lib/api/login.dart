@@ -8,10 +8,10 @@ Future<String> loginApi(String email, String password) async {
 
   final response = await http.post(
     uri,
-    // headers: {
-    //   HttpHeaders.contentTypeHeader: 'application/json',
-    //   'Accept': 'application/json',
-    // },
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      'Accept': 'application/json',
+    },
     body: jsonEncode({
       'email': email,
       'password': password,

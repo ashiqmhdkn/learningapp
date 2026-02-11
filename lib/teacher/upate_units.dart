@@ -146,8 +146,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                       child: EditUnitCard(
                         title: unit.title,
                         image:
-                            "https://media.crescentlearning.org/" +
-                            unit.unit_image,
+                            "https://media.crescentlearning.org/${unit.unit_image}",
                         onDelete: () async {
                           //   final confirmed = await showDialog<bool>(
                           //     context: context,

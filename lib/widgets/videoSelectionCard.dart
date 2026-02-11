@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learningapp/widgets/customPrimaryText.dart';
 
 class Videoselectioncard extends StatelessWidget {
   final String title;

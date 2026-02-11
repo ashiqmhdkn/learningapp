@@ -1,4 +1,3 @@
-import 'subject_model.dart';
 
 class Course {
   final String? course_id;

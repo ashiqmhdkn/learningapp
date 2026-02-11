@@ -4,12 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/profileapi.dart';
 import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/models/user_model.dart';
-import 'package:learningapp/widgets/calender.dart';
-import 'package:learningapp/widgets/courseCompletionPieChart.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/darkOrLight.dart';
-import 'package:learningapp/widgets/hAndLScoreContainer.dart';
-import 'package:learningapp/widgets/streak.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilepage extends ConsumerWidget {

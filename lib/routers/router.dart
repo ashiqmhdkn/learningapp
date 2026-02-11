@@ -92,9 +92,9 @@ final router = GoRouter(
       path: "/chapterupdate/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-        final subject_id = state.extra as String;
+        final subjectId = state.extra as String;
         // final subject_id=state.pathParameters['subject_id']!;
-        return Chatpersteachers(subjectId: subject_id, subjectName: name);
+        return Chatpersteachers(subjectId: subjectId, subjectName: name);
       },
     ),
     //Mentor routes

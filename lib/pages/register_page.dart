@@ -70,7 +70,7 @@ class _RegisterState extends ConsumerState<Register> {
               const SizedBox(height: 15),
 
               DropdownButtonFormField<String>(
-                value: _selectedRole,
+                initialValue: _selectedRole,
                 hint: const Text("Select Role"),
                 borderRadius: BorderRadius.circular(8),
                 items: _roles.map((role) {

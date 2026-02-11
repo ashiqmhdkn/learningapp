@@ -3,7 +3,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/providers/courses_provider.dart';
-import 'package:learningapp/widgets/customTextBox.dart';
 
 class AddCourse extends ConsumerStatefulWidget {
   const AddCourse({super.key});

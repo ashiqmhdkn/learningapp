@@ -35,7 +35,7 @@ class AdminCourses extends ConsumerWidget {
       body: coursesAsync.when(
         data: (courses) {
           if (courses.isEmpty) {
-            return const Center(child: const Text("No Coures Available"));
+            return const Center(child: Text("No Coures Available"));
           }
           return AnimationLimiter(
             child: ListView.builder(

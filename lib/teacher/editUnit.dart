@@ -279,7 +279,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
     });
 
     final result = await ref.read(unitsNotifierProvider.notifier).updateUnit(
-          unitId: widget.unit.unit_id!,
+          unitId: widget.unit.unit_id,
           title: _titleController.text,
           unitImage: newUnitImage, // null if keeping existing image
         );

@@ -4,7 +4,6 @@ import 'package:learningapp/mentor/mentorPages/mentor_note.dart';
 import 'package:learningapp/mentor/mentorPages/mentors_modules.dart';
 import 'package:learningapp/teacher/quiz/quiz_creation.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
-import 'package:learningapp/widgets/customPrimaryText.dart';
 
 class MentorLandingPage extends StatefulWidget {
   const MentorLandingPage({super.key});

@@ -39,7 +39,7 @@ class VideoAccess extends StatelessWidget {
             trailing: Switch(
               value: isAccessEnabled,
               onChanged: onToggle,
-              activeColor: Colors.green,
+              activeThumbColor: Colors.green,
               inactiveThumbColor: Colors.red,
             ),
           ),

@@ -99,10 +99,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     "y6SsdIR",
                   );
 
-                  String token = await ref
+                  bool success = await ref
                       .read(authControllerProvider.notifier)
                       .login(_emailcontroller.text, pass);
+                  if (!success) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid email or password'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    return;
+                  }
+                  final token = await ref
+                      .read(authControllerProvider.notifier)
+                      .getToken();
 
+                  if (token == null) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Authentication error'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                    return;
+                  }
                   User person = await profileapi(token);
 
                   if (person.role == 'admin') {

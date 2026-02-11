@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
-import 'package:flutter/rendering.dart';
 import 'package:learningapp/mentor/mentorWidgets/exam_info_tile.dart';
 import 'package:learningapp/widgets/customBoldText.dart';
 

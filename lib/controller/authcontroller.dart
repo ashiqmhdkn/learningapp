@@ -17,16 +17,16 @@ class AuthController extends StateNotifier<String?> {
   }
 
   // Login
-  Future<String> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     state = "loading";
     try {
       final token = await loginApi(email, password);
       await _saveToken(token);
       state = token;
-      return token;
+      return true;
     } catch (e) {
       state = null;
-      rethrow;
+      return false;
     }
   }
   Future<void> register(

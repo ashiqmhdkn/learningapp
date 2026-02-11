@@ -41,10 +41,10 @@ class ManageTeachers extends StatelessWidget {
                   backgroundImage: user.image != null
                       ? NetworkImage(user.image!)
                       : null,
+                  backgroundColor: scheme.tertiary,
                   child: user.image == null
                       ? Icon(Icons.person_outline, color: scheme.onSurface)
                       : null,
-                  backgroundColor: scheme.tertiary,
                 ),
                 const SizedBox(height: 6),
                 Text(

@@ -65,7 +65,7 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => coursesget(token!));
+        state = await AsyncValue.guard(() => coursesget(token));
       }
       
       return success;
@@ -89,7 +89,7 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => coursesget(token!));
+        state = await AsyncValue.guard(() => coursesget(token));
       }
       
       return success;

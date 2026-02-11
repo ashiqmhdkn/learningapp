@@ -7,7 +7,7 @@ import '../../widgets/customAppBar.dart';
 
 class MentorVideoAccess extends ConsumerWidget {
   final String name;
-  MentorVideoAccess({super.key, required this.name});
+  const MentorVideoAccess({super.key, required this.name});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
