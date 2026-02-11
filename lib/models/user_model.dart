@@ -23,12 +23,14 @@ class User {
   final String? userId;
   final String username;
   final String email;
+  final String? image;
   final int phone;
   final String role;
   final DateTime? lastLogin;
 
   User({
     this.userId,
+    this.image,
     required this.username,
     required this.email,
     required this.phone,
@@ -38,6 +40,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      image:json['image']as String ,
       userId: json['user_id'] as String,
       username: json['name'] as String,
       email: json['email'] as String,

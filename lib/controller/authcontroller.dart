@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:learningapp/api/registerapi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/login.dart';
 
@@ -24,6 +25,20 @@ class AuthController extends StateNotifier<String?> {
       state = token;
       return token;
     } catch (e) {
+      state = null;
+      rethrow;
+    }
+  }
+  Future<void> register(
+    {
+    required final email, required final name,required final role,required final password
+  }
+  )async{
+       state = "loading";
+       try{
+        await registerApi(email: email,password: password,role: role,username: name);
+       }
+       catch (e) {
       state = null;
       rethrow;
     }

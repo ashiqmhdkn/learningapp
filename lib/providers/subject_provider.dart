@@ -1,25 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/api/subjectsapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/models/subject_model.dart';
 
-final authTokenProvider = Provider<String>((ref) {
-  return 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzJmNjFlYmQtYTM2ZS00YTRmLTgwMjctZGFhZjMxYjg1NWYxIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzcwMjEzODk5fQ.u_z-xly9s-Glkj0WiHANps9uc05eyEu2pWMgPik63mI';
+final authTokenProvider = FutureProvider<String?>((ref) async {
+  return  ref.watch(authControllerProvider.notifier).getToken();
 });
-
 class SubjectProvider extends AsyncNotifier<List<Subject>> {
   String course_id = "";
 
   @override
   Future<List<Subject>> build() async {
     // Don't manually set loading state - AsyncNotifier handles this
-    final token = ref.watch(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
+
     
     // If course_id is empty, return empty list or throw error
     if (course_id.isEmpty) {
       return [];
     }
     
-    return subjectsget(token:token, course_id:course_id);
+    return subjectsget(token:token!, course_id:course_id);
   }
 
   void setcourse_id(String course) {
@@ -33,11 +34,11 @@ class SubjectProvider extends AsyncNotifier<List<Subject>> {
     required String title,
     required String subjectImage,
   }) async {
-    final token = ref.read(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
     
     try {
       final success = await subjectspost(
-        token: token,
+        token: token!,
         title: title,
         course_id: course_id,
         subjectImage: subjectImage,
@@ -61,11 +62,10 @@ class SubjectProvider extends AsyncNotifier<List<Subject>> {
     required String title,
     required String? subjectImage,
   }) async {
-    final token = ref.read(authTokenProvider);
-    
+    final token = await ref.read(authTokenProvider.future);
     try {
       final success = await subjectsPut(
-        token: token,
+        token: token!,
         subject_id: subjectId,
         title: title,
         subjectImage: subjectImage,
@@ -86,11 +86,10 @@ class SubjectProvider extends AsyncNotifier<List<Subject>> {
   Future<bool> deleteSubject({
     required String subjectId,
   }) async {
-    final token = ref.read(authTokenProvider);
-    
+final token = await ref.read(authTokenProvider.future);    
     try {
       final success = await subjectsDelete(
-        token: token,
+        token: token!,
         subjectId: subjectId,
       );
       
@@ -107,9 +106,9 @@ class SubjectProvider extends AsyncNotifier<List<Subject>> {
 
   // Refresh subjects list
   Future<void> refresh() async {
-    final token = ref.read(authTokenProvider);
+final token = await ref.read(authTokenProvider.future);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => subjectsget(token:token, course_id:course_id));
+    state = await AsyncValue.guard(() => subjectsget(token:token!, course_id:course_id));
   }
 }
 

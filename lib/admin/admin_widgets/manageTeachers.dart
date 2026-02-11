@@ -4,12 +4,12 @@ import 'package:learningapp/models/user_model.dart';
 
 class ManageTeachers extends StatelessWidget {
   String token;
-   ManageTeachers({super.key, required this.token});
+  ManageTeachers({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-       return FutureBuilder<List<User>>(
+    return FutureBuilder<List<User>>(
       future: usersforadmin(token), // async call
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,26 +32,32 @@ class ManageTeachers extends StatelessWidget {
             mainAxisSpacing: 16,
             childAspectRatio: 0.8,
           ),
-      itemBuilder: (context, index) {
-        return Column(
-          children: [
-            CircleAvatar(
-              radius: 34,
-              backgroundColor: scheme.tertiary,
-              child: Icon(Icons.person_outline, color: scheme.onSurface),
-            ),
-            const SizedBox(height: 6),
-        Text(
-                  users[index].username,
-                 style: TextStyle(fontSize: 12, color: scheme.onSurface),
+          itemBuilder: (context, index) {
+            final user = users[index];
+            return Column(
+              children: [
+                CircleAvatar(
+                  radius: 34,
+                  backgroundImage: user.image != null
+                      ? NetworkImage(user.image!)
+                      : null,
+                  child: user.image == null
+                      ? Icon(Icons.person_outline, color: scheme.onSurface)
+                      : null,
+                  backgroundColor: scheme.tertiary,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  user.username,
+                  style: TextStyle(fontSize: 12, color: scheme.onSurface),
                   maxLines: 1, // Restricts the text to a single line
-          overflow: TextOverflow.ellipsis,
-               )
-
-          ],
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            );
+          },
         );
       },
     );
-  });
   }
 }

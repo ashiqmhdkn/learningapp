@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 Future<String> registerApi(
-    String email, String password, String username, String role) async {
+    {required final email, required final password, required final username, required final role}) async {
 
  final primaryUrl = 'https://api.crescentlearning.org';
   final uri = Uri.parse('$primaryUrl/signup');
@@ -23,6 +23,7 @@ Future<String> registerApi(
   );
 
   final Map<String, dynamic> data = jsonDecode(response.body);
+  print(response.body);
   if (data['success']) {
     return 'success';
   }

@@ -19,7 +19,7 @@ import 'package:learningapp/test.dart';
 import 'package:learningapp/widgets/student_navbar.dart';
 
 final router = GoRouter(
-  initialLocation: "/test",
+  initialLocation: "/splash",
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
 

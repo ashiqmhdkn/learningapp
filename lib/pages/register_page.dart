@@ -1,19 +1,21 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/registerapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
-class Register extends StatefulWidget {
+class Register extends ConsumerStatefulWidget {
   const Register({super.key});
 
   @override
-  State<Register> createState() => _RegisterState();
+  ConsumerState<Register> createState() => _RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterState extends ConsumerState<Register> {
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
@@ -37,6 +39,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -162,7 +165,20 @@ class _RegisterState extends State<Register> {
 
               Custombuttonone(
                 text: 'Sign Up',
-                onTap: () async {
+                onTap: () async 
+                {
+                  if(_emailcontroller.text.isEmpty){
+                       ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("email field free")),
+                    );
+                    return;
+                    }
+                  if(_namecontroller.text.isEmpty){
+                       ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("name field free")),
+                    );
+                    return;
+                    }
                   if (_selectedRole == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Please select a role")),
@@ -183,13 +199,12 @@ class _RegisterState extends State<Register> {
                       _passwordcontroller.text,
                       "y6SsdIR",
                     );
-
-                    await registerApi(
-                      _emailcontroller.text,
-                      hashedPassword,
-                      _namecontroller.text,
-                      _selectedRole!,
-                    );
+                    await ref.read(authControllerProvider.notifier)
+                    .register(
+                    email: _emailcontroller.text, 
+                    name: _namecontroller.text,
+                    role:_selectedRole!,
+                    password: hashedPassword,);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Registration successful')),

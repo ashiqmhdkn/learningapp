@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/api/unitsapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/models/unit_model.dart';
 
-final authTokenProvider = Provider<String>((ref) {
-  return 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzJmNjFlYmQtYTM2ZS00YTRmLTgwMjctZGFhZjMxYjg1NWYxIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzcwMjEzODk5fQ.u_z-xly9s-Glkj0WiHANps9uc05eyEu2pWMgPik63mI';
+final authTokenProvider = FutureProvider<String?>((ref) async {
+  return  ref.watch(authControllerProvider.notifier).getToken();
 });
 
 class UnitProvider extends AsyncNotifier<List<Unit>> {
@@ -12,14 +13,13 @@ class UnitProvider extends AsyncNotifier<List<Unit>> {
   @override
   Future<List<Unit>> build() async {
     // Don't manually set loading state - AsyncNotifier handles this
-    final token = ref.watch(authTokenProvider);
-    
+    final token = await ref.read(authTokenProvider.future);
     // If subject_id is empty, return empty list or throw error
     if (subject_id.isEmpty) {
       return [];
     }
     
-    return unitsget(token,subject_id);
+    return unitsget(token!,subject_id);
   }
 
   void setsubject_id(String subject) {
@@ -33,11 +33,10 @@ class UnitProvider extends AsyncNotifier<List<Unit>> {
     required String title,
     required String unitImage,
   }) async {
-    final token = ref.read(authTokenProvider);
-    
+final token = await ref.read(authTokenProvider.future);    
     try {
       final success = await unitspost(
-        token: token,
+        token: token!,
         title: title,
         subject_id: subject_id,
         unitImage: unitImage,
@@ -61,11 +60,10 @@ class UnitProvider extends AsyncNotifier<List<Unit>> {
     required String title,
     required String? unitImage,
   }) async {
-    final token = ref.read(authTokenProvider);
-    
+final token = await ref.read(authTokenProvider.future);    
     try {
       final success = await unitsPut(
-        token: token,
+        token: token!,
         unit_id: unitId,
         title: title,
         unitImage: unitImage,
@@ -86,11 +84,10 @@ class UnitProvider extends AsyncNotifier<List<Unit>> {
   Future<bool> deleteUnit({
     required String unitId,
   }) async {
-    final token = ref.read(authTokenProvider);
-    
+    final token = await ref.read(authTokenProvider.future);
     try {
       final success = await unitsDelete(
-        token: token,
+        token: token!,
         unitId: unitId,
       );
       
@@ -107,9 +104,9 @@ class UnitProvider extends AsyncNotifier<List<Unit>> {
 
   // Refresh units list
   Future<void> refresh() async {
-    final token = ref.read(authTokenProvider);
+final token = await ref.read(authTokenProvider.future);
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => unitsget(token, subject_id));
+    state = await AsyncValue.guard(() => unitsget(token!, subject_id));
   }
 }
 

@@ -1,17 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/api/coursesapi.dart';
+import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/models/course_model.dart';
 
-final authTokenProvider = Provider<String>((ref) {
-  return 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNzJmNjFlYmQtYTM2ZS00YTRmLTgwMjctZGFhZjMxYjg1NWYxIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzcwMjEzODk5fQ.u_z-xly9s-Glkj0WiHANps9uc05eyEu2pWMgPik63mI';
+final authTokenProvider = FutureProvider<String?>((ref) async {
+  return  ref.watch(authControllerProvider.notifier).getToken();
 });
 
 class CoursesNotifier extends AsyncNotifier<List<Course>> {
   @override
   Future<List<Course>> build() async {
     state = const AsyncValue.loading();
-    final token = ref.watch(authTokenProvider);
-    return coursesget(token);
+    final token = await ref.read(authTokenProvider.future);
+    return coursesget(token!);
   }
 
   // Create new course
@@ -20,11 +21,12 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
     required String description,
     required String courseImage,
   }) async {
-    final token = ref.read(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
+
     
     try {
       final success = await coursespost(
-        token: token,
+        token: token!,
         title: title,
         description: description,
         courseImage: courseImage,
@@ -49,11 +51,12 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
     required String description,
     String? courseImage,
   }) async {
-    final token = ref.read(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
+
     
     try {
       final success = await coursesPut(
-        token: token,
+        token: token!,
         courseId: courseId,
         title: title,
         description: description,
@@ -62,7 +65,7 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => coursesget(token));
+        state = await AsyncValue.guard(() => coursesget(token!));
       }
       
       return success;
@@ -75,17 +78,18 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
   Future<bool> deleteCourse({
     required String courseId,
   }) async {
-    final token = ref.read(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
+
     
     try {
       final success = await coursesDelete(
-        token: token,
+        token: token!,
         courseId: courseId,
       );
       
       if (success) {
         state = const AsyncValue.loading();
-        state = await AsyncValue.guard(() => coursesget(token));
+        state = await AsyncValue.guard(() => coursesget(token!));
       }
       
       return success;
@@ -96,9 +100,10 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
 
   // Refresh courses list
   Future<void> refresh() async {
-    final token = ref.read(authTokenProvider);
+    final token = await ref.read(authTokenProvider.future);
+
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => coursesget(token));
+    state = await AsyncValue.guard(() => coursesget(token!));
   }
 }
 
