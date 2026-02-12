@@ -7,7 +7,7 @@ import 'package:learningapp/providers/unit_provider.dart';
 
 class EditUnit extends ConsumerStatefulWidget {
   final Unit unit;
-  
+
   const EditUnit({super.key, required this.unit});
 
   @override
@@ -54,78 +54,102 @@ class _EditUnitState extends ConsumerState<EditUnit> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomSheet(
-      onClosing: () {
-        Navigator.pop(context);
-      },
-      builder: (context) => SizedBox(
-        height: 390,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8,2,8,8),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Text(
-                    "Edit Unit",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Text(
+                  "Edit Unit",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              const Text("Name"),
+              const SizedBox(height: 6),
+
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                  hintText: "Enter Unit name",
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(height: 6),
-                const Text("Name"),
-                const SizedBox(height: 6),
-                TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    hintText: "Enter Unit name",
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+              ),
+
+              const SizedBox(height: 16),
+              const Text("Image"),
+              const SizedBox(height: 8),
+
+              _buildImageWidget(),
+
+              const SizedBox(height: 20),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.primary,
+                        ),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      onPressed: _isUploading ? null : _handleUpdate,
+                      child: _isUploading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text(
+                              "Update",
+                              style: TextStyle(color: Colors.white),
+                            ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                const Text("Image"),
-                const SizedBox(height: 8),
-                
-                // Image display logic
-                _buildImageWidget(),
-                
-                const SizedBox(height: 12),
-                
-                // Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _isUploading ? null : _handleUpdate,
-                        child: _isUploading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Text("Update"),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.tertiary,
+                        ),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      onPressed: _isUploading
+                          ? null
+                          : () => Navigator.pop(context),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: _isUploading ? null : () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -134,7 +158,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-            final String baseUrl = "https://media.crescentlearning.org/";
+    final String baseUrl = "https://media.crescentlearning.org/";
     if (newUnitImage != null) {
       return Stack(
         children: [
@@ -158,18 +182,14 @@ class _EditUnitState extends ConsumerState<EditUnit> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
+
     // If keeping existing image, show network image
     if (_keepExistingImage && widget.unit.unit_image.isNotEmpty) {
       return Stack(
@@ -177,7 +197,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl+widget.unit.unit_image,
+              baseUrl + widget.unit.unit_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -201,9 +221,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
                   ),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
               },
             ),
@@ -219,18 +237,14 @@ class _EditUnitState extends ConsumerState<EditUnit> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
+
     // No image - show picker
     return GestureDetector(
       onTap: () => _pickFile(context),
@@ -257,20 +271,16 @@ class _EditUnitState extends ConsumerState<EditUnit> {
   Future<void> _handleUpdate() async {
     if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all required fields."),
-        ),
+        const SnackBar(content: Text("Please fill all required fields.")),
       );
       return;
     }
 
     // Check if at least we have an image (either existing or new)
     if (!_keepExistingImage && newUnitImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please select an image."),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please select an image.")));
       return;
     }
 
@@ -278,7 +288,9 @@ class _EditUnitState extends ConsumerState<EditUnit> {
       _isUploading = true;
     });
 
-    final result = await ref.read(unitsNotifierProvider.notifier).updateUnit(
+    final result = await ref
+        .read(unitsNotifierProvider.notifier)
+        .updateUnit(
           unitId: widget.unit.unit_id,
           title: _titleController.text,
           unitImage: newUnitImage, // null if keeping existing image
