@@ -18,7 +18,6 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String baseUrl = "https://media.crescentlearning.org/";
 
     return GestureDetector(
       onTap: onTap,
@@ -32,7 +31,7 @@ class CourseTile extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(baseUrl + backGroundImage, fit: BoxFit.cover),
+                Image.network(backGroundImage, fit: BoxFit.cover),
                 Positioned(
                   top: 8,
                   right: 8,

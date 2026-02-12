@@ -62,12 +62,18 @@ class AdminCourses extends ConsumerWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => AdminSubjects(
+                                course_name: course.title,
                                 courseid: course.course_id as String,
                               ),
                             ),
                           );
                         },
-                        onDelete: () {},
+                        onDelete: () async{
+                           await ref.read(coursesNotifierProvider.notifier)
+              .deleteCourse(
+                     courseId: course.course_id!
+                      );
+                        },
                       ),
                     ),
                   ),

@@ -10,7 +10,8 @@ import 'package:learningapp/providers/subject_provider.dart';
 
 class AdminSubjects extends ConsumerStatefulWidget {
   final String courseid;
-  const AdminSubjects({super.key, required this.courseid});
+  final String course_name;
+  const AdminSubjects({super.key, required this.courseid,required this.course_name});
 
   @override
   ConsumerState<AdminSubjects> createState() => _AdminSubjectsState();
@@ -34,7 +35,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
       backgroundColor: Theme.of(context).colorScheme.surface,
 
       appBar: AdminAppBar(
-        title: "Subjects",
+        title: widget.course_name,
         onAddPressed: () {
           showModalBottomSheet(
             context: context,

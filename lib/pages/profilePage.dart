@@ -14,8 +14,7 @@ class Profilepage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider);
-    return Scaffold(
+    return Scaffold( 
       appBar: AppBar(actions: [Darkorlight()], scrolledUnderElevation: 0),
       body: SingleChildScrollView(
         child: Column(
@@ -25,7 +24,7 @@ class Profilepage extends ConsumerWidget {
               children: [
                 const CircleAvatar(
                   radius: 70,
-                  backgroundImage: AssetImage('lib/assets/image.png'),
+                  backgroundImage: NetworkImage('lib/assets/image.png'),
                 ),
                 const SizedBox(width: 60),
                 Flexible(
@@ -44,12 +43,9 @@ class Profilepage extends ConsumerWidget {
                             ),
                           ),
                           onPressed: () async {
-                            var token = await SharedPreferences.getInstance()
-                                .then((prefs) {
-                                  return prefs.getString('auth_token') ?? '';
-                                });
+                          var token=await ref.read(authControllerProvider.notifier).getToken();
                             print("Token in profile page: $token");
-                            User user = await profileapi(token);
+                            User user = await profileapi(token!);
                             GoRouter.of(
                               context,
                             ).push('/editProfile', extra: user);

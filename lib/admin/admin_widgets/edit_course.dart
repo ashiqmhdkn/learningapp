@@ -153,7 +153,6 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-    final String baseUrl = "https://media.crescentlearning.org/";
     if (newCourseImage != null) {
       return Stack(
         children: [
@@ -192,7 +191,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl + widget.course.course_image,
+               widget.course.course_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -288,7 +287,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
         .updateCourse(
           courseId: widget.course.course_id!,
           title: _titleController.text,
-          courseImage: newCourseImage, // null if keeping existing image
+          courseImage: newCourseImage??widget.course.course_image, // null if keeping existing image
           description: _descriptionController.text,
         );
 

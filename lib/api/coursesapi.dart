@@ -84,11 +84,12 @@ Future<bool> coursesPut({
   required String courseId,
   required String title,
   required String description,
-  String? courseImage,
+  required String courseImage,
 }) async {
-  final uri = Uri.parse('$baseUrl/courses/$courseId');
+  final uri = Uri.parse('$baseUrl/courses?course_id=$courseId');
   try {
     final request = http.MultipartRequest('PUT', uri)
+    ..fields['course_id']=courseId
       ..fields['title'] = title
       ..fields['description'] = description
       ..headers['Authorization'] = 'Bearer $token'
@@ -125,9 +126,10 @@ Future<bool> coursesDelete({
   required String token,
   required String courseId,
 }) async {
-  final uri = Uri.parse('$baseUrl/courses/$courseId');
+  final uri = Uri.parse('$baseUrl/courses');
   try {
     final request = http.Request('DELETE', uri)
+    ..bodyFields['course_id']=courseId
       ..headers['Authorization'] = 'Bearer $token'
       ..headers['Accept'] = 'application/json'
       ..headers['Content-Type'] = 'application/json';
