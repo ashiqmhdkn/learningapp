@@ -18,20 +18,15 @@ class PracticeTile2 extends StatelessWidget {
       height: 210,
       child: Container(
         margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: InkWell( 
+          child: InkWell(
             onTap: onTap,
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(
-                  backGroundImage,
-                  fit: BoxFit.fill,
-                ),
+                Image.asset(backGroundImage, fit: BoxFit.fill),
                 Positioned(
                   bottom: 0,
                   left: 0,

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:learningapp/models/course_info_model.dart';
 import 'package:learningapp/pages/course_info_page.dart';
 import 'package:learningapp/widgets/course_card_new.dart';
+import 'package:learningapp/widgets/course_card_new1.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
 
@@ -19,34 +20,24 @@ class CourseSubjectPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PracticeTile2(
+            CourseCardNew1(
+              course: dummyCourse,
               onTap: () {
-                context.push('/subjects/Class 9');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      return CourseInfoPage(
+                        course: dummyCourse,
+                        onTap: () {
+                          context.push('/subjects/Class 9');
+                        },
+                      );
+                    },
+                  ),
+                );
               },
-              title: 'Class 9 ',
-              backGroundImage: 'lib/assets/image.png',
             ),
-            PracticeTile2(
-              onTap: () {
-                context.push('/subjects/Class 10');
-              },
-              title: 'Class 10 ',
-              backGroundImage: 'lib/assets/image.png',
-            ),
-            PracticeTile2(
-              onTap: () {
-                context.push('/subjects/Class 11');
-              },
-              title: 'Class 11 ',
-              backGroundImage: 'lib/assets/image.png',
-            ),
-            PracticeTile2(
-              onTap: () {
-                context.push('/subjects/Class 12');
-              },
-              title: 'Class 12 ',
-              backGroundImage: 'lib/assets/image.png',
-            ),
+
             CourseCard(
               course: dummyCourse,
               onTap: () {

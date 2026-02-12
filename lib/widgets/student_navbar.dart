@@ -132,8 +132,8 @@ class _StudentNavbarState extends State<StudentNavbar>
           tabBackgroundColor: colorScheme.primary,
           color: colorScheme.secondary,
           tabs: const [
-            GButton(icon: Icons.home_outlined, text: 'Home'),
-            GButton(icon: Icons.book_outlined, text: 'Courses'),
+            GButton(icon: Icons.menu_book, text: 'Learn'),
+            GButton(icon: Icons.explore, text: 'Explore'),
             // GButton(icon: Icons.person_outline, text: 'Admin'), // OLD CODE
             GButton(icon: Icons.notifications, text: 'Messages'), // NEW CODE
             GButton(icon: Icons.grade_outlined, text: 'Marks'),
