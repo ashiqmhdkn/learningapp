@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:cross_file/cross_file.dart';
 import 'package:http/http.dart' as http;
-import 'package:tusc/tusc.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:learningapp/models/video_model.dart';
+import 'package:tusc/tusc.dart';
 
 const String baseUrl = 'https://api.crescentlearning.org';
 
-Future<bool> videoUpload({
+Future<bool> videoUploadTUS({
   required String token,
   required File videoFile,
   required int duration,
@@ -23,7 +23,7 @@ Future<bool> videoUpload({
       uri,
       headers: {
         'Authorization': 'Bearer $token',
-        'Upload-Length': videoFile.lengthSync().toString(),
+        'Upload-Length': '$duration',
         'Tus-Resumable': '1.0.0',
         'Accept': 'application/json',
       },
@@ -47,48 +47,48 @@ Future<bool> videoUpload({
 
     print('✅ Successfully received upload URL and video ID');
 
-    // Step 2: Upload video using TUSC (TUS protocol)
-    await uploadVideoTUSC(
+    // Step 2: Upload video using TUS protocol
+    await uploadVideoTUS(
       uploadUrl: uploadUrl,
       videoFile: videoFile,
       token: token,
     );
 
     // Step 3: Update your database table
-    return await table_update(title, description, unit_id, videoId,token);
+    return await table_update(title, description, unit_id, videoId);
   } catch (e) {
     print('❌ Error in video upload: $e');
     rethrow;
   }
 }
 
-Future<void> uploadVideoTUSC({
+Future<void> uploadVideoTUS({
   required String uploadUrl,
   required File videoFile,
   required String token,
 }) async {
-  try {
-    // Initialize TUSC client
-    final client = TusClient(
-      url:uploadUrl,
-      file:XFile(videoFile.path),
-        chunkSize: 20 * 1024 * 1024, // Use memory store for upload state
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
+  // Convert File to XFile for TUS client
+  final xFile = XFile(videoFile.path);
 
-    print('Starting TUS upload...');
-    
-    // Start upload with progress tracking
-    await  client.startUpload(
+  // Initialize TUS client with named parameters
+  final tusClient = TusClient(
+    url: uploadUrl,
+    file: xFile,
+    chunkSize: 20 * 1024 * 1024, // 20MB chunks
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  try {
+    await tusClient.startUpload(
       onProgress: (count, total, response) {
         final percent = (count / total) * 100;
         print('Upload Progress: ${percent.toStringAsFixed(2)}% ($count/$total)');
       },
       onComplete: (response) {
         print('✅ Upload completed successfully!');
-        print('Stream URL: ${client.uploadUrl}');
+        print('Stream URL: ${tusClient.uploadUrl}');
       },
       onError: (error) {
         print('❌ Upload failed: ${error.message}');
@@ -98,9 +98,8 @@ Future<void> uploadVideoTUSC({
         throw Exception('TUS upload failed: ${error.message}');
       },
     );
-    
   } catch (e) {
-    print('❌ Upload failed: $e');
+    print('❌ Unexpected error during upload: $e');
     rethrow;
   }
 }
@@ -110,7 +109,6 @@ Future<bool> table_update(
   String description,
   String unit_id,
   String video_id,
-  String token,
 ) async {
   final uri = Uri.parse('$baseUrl/unit/videos/update');
 
@@ -119,7 +117,6 @@ Future<bool> table_update(
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization':'Bearer $token',
     },
     body: jsonEncode({
       'title': title,

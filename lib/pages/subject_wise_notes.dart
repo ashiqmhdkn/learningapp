@@ -40,7 +40,7 @@ class SubjectWiseNotes extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(),
+                            builder: (_) => const Videoplayback(url:"hi"),
                           ),
                         );
                       },

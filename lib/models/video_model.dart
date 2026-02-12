@@ -5,13 +5,13 @@ class Video {
   final String description;
   final double duration;
   final String video_url;
-  final String thumbnail_image;
+  final String thumbnail_url;
   final String status;
   Video({
     required this.description,
     required this.duration,
     required this.status,
-    required this.thumbnail_image,
+    required this.thumbnail_url,
     required this.unit_id,
     required this.video_url,
     required this.title,
@@ -21,7 +21,7 @@ class Video {
     return Video(
       unit_id: json['unit_id'],
       title: json['title'], 
-      thumbnail_image: json['thumbnail_image'],
+      thumbnail_url: json['thumbnail_url'],
       video_id: json['video_id'],
       video_url: json['video_url'],
       status: json['status'],
@@ -33,7 +33,7 @@ class Video {
     return {
       'title': title,
       'unit_id':unit_id,
-      'thumbnail_image': thumbnail_image,
+      'thumbnail_url': thumbnail_url,
        'video_id': video_id,
        'video_url':video_url,
        'status':status,

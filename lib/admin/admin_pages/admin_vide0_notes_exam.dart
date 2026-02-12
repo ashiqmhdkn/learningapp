@@ -4,13 +4,12 @@ import 'package:learningapp/admin/admin_widgets/add_video_notes_exam.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_exams.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_notes.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_videos.dart';
-import 'package:learningapp/pages/student_exams.dart';
-import 'package:learningapp/pages/subjectWiseVideos.dart';
-import 'package:learningapp/pages/subject_wise_notes.dart';
+import 'package:learningapp/teacher/addVideo.dart';
 
 class AdminVide0NotesExam extends StatefulWidget {
   final String unitName;
-  const AdminVide0NotesExam({super.key, required this.unitName});
+  final String unitId;
+  const AdminVide0NotesExam({super.key, required this.unitName,required this.unitId});
 
   @override
   State<AdminVide0NotesExam> createState() => _AdminVide0NotesExamState();
@@ -91,7 +90,7 @@ class _AdminVide0NotesExamState extends State<AdminVide0NotesExam> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 builder: (context) {
-                  return const AddVideoNotesExam(); // NO padding here
+                  return AddVideo(unitid: widget.unitId,); // NO padding here
                 },
               );
             },
@@ -118,7 +117,7 @@ class _AdminVide0NotesExamState extends State<AdminVide0NotesExam> {
           });
         },
         children: [
-          AdminSubjectVideos(unitName: widget.unitName),
+          AdminSubjectVideos(unitName: widget.unitName,unit_id:widget.unitId),
           AdminSubjectExams(),
           AdminSubjectNotes(unitName: widget.unitName),
         ],

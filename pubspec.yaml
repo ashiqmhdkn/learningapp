@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   chewie: ^1.7.5
+  cross_file: ^0.3.5+2
   crypto: ^3.0.7
   cupertino_icons: ^1.0.8
   custom_sliding_segmented_control: ^1.8.5
@@ -46,6 +47,7 @@ dependencies:
   riverpod_annotation: ^4.0.0
   shared_preferences: ^2.5.4
   streakify: ^0.0.2
+  tusc: ^2.1.0
   video_player: ^2.8.2
 
 dev_dependencies:

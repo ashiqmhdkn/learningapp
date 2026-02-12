@@ -190,7 +190,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                         },
                         onTap: () {
                           // Navigate to lessons page
-                          context.push('/adminunits/${unit.title}');
+                          context.push('/adminunits/${unit.title}',extra: unit.unit_id);
                         },
                       ),
                     ),

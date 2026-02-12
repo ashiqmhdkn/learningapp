@@ -56,26 +56,20 @@ class VideoService {
       return false;
     }
   }
-
+}
 
 //   // Delete video
 //   Future<bool> deleteVideo(String videoId) async {
 //     return await videoDelete(token: token, videoId: videoId);
 //   }
- }
+ 
 
-// ============================================================================
-// BOX 3: Video Service Provider
-// ============================================================================
 final videoServiceProvider = Provider<VideoService>((ref) {
   final token = ref.watch(authTokenProvider).value;
   if (token == null) throw Exception('No token available');
   return VideoService(token);
 });
 
-// ============================================================================
-// BOX 4: Videos List Provider - Manages video list state
-// ============================================================================
 class VideoProvider extends AsyncNotifier<List<Video>> {
   String unitId = "";
 
@@ -135,9 +129,6 @@ class VideoProvider extends AsyncNotifier<List<Video>> {
 //   }
 // }
 
-// ============================================================================
-// BOX 5: Videos Notifier Provider - Main provider to use in UI
-// ============================================================================
 final videosNotifierProvider =
     AsyncNotifierProvider<VideoProvider, List<Video>>(
   () => VideoProvider(),

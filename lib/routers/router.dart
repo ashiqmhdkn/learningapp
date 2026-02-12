@@ -65,7 +65,8 @@ final router = GoRouter(
       path: "/adminunits/:unitname",
       builder: (context, state) {
         final unitname = state.pathParameters['unitname']!;
-        return AdminVide0NotesExam(unitName: unitname);
+        final unitId=state.extra as String;
+        return AdminVide0NotesExam(unitName: unitname,unitId: unitId,);
       },
     ),
 
