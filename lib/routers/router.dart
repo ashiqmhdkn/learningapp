@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_navbar.dart';
+import 'package:learningapp/admin/admin_pages/admin_vide0_notes_exam.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
 import 'package:learningapp/mentor/mentorPages/new_batch_creation.dart';
@@ -58,6 +59,13 @@ final router = GoRouter(
       builder: (context, state) {
         final unitname = state.pathParameters['unitname']!;
         return Unitspage(unitName: unitname);
+      },
+    ),
+    GoRoute(
+      path: "/adminunits/:unitname",
+      builder: (context, state) {
+        final unitname = state.pathParameters['unitname']!;
+        return AdminVide0NotesExam(unitName: unitname);
       },
     ),
 

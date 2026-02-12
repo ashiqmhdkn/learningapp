@@ -145,8 +145,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                     child: FadeInAnimation(
                       child: EditUnitCard(
                         title: unit.title,
-                        image:
-                            unit.unit_image,
+                        image: unit.unit_image,
                         onDelete: () async {
                           //   final confirmed = await showDialog<bool>(
                           //     context: context,
@@ -191,7 +190,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                         },
                         onTap: () {
                           // Navigate to lessons page
-                          context.push('/units/${unit.title}');
+                          context.push('/adminunits/${unit.title}');
                         },
                       ),
                     ),
