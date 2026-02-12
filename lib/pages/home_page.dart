@@ -75,11 +75,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-<<<<<<< HEAD
                           return Videoplayback(url: "widget.url,");
-=======
-                          return Videoplayback(link: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
->>>>>>> 0edaebd678807fd89c97bd9f034d28f7eb283872
                         },
                       ),
                     );

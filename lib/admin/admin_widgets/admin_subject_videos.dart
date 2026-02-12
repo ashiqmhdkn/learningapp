@@ -30,7 +30,6 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjectVideos>{
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: AnimationLimiter(
-<<<<<<< HEAD
           child:VideoProvider.when(
             data: (Videos){
                 if(Videos.isEmpty){
@@ -58,32 +57,6 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjectVideos>{
                           );
                         },
                       ),
-=======
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: videos.length,
-            itemBuilder: (context, index) {
-              final video = videos[index];
-
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                child: SlideAnimation(
-                  duration: const Duration(milliseconds: 400),
-                  child: FadeInAnimation(
-                    child: AdminVideoSelectionCard(
-                      onDelete: () {},
-                      onEdit: () {},
-                      title: video["title"]!,
-                      subtitle: video["subtitle"]!,
-                      imagelocation: video["image"]!,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const Videoplayback(link: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
-                          ),
-                        );
-                      },
->>>>>>> 0edaebd678807fd89c97bd9f034d28f7eb283872
                     ),
                   ),
                 );
