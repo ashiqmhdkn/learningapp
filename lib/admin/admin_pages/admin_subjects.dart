@@ -11,7 +11,11 @@ import 'package:learningapp/providers/subject_provider.dart';
 class AdminSubjects extends ConsumerStatefulWidget {
   final String courseid;
   final String course_name;
-  const AdminSubjects({super.key, required this.courseid,required this.course_name});
+  const AdminSubjects({
+    super.key,
+    required this.courseid,
+    required this.course_name,
+  });
 
   @override
   ConsumerState<AdminSubjects> createState() => _AdminSubjectsState();
@@ -73,10 +77,6 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
                         title: subject.title,
                         backGroundImage: subject.subject_image,
                         onTap: () {
-                          context.push(
-                            '/chapterupdate/${subject.title}',
-                            extra: subject.subject_id,
-                          );
                           context.push(
                             '/chapterupdate/${subject.title}',
                             extra: subject.subject_id,

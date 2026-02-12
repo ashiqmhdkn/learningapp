@@ -7,7 +7,7 @@ import 'package:learningapp/providers/subject_provider.dart';
 
 class EditSubject extends ConsumerStatefulWidget {
   final Subject subject;
-  
+
   const EditSubject({super.key, required this.subject});
 
   @override
@@ -61,7 +61,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
       builder: (context) => SizedBox(
         height: 390,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8,0,8,16),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -89,12 +89,12 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
                 const SizedBox(height: 16),
                 const Text("Image"),
                 const SizedBox(height: 8),
-                
+
                 // Image display logic
                 _buildImageWidget(),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Buttons
                 Row(
                   children: [
@@ -116,9 +116,11 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _isUploading ? null : () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: _isUploading
+                            ? null
+                            : () {
+                                Navigator.pop(context);
+                              },
                         child: const Text("Cancel"),
                       ),
                     ),
@@ -134,7 +136,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-            final String baseUrl = "https://media.crescentlearning.org/";
+    final String baseUrl = "https://media.crescentlearning.org/";
     if (newSubjectImage != null) {
       return Stack(
         children: [
@@ -158,18 +160,14 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
+
     // If keeping existing image, show network image
     if (_keepExistingImage && widget.subject.subject_image.isNotEmpty) {
       return Stack(
@@ -177,7 +175,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl+widget.subject.subject_image,
+              baseUrl + widget.subject.subject_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -201,9 +199,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.grey[300],
                   ),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 );
               },
             ),
@@ -219,19 +215,13 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
             ),
           ),
         ],
       );
     }
-    
-    // No image - show picker
     return GestureDetector(
       onTap: () => _pickFile(context),
       child: Container(
@@ -257,20 +247,16 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   Future<void> _handleUpdate() async {
     if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all required fields."),
-        ),
+        const SnackBar(content: Text("Please fill all required fields.")),
       );
       return;
     }
 
     // Check if at least we have an image (either existing or new)
     if (!_keepExistingImage && newSubjectImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please select an image."),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please select an image.")));
       return;
     }
 
@@ -278,7 +264,9 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
       _isUploading = true;
     });
 
-    final result = await ref.read(subjectsNotifierProvider.notifier).updateSubject(
+    final result = await ref
+        .read(subjectsNotifierProvider.notifier)
+        .updateSubject(
           subjectId: widget.subject.subject_id,
           title: _titleController.text,
           subjectImage: newSubjectImage, // null if keeping existing image

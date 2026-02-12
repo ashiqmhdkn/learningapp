@@ -145,29 +145,28 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                     child: FadeInAnimation(
                       child: EditUnitCard(
                         title: unit.title,
-                        image:
-                            unit.unit_image,
-                      onDelete: () async {
-                        //     final confirmed = await showbottomsheet<bool>(
-                        //       context: context,
-                        //       builder: (context) => AlertDialog(
-                        //         title: const Text('Delete Unit'),
-                        //         content: Text('Are you sure you want to delete "${unit.title}"?'),
-                        //         actions: [
-                        //           TextButton(
-                        //             onPressed: () => Navigator.pop(context, false),
-                        //             child: const Text('Cancel'),
-                        //           ),
-                        //           TextButton(
-                        //             onPressed: () => Navigator.pop(context, true),
-                        //             style: TextButton.styleFrom(
-                        //               foregroundColor: Colors.red,
-                        //             ),
-                        //             child: const Text('Delete'),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
+                        image: unit.unit_image,
+                        onDelete: () async {
+                          //   final confirmed = await showDialog<bool>(
+                          //     context: context,
+                          //     builder: (context) => AlertDialog(
+                          //       title: const Text('Delete Unit'),
+                          //       content: Text('Are you sure you want to delete "${unit.title}"?'),
+                          //       actions: [
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context, false),
+                          //           child: const Text('Cancel'),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: () => Navigator.pop(context, true),
+                          //           style: TextButton.styleFrom(
+                          //             foregroundColor: Colors.red,
+                          //           ),
+                          //           child: const Text('Delete'),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
 
                         //     if (confirmed == true && mounted) {
                         //       final success = await ref
@@ -191,7 +190,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                         },
                         onTap: () {
                           // Navigate to lessons page
-                          context.push('/units/${unit.title}');
+                          context.push('/adminunits/${unit.title}');
                         },
                       ),
                     ),
