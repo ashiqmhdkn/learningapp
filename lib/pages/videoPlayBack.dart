@@ -6,7 +6,8 @@ import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
 class Videoplayback extends StatefulWidget {
-  const Videoplayback({super.key});
+  final String link;
+  const Videoplayback({super.key, required this.link});
 
   @override
   State<Videoplayback> createState() => _VideoplaybackState();
@@ -21,9 +22,7 @@ class _VideoplaybackState extends State<Videoplayback> {
     super.initState();
 
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(
-        'https://media.crescentlearning.org/courses/subjects/units/videos/song.mp4',
-      ),
+      Uri.parse(widget.link),
     );
     _videoPlayerController.initialize().then((_) {
       setState(() {});
@@ -165,7 +164,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+                                );
                               },
                             ),
                           );
@@ -179,7 +181,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                );
                               },
                             ),
                           );
@@ -193,7 +198,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                );
                               },
                             ),
                           );
@@ -207,7 +215,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                );
                               },
                             ),
                           );
@@ -221,7 +232,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                );
                               },
                             ),
                           );
@@ -235,7 +249,10 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback();
+                                return Videoplayback(
+                                  link:
+                                      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                                );
                               },
                             ),
                           );

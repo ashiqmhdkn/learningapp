@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:learningapp/admin/admin_widgets/admin_video_selection_card.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/videoSelectionCard.dart';
 
@@ -33,14 +34,16 @@ class AdminSubjectVideos extends StatelessWidget {
                 child: SlideAnimation(
                   duration: const Duration(milliseconds: 400),
                   child: FadeInAnimation(
-                    child: Videoselectioncard(
+                    child: AdminVideoSelectionCard(
+                      onDelete: () {},
+                      onEdit: () {},
                       title: video["title"]!,
                       subtitle: video["subtitle"]!,
                       imagelocation: video["image"]!,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(),
+                            builder: (_) => const Videoplayback(link: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
                           ),
                         );
                       },

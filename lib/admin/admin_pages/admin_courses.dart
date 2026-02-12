@@ -68,11 +68,10 @@ class AdminCourses extends ConsumerWidget {
                             ),
                           );
                         },
-                        onDelete: () async{
-                           await ref.read(coursesNotifierProvider.notifier)
-              .deleteCourse(
-                     courseId: course.course_id!
-                      );
+                        onDelete: () async {
+                          await ref
+                              .read(coursesNotifierProvider.notifier)
+                              .deleteCourse(courseId: course.course_id!);
                         },
                       ),
                     ),

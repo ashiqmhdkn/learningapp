@@ -40,7 +40,10 @@ class Subjectwisevideos extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(),
+                            builder: (_) => const Videoplayback(
+                              link:
+                                  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            ),
                           ),
                         );
                       },
