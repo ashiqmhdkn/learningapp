@@ -147,39 +147,39 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                         title: unit.title,
                         image:
                             unit.unit_image,
-                        onDelete: () async {
-                          //   final confirmed = await showDialog<bool>(
-                          //     context: context,
-                          //     builder: (context) => AlertDialog(
-                          //       title: const Text('Delete Unit'),
-                          //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-                          //       actions: [
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context, false),
-                          //           child: const Text('Cancel'),
-                          //         ),
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context, true),
-                          //           style: TextButton.styleFrom(
-                          //             foregroundColor: Colors.red,
-                          //           ),
-                          //           child: const Text('Delete'),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   );
+                      onDelete: () async {
+                        //     final confirmed = await showbottomsheet<bool>(
+                        //       context: context,
+                        //       builder: (context) => AlertDialog(
+                        //         title: const Text('Delete Unit'),
+                        //         content: Text('Are you sure you want to delete "${unit.title}"?'),
+                        //         actions: [
+                        //           TextButton(
+                        //             onPressed: () => Navigator.pop(context, false),
+                        //             child: const Text('Cancel'),
+                        //           ),
+                        //           TextButton(
+                        //             onPressed: () => Navigator.pop(context, true),
+                        //             style: TextButton.styleFrom(
+                        //               foregroundColor: Colors.red,
+                        //             ),
+                        //             child: const Text('Delete'),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     );
 
-                          //   if (confirmed == true && mounted) {
-                          //     final success = await ref
-                          //         .read(unitsNotifierProvider(widget.subjectId).notifier)
-                          //         .deleteUnit(unitId: unit.id);
+                        //     if (confirmed == true && mounted) {
+                        //       final success = await ref
+                        //           .read(unitsNotifierProvider(widget.subjectId).notifier)
+                        //           .deleteUnit(unitId: unit.id);
 
-                          //     if (success && mounted) {
-                          //       ScaffoldMessenger.of(context).showSnackBar(
-                          //         const SnackBar(content: Text('Unit deleted successfully')),
-                          //       );
-                          //     }
-                          //   }
+                        //       if (success && mounted) {
+                        //         ScaffoldMessenger.of(context).showSnackBar(
+                        //           const SnackBar(content: Text('Unit deleted successfully')),
+                        //         );
+                        //       }
+                        //     }
                         },
                         onEdit: () {
                           showModalBottomSheet(
