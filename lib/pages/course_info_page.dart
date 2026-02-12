@@ -6,7 +6,8 @@ import 'package:learningapp/widgets/customPrimaryText.dart';
 
 class CourseInfoPage extends StatelessWidget {
   final CourseInfoModel course;
-  const CourseInfoPage({super.key, required this.course});
+  final VoidCallback onTap;
+  const CourseInfoPage({super.key, required this.course, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,11 @@ class CourseInfoPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _HeaderSection(imageUrl: course.bannerImageUrl),
+                    _HeaderSection(
+                      imageUrl: course.bannerImageUrl,
+                      heroTag: course.id,
+                    ),
+
                     _TitleSection(course: course),
                     _EnrollmentSection(course: course),
                     const _TabSection(),
@@ -40,7 +45,7 @@ class CourseInfoPage extends StatelessWidget {
                 ),
               ),
             ),
-            _BottomCTA(course: course),
+            _BottomCTA(course: course, onTap: onTap),
           ],
         ),
       ),
@@ -50,18 +55,21 @@ class CourseInfoPage extends StatelessWidget {
 
 class _HeaderSection extends StatelessWidget {
   final String imageUrl;
+  final String heroTag;
 
-  const _HeaderSection({required this.imageUrl});
+  const _HeaderSection({required this.imageUrl, required this.heroTag});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Banner Image
         SizedBox(
           height: 240,
           width: double.infinity,
-          child: Image.network(imageUrl, fit: BoxFit.cover),
+          child: Hero(
+            tag: heroTag,
+            child: Image.network(imageUrl, fit: BoxFit.fill),
+          ),
         ),
         Container(
           height: 240,
@@ -219,8 +227,8 @@ class _AboutTab extends StatelessWidget {
 
 class _BottomCTA extends StatelessWidget {
   final CourseInfoModel course;
-
-  const _BottomCTA({required this.course});
+  final VoidCallback onTap;
+  const _BottomCTA({required this.course, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +262,7 @@ class _BottomCTA extends StatelessWidget {
             Expanded(
               child: Custombuttonone(
                 text: course.isEnrolled ? "Already Enrolled" : "Join Batch",
-                onTap: () {},
+                onTap: onTap,
               ),
             ),
           ],
