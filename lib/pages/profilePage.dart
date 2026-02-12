@@ -3,10 +3,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/api/profileapi.dart';
 import 'package:learningapp/controller/authcontroller.dart';
+import 'package:learningapp/models/streak_modal.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/darkOrLight.dart';
+import 'package:learningapp/widgets/streak_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class DummyStreakData {
+  static List<StreakDay> generate() {
+    final today = DateTime.now();
+
+    return [
+      StreakDay(
+        date: today.subtract(const Duration(days: 6)),
+        minutesStudied: 15,
+      ),
+      StreakDay(
+        date: today.subtract(const Duration(days: 5)),
+        minutesStudied: 12,
+      ),
+      StreakDay(
+        date: today.subtract(const Duration(days: 4)),
+        minutesStudied: 0,
+      ),
+      StreakDay(
+        date: today.subtract(const Duration(days: 3)),
+        minutesStudied: 20,
+      ),
+      StreakDay(
+        date: today.subtract(const Duration(days: 2)),
+        minutesStudied: 5,
+      ),
+
+      StreakDay(date: today, minutesStudied: 25),
+    ];
+  }
+}
 
 class Profilepage extends ConsumerWidget {
   final String username;
@@ -14,6 +47,7 @@ class Profilepage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dummyData = DummyStreakData.generate();
     final authState = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(actions: [Darkorlight()], scrolledUnderElevation: 0),
@@ -25,7 +59,9 @@ class Profilepage extends ConsumerWidget {
               children: [
                 const CircleAvatar(
                   radius: 70,
-                  backgroundImage: AssetImage('lib/assets/image.png'),
+                  backgroundImage: NetworkImage(
+                    "https://imagedelivery.net/qbIY5PxQGCt4my9mH271vg/99b1944d-1cec-422f-a658-655e7df66800/public",
+                  ),
                 ),
                 const SizedBox(width: 60),
                 Flexible(
@@ -81,6 +117,10 @@ class Profilepage extends ConsumerWidget {
             ),
 
             const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StreakWidget(streakData: dummyData),
+            ),
             const SizedBox(height: 20),
             _settingsSectionTitle("Feedback"),
             _SettingsTile(
@@ -168,7 +208,7 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.8),
+      color: Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.9),
       child: ListTile(
         leading: CircleAvatar(
           radius: 18,

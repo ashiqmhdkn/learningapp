@@ -67,7 +67,7 @@ class _StudentNavbarState extends State<StudentNavbar>
     HomePage(),
     CourseSubjectPage(),
     StudentNotifications(),
-    CourseInfoPage(course: dummyCourse),
+    StudentNotifications(),
   ];
 
   @override

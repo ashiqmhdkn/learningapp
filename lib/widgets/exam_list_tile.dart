@@ -24,6 +24,9 @@ class ExamListTile extends StatelessWidget {
         trailing: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.green),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            ),
           ),
           onPressed: onStartExam,
           child: const Text("Start", style: TextStyle(color: Colors.white)),
