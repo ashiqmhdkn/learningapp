@@ -119,36 +119,36 @@ Future<bool> subjectsPut({
   }
 }
 
-// DELETE - Delete subject
+
 Future<bool> subjectsDelete({
   required String token,
   required String subjectId,
 }) async {
-  final uri = Uri.parse('$baseUrl/subjects/$subjectId');
-  try {
-    final request = http.Request('DELETE', uri)
-      ..headers['Authorization'] = 'Bearer $token'
-      ..headers['Accept'] = 'application/json'
-      ..headers['Content-Type'] = 'application/json';
 
-    final streamed = await request.send();
-    final res = await http.Response.fromStream(streamed);
-    
+  final uri = Uri.parse('$baseUrl/subjects');
+
+  print("DELETE URL: $uri");
+  print("SUBJECT ID: $subjectId");
+  print("TOKEN: $token");
+
+  try {
+    final res = await http.delete(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: '{"id":"$subjectId"}',
+    );
+
     print("DELETE Status: ${res.statusCode}");
     print("DELETE Body: ${res.body}");
 
-    if (res.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(res.body);
-      return data['success'] == true;
-    } else if (res.statusCode == 404) {
-      print("Course not found");
-      return false;
-    } else {
-      print("Server error: ${res.statusCode}, Body: ${res.body}");
-      return false;
-    }
+    return res.statusCode == 200;
+
   } catch (e) {
-    print('Error in subjectsDelete: $e');
+    print('Error: $e');
     return false;
   }
 }

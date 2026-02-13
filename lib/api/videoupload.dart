@@ -26,7 +26,13 @@ Future<bool> videoUpload({
         'Upload-Length': videoFile.lengthSync().toString(),
         'Tus-Resumable': '1.0.0',
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
+      body: jsonEncode({
+        "title": title,
+        "description":description,
+        "unit_id":unit_id,
+      }),
     );
 
     print('Get upload URL Status: ${response.statusCode}');
@@ -48,14 +54,13 @@ Future<bool> videoUpload({
     print('✅ Successfully received upload URL and video ID');
 
     // Step 2: Upload video using TUSC (TUS protocol)
-    await uploadVideoTUSC(
+   await uploadVideoTUSC(
       uploadUrl: uploadUrl,
       videoFile: videoFile,
       token: token,
     );
-
+    return true;
     // Step 3: Update your database table
-    return await table_update(title, description, unit_id, videoId,token);
   } catch (e) {
     print('❌ Error in video upload: $e');
     rethrow;
@@ -91,7 +96,8 @@ Future<void> uploadVideoTUSC({
         print('Stream URL: ${client.uploadUrl}');
       },
       onError: (error) {
-        print('❌ Upload failed: ${error.message}');
+        print('❌ Upload failed: ${error.message}'
+      );
         if (error.response != null) {
           print('Server Response: ${error.response!.body}');
         }
@@ -103,46 +109,6 @@ Future<void> uploadVideoTUSC({
     print('❌ Upload failed: $e');
     rethrow;
   }
-}
-
-Future<bool> table_update(
-  String title,
-  String description,
-  String unit_id,
-  String video_id,
-  String token,
-) async {
-  final uri = Uri.parse('$baseUrl/unit/videos/update');
-
-  final response = await http.post(
-    uri,
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization':'Bearer $token',
-    },
-    body: jsonEncode({
-      'title': title,
-      'description': description,
-      'unit_id': unit_id,
-      'video_id': video_id,
-    }),
-  );
-
-  print('Table update Status: ${response.statusCode}');
-  print('Table update Response: ${response.body}');
-
-  if (response.statusCode != 200) {
-    throw Exception('Table update failed: ${response.body}');
-  }
-
-  final Map<String, dynamic> data = jsonDecode(response.body);
-
-  if (data.containsKey('success') && data['success']) {
-    return true;
-  }
-
-  throw Exception('Table update error: success flag not true');
 }
 
 Future<List<Video>> videosGet(String token, String unit_id) async {
