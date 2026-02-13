@@ -23,7 +23,7 @@ class AdminDashboard extends ConsumerWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No token found. Please login."));
+            return const Center(child: const Text("No token found. Please login."));
           }
 
           final token = snapshot.data!;

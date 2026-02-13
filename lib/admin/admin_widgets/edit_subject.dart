@@ -156,7 +156,6 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-    final String baseUrl = "https://media.crescentlearning.org/";
     if (newSubjectImage != null) {
       return Stack(
         children: [
@@ -195,7 +194,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl + widget.subject.subject_image,
+               widget.subject.subject_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,

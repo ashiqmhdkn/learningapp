@@ -132,7 +132,7 @@ class AdminCourses extends ConsumerWidget {
                                 .deleteCourse(courseId: course.course_id!);
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Course deleted")),
+                              const SnackBar(content: const Text("Course deleted")),
                             );
                           }
                         },

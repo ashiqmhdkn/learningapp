@@ -114,7 +114,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Center(
-              child: Text(
+              child: const Text(
                 "Course Upload",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
@@ -171,8 +171,8 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                         children: [
                           Icon(Icons.cloud_upload_outlined, size: 40),
                           SizedBox(height: 8),
-                          Text("Select Image for the Course"),
-                          Text(
+                          const Text("Select Image for the Course"),
+                          const Text(
                             "or Browse",
                             style: TextStyle(color: Colors.blue),
                           ),

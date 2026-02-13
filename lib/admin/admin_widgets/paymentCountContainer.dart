@@ -25,7 +25,7 @@ class Paymentcountcontainer extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "Number of Payments",
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 22),
                   ),
@@ -35,7 +35,7 @@ class Paymentcountcontainer extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                child: Text(
+                child: const Text(
                   "666",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
                 ),

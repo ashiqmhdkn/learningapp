@@ -52,7 +52,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
       body: subjectsState.when(
         data: (subjects) {
           if (subjects.isEmpty) {
-            return const Center(child: Text('No Subjects available'));
+            return const Center(child: const Text('No Subjects available'));
           }
           return AnimationLimiter(
             child: ListView.builder(
@@ -157,8 +157,8 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        loading: () => const Center(child: const CircularProgressIndicator()),
+        error: (error, stack) => Center(child:  Text('Error: $error')),
       ),
     );
   }

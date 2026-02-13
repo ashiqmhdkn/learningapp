@@ -17,7 +17,6 @@ class EditUnit extends ConsumerStatefulWidget {
 class _EditUnitState extends ConsumerState<EditUnit> {
   String? newUnitImage; // New local image path
   late TextEditingController _titleController;
-  late TextEditingController _descriptionController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
 
@@ -48,7 +47,6 @@ class _EditUnitState extends ConsumerState<EditUnit> {
   @override
   void dispose() {
     _titleController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -158,7 +156,6 @@ class _EditUnitState extends ConsumerState<EditUnit> {
 
   Widget _buildImageWidget() {
     // If new image is selected, show it
-    final String baseUrl = "https://media.crescentlearning.org/";
     if (newUnitImage != null) {
       return Stack(
         children: [
@@ -197,7 +194,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              baseUrl + widget.unit.unit_image,
+               widget.unit.unit_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -269,7 +266,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
   }
 
   Future<void> _handleUpdate() async {
-    if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
+    if ( _titleController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all required fields.")),
       );
@@ -293,7 +290,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
         .updateUnit(
           unitId: widget.unit.unit_id,
           title: _titleController.text,
-          unitImage: newUnitImage, // null if keeping existing image
+          unitImage: newUnitImage??widget.unit.unit_image, // null if keeping existing image
         );
 
     setState(() {

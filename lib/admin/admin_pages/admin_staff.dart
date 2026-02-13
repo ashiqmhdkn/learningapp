@@ -56,11 +56,11 @@ class _AdminStaffState extends State<AdminStaff> {
               child: CustomSlidingSegmentedControl<int>(
                 initialValue: _selectedIndex,
                 children: const {
-                  0: Text("Teachers"),
+                  0: const Text("Teachers"),
 
-                  1: Text("Mentors"),
-                  2: Text("Coordinator"),
-                  3: Text("Collaborator"),
+                  1: const Text("Mentors"),
+                  2: const Text("Coordinator"),
+                  3: const Text("Collaborator"),
                 },
                 decoration: BoxDecoration(
                   color: colorScheme.surface,

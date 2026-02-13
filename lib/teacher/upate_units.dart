@@ -146,39 +146,73 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                       child: EditUnitCard(
                         title: unit.title,
                         image: unit.unit_image,
-                        onDelete: () async {
-                          //   final confirmed = await showDialog<bool>(
-                          //     context: context,
-                          //     builder: (context) => AlertDialog(
-                          //       title: const Text('Delete Unit'),
-                          //       content: Text('Are you sure you want to delete "${unit.title}"?'),
-                          //       actions: [
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context, false),
-                          //           child: const Text('Cancel'),
-                          //         ),
-                          //         TextButton(
-                          //           onPressed: () => Navigator.pop(context, true),
-                          //           style: TextButton.styleFrom(
-                          //             foregroundColor: Colors.red,
-                          //           ),
-                          //           child: const Text('Delete'),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   );
+                         onDelete: () async {
+                          final confirm = await showModalBottomSheet<bool>(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Delete Unit?",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
 
-                        //     if (confirmed == true && mounted) {
-                        //       final success = await ref
-                        //           .read(unitsNotifierProvider(widget.subjectId).notifier)
-                        //           .deleteUnit(unitId: unit.id);
+                                    const SizedBox(height: 10),
 
-                        //       if (success && mounted) {
-                        //         ScaffoldMessenger.of(context).showSnackBar(
-                        //           const SnackBar(content: Text('Unit deleted successfully')),
-                        //         );
-                        //       }
-                        //     }
+                                    const Text("This action cannot be undone."),
+
+                                    const SizedBox(height: 20),
+
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, false),
+                                            child: const Text("Cancel"),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 10),
+
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pop(context, true),
+                                            child: const Text("Delete"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+
+                          if (confirm == true) {
+                            await ref
+                                .read(unitsNotifierProvider.notifier)
+                                .deleteUnit(unitId: unit.unit_id);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Unit deleted")),
+                            );
+                          }
                         },
                         onEdit: () {
                           showModalBottomSheet(
