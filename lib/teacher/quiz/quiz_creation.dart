@@ -3,10 +3,10 @@ import 'package:learningapp/models/quiz_model.dart';
 import 'package:learningapp/teacher/quiz/question_typesheet.dart';
 import 'package:learningapp/teacher/quiz/quiz_review_page.dart';
 import 'package:learningapp/teacher/quiz/textquestion_editorsheet.dart';
+import 'package:learningapp/utils/app_snackbar.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
-import 'package:learningapp/widgets/snackbar.dart';
 
 class QuizCreation extends StatefulWidget {
   const QuizCreation({super.key});
@@ -115,7 +115,11 @@ class _QuizCreationState extends State<QuizCreation> {
                 text: "Review ",
                 onTap: () {
                   if (_titleController.text.trim().isEmpty) {
-                    AppSnackBar.show(context, message: "Enter a title ");
+                    AppSnackBar.show(
+                      context,
+                      message: "Enter a title",
+                      type: SnackType.error,
+                    );
                   } else if (_questions.isEmpty) {
                     AppSnackBar.show(
                       context,
@@ -380,7 +384,8 @@ class BaseEditor extends StatelessWidget {
 
   final VoidCallback onDelete;
 
-  const BaseEditor({super.key, 
+  const BaseEditor({
+    super.key,
     required this.title,
     required this.children,
     required this.onDelete,

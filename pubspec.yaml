@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   chewie: ^1.7.5
+  crop_your_image: ^2.0.0
   cross_file: ^0.3.5+2
   crypto: ^3.0.7
   cupertino_icons: ^1.0.8
@@ -44,6 +45,8 @@ dependencies:
   go_router: ^17.0.1
   google_nav_bar: ^5.0.7
   http: ^1.2.0
+  intl: ^0.20.2
+  path_provider: ^2.1.5
   riverpod_annotation: ^4.0.0
   shared_preferences: ^2.5.4
   streakify: ^0.0.2

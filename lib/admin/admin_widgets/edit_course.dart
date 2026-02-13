@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/course_model.dart';
 import 'package:learningapp/providers/courses_provider.dart';
+import 'package:learningapp/utils/app_snackbar.dart';
 
 class EditCourse extends ConsumerStatefulWidget {
   final Course course;
@@ -31,13 +33,24 @@ class _EditCourseState extends ConsumerState<EditCourse> {
     );
   }
 
-  Future<void> _pickFile(BuildContext context) async {
+  Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        newCourseImage = result.files.single.path!;
-        _keepExistingImage = false; // New image selected, don't keep old one
-      });
+      final String pickedImagePath = result.files.single.path!;
+
+      // Open crop page
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+      );
+
+      // If user completed cropping, use the cropped image
+      if (croppedImagePath != null) {
+        setState(() {
+          newCourseImage = croppedImagePath;
+        });
+      }
     }
   }
 
@@ -144,7 +157,6 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   }
 
   Widget _buildImageWidget() {
-    // If new image is selected, show it
     if (newCourseImage != null) {
       return Stack(
         children: [
@@ -176,7 +188,6 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       );
     }
 
-    // If keeping existing image, show network image
     if (_keepExistingImage && widget.course.course_image.isNotEmpty) {
       return Stack(
         children: [
@@ -233,7 +244,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
     // No image - show picker
     return GestureDetector(
-      onTap: () => _pickFile(context),
+      onTap: () => _pickFile(),
       child: Container(
         height: 160,
         width: double.infinity,
@@ -256,17 +267,23 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   Future<void> _handleUpdate() async {
     if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all required fields.")),
+      AppSnackBar.show(
+        context,
+        message: "Please fill all fields ",
+        type: SnackType.error,
+        showAtTop: true,
       );
       return;
     }
 
     // Check if at least we have an image (either existing or new)
     if (!_keepExistingImage && newCourseImage == null) {
-      ScaffoldMessenger.of(
+      AppSnackBar.show(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Please select an image.")));
+        message: "Please select an image.",
+        type: SnackType.error,
+        showAtTop: true,
+      );
       return;
     }
 
@@ -291,19 +308,19 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
     if (context.mounted) {
       if (result) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Course updated successfully"),
-            backgroundColor: Colors.green,
-          ),
+        AppSnackBar.show(
+          context,
+          message: "Course udpated successfully",
+          type: SnackType.success,
+          showAtTop: true,
         );
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Failed to update course"),
-            backgroundColor: Colors.red,
-          ),
+        AppSnackBar.show(
+          context,
+          message: "Failed to update course",
+          type: SnackType.error,
+          showAtTop: true,
         );
       }
     }

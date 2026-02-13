@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/providers/courses_provider.dart';
+import 'package:learningapp/utils/app_snackbar.dart';
 
 class AddCourse extends ConsumerStatefulWidget {
   const AddCourse({super.key});
@@ -21,48 +23,19 @@ class _AddCourseState extends ConsumerState<AddCourse> {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        courseImage = result.files.single.path!;
-      });
-    }
-  }
+      final String pickedImagePath = result.files.single.path!;
 
-  Future<void> _submit() async {
-    if (courseImage.isEmpty ||
-        _titleController.text.isEmpty ||
-        _descriptionController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all fields and select a file."),
-        ),
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
       );
-      return;
+
+      if (croppedImagePath != null) {
+        setState(() {
+          courseImage = croppedImagePath;
+        });
+      }
     }
-
-    setState(() => _isUploading = true);
-
-    final result = await ref
-        .read(coursesNotifierProvider.notifier)
-        .createCourse(
-          title: _titleController.text,
-          courseImage: courseImage,
-          description: _descriptionController.text,
-        );
-
-    setState(() => _isUploading = false);
-
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          result ? "Course created successfully" : "Failed to create course",
-        ),
-        backgroundColor: result ? Colors.green : Colors.red,
-      ),
-    );
-
-    if (result) Navigator.pop(context);
   }
 
   Widget _imagePreview() {
@@ -222,31 +195,28 @@ class _AddCourseState extends ConsumerState<AddCourse> {
 
                               if (context.mounted) {
                                 if (result) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Course created successfully",
-                                      ),
-                                      backgroundColor: Colors.green,
-                                    ),
+                                  AppSnackBar.show(
+                                    context,
+                                    message: "Course created succesfully",
+                                    type: SnackType.success,
                                   );
                                   Navigator.pop(context);
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Failed to create course"),
-                                      backgroundColor: Colors.red,
-                                    ),
+                                  AppSnackBar.show(
+                                    context,
+                                    message: "Failed to create course",
+                                    type: SnackType.error,
+                                    showAtTop: true,
                                   );
                                 }
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
+                              AppSnackBar.show(
+                                context,
+                                message:
                                     "Please fill all fields and select a file.",
-                                  ),
-                                ),
+                                type: SnackType.error,
+                                showAtTop: true,
                               );
                             }
                           },

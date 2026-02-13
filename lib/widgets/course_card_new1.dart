@@ -14,9 +14,13 @@ class CourseCardNew1 extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(10),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.tertiary,
           borderRadius: BorderRadius.circular(16),
@@ -32,7 +36,7 @@ class CourseCardNew1 extends StatelessWidget {
                 tag: course.id,
                 child: Image.network(
                   course.bannerImageUrl,
-                  height: 190,
+                  height: 180,
                   width: double.infinity,
                   fit: BoxFit.fill,
                 ),
@@ -40,7 +44,7 @@ class CourseCardNew1 extends StatelessWidget {
             ),
 
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+              padding: const EdgeInsets.fromLTRB(14, 5, 14, 14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,7 +56,7 @@ class CourseCardNew1 extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   Text(
                     course.title,
                     maxLines: 2,
@@ -64,7 +68,7 @@ class CourseCardNew1 extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 5),
                   Text(
                     "Enrollment closes on "
                     "${DateFormat('dd MMM').format(course.enrollmentEndDate)}",
@@ -75,7 +79,7 @@ class CourseCardNew1 extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Text(
