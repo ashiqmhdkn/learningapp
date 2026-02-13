@@ -17,7 +17,6 @@ class EditSubject extends ConsumerStatefulWidget {
 class _EditSubjectState extends ConsumerState<EditSubject> {
   String? newSubjectImage; // New local image path
   late TextEditingController _titleController;
-  late TextEditingController _descriptionController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
 
@@ -48,7 +47,6 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   @override
   void dispose() {
     _titleController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -267,10 +265,19 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   }
 
   Future<void> _handleUpdate() async {
-    if (_descriptionController.text.isEmpty || _titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all required fields.")),
-      );
+    if ( _titleController.text.isEmpty) {
+     ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: const Text("Please fill all required fields."),
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.only(
+      top: 50,
+      left: 16,
+      right: 16,
+    ),
+  ),
+);
+
       return;
     }
 

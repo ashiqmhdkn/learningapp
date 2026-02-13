@@ -69,9 +69,72 @@ class AdminCourses extends ConsumerWidget {
                           );
                         },
                         onDelete: () async {
-                          await ref
-                              .read(coursesNotifierProvider.notifier)
-                              .deleteCourse(courseId: course.course_id!);
+                          final confirm = await showModalBottomSheet<bool>(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder: (context) {
+                              return Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Delete Course?",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    const Text("This action cannot be undone."),
+
+                                    const SizedBox(height: 20),
+
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: OutlinedButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, false),
+                                            child: const Text("Cancel"),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 10),
+
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.pop(context, true),
+                                            child: const Text("Delete"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+
+                          if (confirm == true) {
+                            await ref
+                                .read(coursesNotifierProvider.notifier)
+                                .deleteCourse(courseId: course.course_id!);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Course deleted")),
+                            );
+                          }
                         },
                       ),
                     ),
