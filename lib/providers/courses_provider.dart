@@ -78,6 +78,7 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
   Future<bool> deleteCourse({
     required String courseId,
   }) async {
+    state = const AsyncValue.loading();
     final token = await ref.read(authTokenProvider.future);
 
     
@@ -92,8 +93,9 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
         state = await AsyncValue.guard(() => coursesget(token));
       }
       
-      return success;
+      return false;
     } catch (e) {
+      print(e);
       return false;
     }
   }

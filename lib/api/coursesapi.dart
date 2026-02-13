@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:learningapp/models/course_model.dart';
 
@@ -121,35 +122,41 @@ Future<bool> coursesPut({
   }
 }
 
-// DELETE - Delete course
 Future<bool> coursesDelete({
   required String token,
   required String courseId,
 }) async {
   final uri = Uri.parse('$baseUrl/courses');
-  try {
-    final request = http.Request('DELETE', uri)
-    ..bodyFields['course_id']=courseId
-      ..headers['Authorization'] = 'Bearer $token'
-      ..headers['Accept'] = 'application/json'
-      ..headers['Content-Type'] = 'application/json';
 
-    final streamed = await request.send();
-    final res = await http.Response.fromStream(streamed);
-    
+  try {
+    final res = await http.delete(
+      uri,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json', // IMPORTANT
+      },
+      body: jsonEncode({
+        "id": courseId,
+      }),
+    );
+
     print("DELETE Status: ${res.statusCode}");
     print("DELETE Body: ${res.body}");
 
     if (res.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(res.body);
+      final data = jsonDecode(res.body);
       return data['success'] == true;
-    } else if (res.statusCode == 404) {
+    } 
+    else if (res.statusCode == 404) {
       print("Course not found");
       return false;
-    } else {
-      print("Server error: ${res.statusCode}, Body: ${res.body}");
+    } 
+    else {
+      print("Server error: ${res.statusCode}");
       return false;
     }
+
   } catch (e) {
     print('Error in coursesDelete: $e');
     return false;
