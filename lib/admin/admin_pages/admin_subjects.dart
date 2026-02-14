@@ -126,7 +126,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
                           if (confirm == true) {
                             await ref
                                 .read(subjectsNotifierProvider.notifier)
-                                .deleteSubject(subjectId: subject.subject_id!);
+                                .deleteSubject(subjectId: subject.subject_id);
 
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Subject deleted")),

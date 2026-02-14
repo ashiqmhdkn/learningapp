@@ -19,6 +19,7 @@ Future<List<Course>> coursesget(String token) async {
     );
     
     print('GET Courses Response: ${response.statusCode}');
+    print("==============================================object===============================================================");
     print('GET Courses Body: ${response.body}');
     
     if (response.statusCode == 200) {
