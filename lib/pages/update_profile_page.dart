@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/api/profileapi.dart';
 import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/models/user_model.dart';
+import 'package:learningapp/utils/image_preview.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customPrimaryText.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
@@ -22,13 +27,17 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
   late TextEditingController _phoneController;
   String _selectedRole = '';
   bool _isLoading = false;
+  String _profileImagePath = "";
+  final double _aspectRatio = 1;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.user.username);
     _emailController = TextEditingController(text: widget.user.email);
-    _phoneController = TextEditingController(text: widget.user.phone.toString());
+    _phoneController = TextEditingController(
+      text: widget.user.phone.toString(),
+    );
     _selectedRole = widget.user.role;
   }
 
@@ -95,10 +104,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
@@ -123,20 +129,18 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
             Center(
               child: Stack(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 55,
-                    backgroundImage: AssetImage('lib/assets/image.png'),
+                    backgroundImage: _profileImagePath.isNotEmpty
+                        ? FileImage(File(_profileImagePath))
+                        : const AssetImage('lib/assets/image.png')
+                              as ImageProvider,
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: GestureDetector(
-                      onTap: () {
-                        // TODO: Implement image picker
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Image upload coming soon!')),
-                        );
-                      },
+                      onTap: _pickFile,
                       child: CircleAvatar(
                         radius: 18,
                         backgroundColor: colorScheme.primary,
@@ -182,8 +186,9 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-              hintText: "Email Address",
-              prefixIcon: Icon(Icons.mail),),
+                hintText: "Email Address",
+                prefixIcon: Icon(Icons.mail),
+              ),
               keyboardType: TextInputType.emailAddress,
             ),
 
@@ -201,12 +206,12 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                 isExpanded: true,
                 underline: const SizedBox(),
                 items: ['student', 'teacher', 'admin']
-                    .map((role) => DropdownMenuItem(
-                          value: role,
-                          child: Text(
-                            role[0].toUpperCase() + role.substring(1),
-                          ),
-                        ))
+                    .map(
+                      (role) => DropdownMenuItem(
+                        value: role,
+                        child: Text(role[0].toUpperCase() + role.substring(1)),
+                      ),
+                    )
                     .toList(),
                 value: _selectedRole,
                 onChanged: (value) {
@@ -218,7 +223,7 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
                 },
               ),
             ),
-            
+
             const SizedBox(height: 30),
             Center(
               child: _isLoading
@@ -231,6 +236,58 @@ class _UpdateProfilePageState extends ConsumerState<UpdateProfilePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null && result.files.single.path != null) {
+      final String pickedImagePath = result.files.single.path!;
+
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+        aspectRatio: _aspectRatio,
+      );
+
+      if (croppedImagePath != null) {
+        setState(() {
+          _profileImagePath = croppedImagePath;
+        });
+      }
+    }
+  }
+
+  void _showImagePreviewDialog(String imagePath) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(16),
+          content: AspectRatioImageField(
+            imagePath: imagePath,
+            aspectRatio: _aspectRatio,
+            onPick: () {},
+            onRemove: () {},
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _profileImagePath = imagePath;
+                });
+                Navigator.pop(context);
+              },
+              child: const Text("Use Image"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

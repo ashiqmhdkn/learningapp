@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/unit_model.dart';
 import 'package:learningapp/providers/unit_provider.dart';
+import 'package:learningapp/utils/app_snackbar.dart';
 
 class EditUnit extends ConsumerStatefulWidget {
   final Unit unit;
@@ -19,7 +21,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
   late TextEditingController _titleController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
-
+  final double _aspectRatio = 1;
   @override
   void initState() {
     super.initState();
@@ -27,13 +29,25 @@ class _EditUnitState extends ConsumerState<EditUnit> {
     _titleController = TextEditingController(text: widget.unit.title);
   }
 
-  Future<void> _pickFile(BuildContext context) async {
+  Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        newUnitImage = result.files.single.path!;
-        _keepExistingImage = false; // New image selected, don't keep old one
-      });
+      final String pickedImagePath = result.files.single.path!;
+
+      // Open crop page
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+        aspectRatio: _aspectRatio,
+      );
+
+      // If user completed cropping, use the cropped image
+      if (croppedImagePath != null) {
+        setState(() {
+          newUnitImage = croppedImagePath;
+        });
+      }
     }
   }
 
@@ -60,7 +74,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -159,13 +173,16 @@ class _EditUnitState extends ConsumerState<EditUnit> {
     if (newUnitImage != null) {
       return Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(newUnitImage!),
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
+          AspectRatio(
+            aspectRatio: _aspectRatio,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                File(newUnitImage!),
+                height: 160,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
@@ -191,36 +208,39 @@ class _EditUnitState extends ConsumerState<EditUnit> {
     if (_keepExistingImage && widget.unit.unit_image.isNotEmpty) {
       return Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-               widget.unit.unit_image,
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                  ),
-                  child: const Icon(Icons.error, size: 40),
-                );
-              },
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                  ),
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              },
+          AspectRatio(
+            aspectRatio: _aspectRatio,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                widget.unit.unit_image,
+                height: 160,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                    ),
+                    child: const Icon(Icons.error, size: 40),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                    ),
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
             ),
           ),
           Positioned(
@@ -244,7 +264,7 @@ class _EditUnitState extends ConsumerState<EditUnit> {
 
     // No image - show picker
     return GestureDetector(
-      onTap: () => _pickFile(context),
+      onTap: () => _pickFile(),
       child: Container(
         height: 160,
         width: double.infinity,
@@ -266,18 +286,24 @@ class _EditUnitState extends ConsumerState<EditUnit> {
   }
 
   Future<void> _handleUpdate() async {
-    if ( _titleController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all required fields.")),
+    if (_titleController.text.isEmpty) {
+      AppSnackBar.show(
+        context,
+        message: "Please fill all fields and select a file.",
+        type: SnackType.error,
+        showAtTop: true,
       );
       return;
     }
 
     // Check if at least we have an image (either existing or new)
     if (!_keepExistingImage && newUnitImage == null) {
-      ScaffoldMessenger.of(
+      AppSnackBar.show(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Please select an image.")));
+        message: "Please select an image",
+        type: SnackType.error,
+        showAtTop: true,
+      );
       return;
     }
 
@@ -290,7 +316,9 @@ class _EditUnitState extends ConsumerState<EditUnit> {
         .updateUnit(
           unitId: widget.unit.unit_id,
           title: _titleController.text,
-          unitImage: newUnitImage??widget.unit.unit_image, // null if keeping existing image
+          unitImage:
+              newUnitImage ??
+              widget.unit.unit_image, // null if keeping existing image
         );
 
     setState(() {

@@ -2,7 +2,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/providers/subject_provider.dart';
+import 'package:learningapp/utils/app_snackbar.dart';
+import 'package:learningapp/utils/image_preview.dart';
 
 class AddSubject extends ConsumerStatefulWidget {
   const AddSubject({super.key});
@@ -15,14 +18,24 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
   String subjectImage = "";
   final TextEditingController _titleController = TextEditingController();
   bool _isUploading = false;
-
+  final double _aspectRatio = 4 / 3;
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        subjectImage = result.files.single.path!;
-      });
+      final String pickedImagePath = result.files.single.path!;
+
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+        aspectRatio: _aspectRatio,
+      );
+
+      if (croppedImagePath != null) {
+        setState(() {
+          subjectImage = croppedImagePath;
+        });
+      }
     }
   }
 
@@ -68,62 +81,14 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
             const Text("File"),
             const SizedBox(height: 8),
 
-            if (subjectImage.isEmpty)
-              GestureDetector(
-                onTap: _pickFile,
-                child: Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.cloud_upload_outlined, size: 40),
-                      SizedBox(height: 8),
-                      Text("Select Image for the Subject"),
-                      Text("or Browse", style: TextStyle(color: Colors.blue)),
-                    ],
-                  ),
-                ),
-              )
-            else
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(subjectImage),
-                      height: 160,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() => subjectImage = "");
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            Center(
+              child: AspectRatioImageField(
+                imagePath: subjectImage,
+                aspectRatio: _aspectRatio,
+                onPick: _pickFile,
+                onRemove: () => setState(() => subjectImage = ""),
               ),
+            ),
 
             const SizedBox(height: 16),
 
@@ -146,12 +111,12 @@ class _AddSubjectState extends ConsumerState<AddSubject> {
                         : () async {
                             if (subjectImage.isEmpty ||
                                 _titleController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
+                              AppSnackBar.show(
+                                context,
+                                message:
                                     "Please fill all fields and select a file.",
-                                  ),
-                                ),
+                                type: SnackType.error,
+                                showAtTop: true,
                               );
                               return;
                             }

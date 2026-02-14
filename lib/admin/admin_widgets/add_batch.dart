@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,19 +7,20 @@ import 'package:learningapp/utils/image_preview.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
 
-class AddCourse extends ConsumerStatefulWidget {
-  const AddCourse({super.key});
+class AddBatch extends ConsumerStatefulWidget {
+  const AddBatch({super.key});
 
   @override
-  ConsumerState<AddCourse> createState() => _AddCourseState();
+  ConsumerState<AddBatch> createState() => _AddBatchState();
 }
 
-class _AddCourseState extends ConsumerState<AddCourse> {
+class _AddBatchState extends ConsumerState<AddBatch> {
   String courseImage = "";
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool _isUploading = false;
-  final double _aspectRatio = 4 / 3;
+  final double _aspectRatio = 1 / 1;
+
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -51,14 +53,14 @@ class _AddCourseState extends ConsumerState<AddCourse> {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(12, 0, 12, bottomInset + 12),
+      padding: EdgeInsets.fromLTRB(12, 12, 12, bottomInset + 12),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Center(
               child: const Text(
-                "Course Upload",
+                "Add Batch",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -70,7 +72,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                hintText: "Enter Course name",
+                hintText: "Enter Batch name",
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -80,13 +82,13 @@ class _AddCourseState extends ConsumerState<AddCourse> {
 
             const SizedBox(height: 16),
 
-            const Text("Description"),
+            const Text("Duration"),
             const SizedBox(height: 6),
             TextField(
               controller: _descriptionController,
-              maxLines: 3,
+
               decoration: InputDecoration(
-                hintText: "Enter Course Description",
+                hintText: "Enter Course Duration",
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -150,14 +152,14 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                                 if (result) {
                                   AppSnackBar.show(
                                     context,
-                                    message: "Course created succesfully",
+                                    message: "Batch created succesfully",
                                     type: SnackType.success,
                                   );
                                   Navigator.pop(context);
                                 } else {
                                   AppSnackBar.show(
                                     context,
-                                    message: "Failed to create course",
+                                    message: "Failed to create batch",
                                     type: SnackType.error,
                                     showAtTop: true,
                                   );

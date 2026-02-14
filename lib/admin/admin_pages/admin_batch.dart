@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/admin/admin_widgets/add_batch.dart';
+import 'package:learningapp/admin/admin_widgets/edit_batch.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/batch_provider.dart';
 import 'package:learningapp/widgets/edit_unit_card.dart';
@@ -22,22 +24,12 @@ class Adminbatch extends ConsumerStatefulWidget {
 }
 
 class _AdminbatchState extends ConsumerState<Adminbatch> {
-  int _selectedIndex = 0;
-  late final PageController _pageController;
-
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _selectedIndex);
     Future.microtask(() {
       ref.read(batchsNotifierProvider.notifier).setcourse_id(widget.courseId);
     });
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -55,60 +47,23 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
         actions: [
           ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.primary,
-              ),
+              backgroundColor: WidgetStatePropertyAll(colorScheme.primary),
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               ),
             ),
             child: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
-              // showModalBottomSheet(
-              //   context: context,
-              //   isScrollControlled: true,
-              //   showDragHandle: true,
-              //   builder: (context) => AddBatch(),
-              // );
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => AddBatch(),
+              );
             },
           ),
-        ],),
-        // bottom: PreferredSize(
-        //   preferredSize: const Size.fromHeight(60),
-        //   child: Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        //     child: CustomSlidingSegmentedControl<int>(
-        //       initialValue: _selectedIndex,
-        //       children: const {0: Text("Batchs"), 1: Text("Exams")},
-        //       decoration: BoxDecoration(
-        //         color: colorScheme.surface,
-        //         borderRadius: BorderRadius.circular(15),
-        //         border: Border.all(color: Colors.black12),
-        //       ),
-        //       thumbDecoration: BoxDecoration(
-        //         color: colorScheme.primary,
-        //         borderRadius: BorderRadius.circular(15),
-        //       ),
-        //       onValueChanged: (value) {
-        //         setState(() => _selectedIndex = value);
-        //         _pageController.animateToPage(
-        //           value,
-        //           duration: const Duration(milliseconds: 300),
-        //           curve: Curves.easeOut,
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // ),
-      // ),
-      body: PageView(
-        controller: _pageController,
-        physics: const BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() => _selectedIndex = index);
-        },
-        children: [_buildBatchsGrid(), const StudentExams()],
+        ],
       ),
+      body: _buildBatchsGrid(),
     );
   }
 
@@ -144,7 +99,7 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
                       child: EditUnitCard(
                         title: batch.name,
                         image: batch.batchImage,
-                         onDelete: () async {
+                        onDelete: () async {
                           final confirm = await showModalBottomSheet<bool>(
                             context: context,
                             shape: const RoundedRectangleBorder(
@@ -213,12 +168,11 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
                           }
                         },
                         onEdit: () {
-                          // showModalBottomSheet(
-                          //   context: context,
-                          //   isScrollControlled: true,
-                          //   showDragHandle: true,
-                          //   builder: (context) => EditBatch(batch: batch),
-                          // );
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => EditBatch(),
+                          );
                         },
                         onTap: () {
                           // Navigate to lessons page

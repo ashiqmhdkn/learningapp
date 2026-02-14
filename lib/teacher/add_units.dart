@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/providers/unit_provider.dart';
+import 'package:learningapp/utils/image_preview.dart';
 
 class AddUnit extends ConsumerStatefulWidget {
   const AddUnit({super.key});
@@ -12,10 +14,10 @@ class AddUnit extends ConsumerStatefulWidget {
 }
 
 class _AddUnitState extends ConsumerState<AddUnit> {
-  String? unitImage;
+  String unitImage = "";
   final TextEditingController _titleController = TextEditingController();
   bool _isUploading = false;
-
+  final double _aspectRatio = 1;
   @override
   void dispose() {
     _titleController.dispose();
@@ -26,9 +28,19 @@ class _AddUnitState extends ConsumerState<AddUnit> {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        unitImage = result.files.single.path!;
-      });
+      final String pickedImagePath = result.files.single.path!;
+
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+        aspectRatio: _aspectRatio,
+      );
+
+      if (croppedImagePath != null) {
+        setState(() {
+          unitImage = croppedImagePath;
+        });
+      }
     }
   }
 
@@ -72,7 +84,7 @@ class _AddUnitState extends ConsumerState<AddUnit> {
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,51 +115,14 @@ class _AddUnitState extends ConsumerState<AddUnit> {
               const Text("Image"),
               const SizedBox(height: 8),
 
-              if (unitImage == null)
-                GestureDetector(
-                  onTap: _pickFile,
-                  child: Container(
-                    height: 160,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: const Center(child: Text("Tap to select image")),
-                  ),
-                )
-              else
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        File(unitImage!),
-                        height: 160,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: GestureDetector(
-                        onTap: () => setState(() {
-                          unitImage = null;
-                        }),
-                        child: const CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.red,
-                          child: Icon(
-                            Icons.close,
-                            size: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+              Center(
+                child: AspectRatioImageField(
+                  imagePath: unitImage!,
+                  aspectRatio: _aspectRatio,
+                  onPick: _pickFile,
+                  onRemove: () => setState(() => unitImage = ""),
                 ),
+              ),
 
               const SizedBox(height: 20),
 

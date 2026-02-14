@@ -6,6 +6,7 @@ import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/course_model.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
+import 'package:learningapp/utils/image_preview.dart';
 
 class EditCourse extends ConsumerStatefulWidget {
   final Course course;
@@ -22,7 +23,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   late TextEditingController _descriptionController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
-
+  final double _aspectRatio = 4 / 3;
   @override
   void initState() {
     super.initState();
@@ -43,6 +44,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
+        aspectRatio: _aspectRatio,
       );
 
       // If user completed cropping, use the cropped image
@@ -124,6 +126,16 @@ class _EditCourseState extends ConsumerState<EditCourse> {
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
                     onPressed: _isUploading ? null : _handleUpdate,
                     child: _isUploading
                         ? const SizedBox(
@@ -134,22 +146,39 @@ class _EditCourseState extends ConsumerState<EditCourse> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text("Update"),
+                        : const Text(
+                            "Update",
+                            style: TextStyle(color: Colors.white),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.tertiary,
+                      ),
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                    ),
                     onPressed: _isUploading
                         ? null
                         : () {
                             Navigator.pop(context);
                           },
-                    child: const Text("Cancel"),
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 10),
           ],
         ),
       ),
@@ -158,69 +187,52 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   Widget _buildImageWidget() {
     if (newCourseImage != null) {
-      return Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(newCourseImage!),
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: GestureDetector(
-              onTap: _removeImage,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(Icons.close, color: Colors.white, size: 20),
-              ),
-            ),
-          ),
-        ],
+      return Center(
+        child: AspectRatioImageField(
+          imagePath: newCourseImage!,
+          aspectRatio: _aspectRatio,
+          onPick: _pickFile,
+          onRemove: () => setState(() => newCourseImage = ""),
+        ),
       );
     }
 
     if (_keepExistingImage && widget.course.course_image.isNotEmpty) {
       return Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              widget.course.course_image,
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                  ),
-                  child: const Icon(Icons.error, size: 40),
-                );
-              },
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  height: 160,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.grey[300],
-                  ),
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              },
+          AspectRatio(
+            aspectRatio: _aspectRatio,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                widget.course.course_image,
+                height: 160,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                    ),
+                    child: const Icon(Icons.error, size: 40),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 160,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey[300],
+                    ),
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
             ),
           ),
           Positioned(
