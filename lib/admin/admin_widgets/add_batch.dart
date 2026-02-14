@@ -6,14 +6,14 @@ import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
 
-class AddCourse extends ConsumerStatefulWidget {
-  const AddCourse({super.key});
+class AddBatch extends ConsumerStatefulWidget {
+  const AddBatch({super.key});
 
   @override
-  ConsumerState<AddCourse> createState() => _AddCourseState();
+  ConsumerState<AddBatch> createState() => _AddBatchState();
 }
 
-class _AddCourseState extends ConsumerState<AddCourse> {
+class _AddBatchState extends ConsumerState<AddBatch> {
   String courseImage = "";
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -28,7 +28,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
-        aspectRatio: 4 / 3,
+        aspectRatio: 1 / 1,
       );
 
       if (croppedImagePath != null) {
@@ -89,7 +89,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
           children: [
             const Center(
               child: const Text(
-                "Course Upload",
+                "Add Batch",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -101,7 +101,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                hintText: "Enter Course name",
+                hintText: "Enter Batch name",
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -111,13 +111,13 @@ class _AddCourseState extends ConsumerState<AddCourse> {
 
             const SizedBox(height: 16),
 
-            const Text("Description"),
+            const Text("Duration"),
             const SizedBox(height: 6),
             TextField(
               controller: _descriptionController,
-              maxLines: 3,
+
               decoration: InputDecoration(
-                hintText: "Enter Course Description",
+                hintText: "Enter Course Duration",
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),

@@ -6,12 +6,14 @@ import 'package:path_provider/path_provider.dart';
 class ImageCropHelper {
   static Future<String?> cropImage(
     BuildContext context,
-    String imagePath,
-  ) async {
+    String imagePath, {
+    required double aspectRatio,
+  }) async {
     return Navigator.push<String>(
       context,
       MaterialPageRoute(
-        builder: (context) => ImageCropPage(imagePath: imagePath),
+        builder: (context) =>
+            ImageCropPage(imagePath: imagePath, aspectRatio: aspectRatio),
       ),
     );
   }
@@ -19,8 +21,12 @@ class ImageCropHelper {
 
 class ImageCropPage extends StatefulWidget {
   final String imagePath;
-
-  const ImageCropPage({super.key, required this.imagePath});
+  final double aspectRatio;
+  const ImageCropPage({
+    super.key,
+    required this.imagePath,
+    required this.aspectRatio,
+  });
 
   @override
   State<ImageCropPage> createState() => _ImageCropPageState();
@@ -33,8 +39,6 @@ class _ImageCropPageState extends State<ImageCropPage> {
   Size _containerSize = Size.zero;
   double _scale = 1.0;
   bool _isProcessing = false;
-
-  static const double aspectRatio = 4 / 3;
 
   @override
   void initState() {
@@ -60,8 +64,8 @@ class _ImageCropPageState extends State<ImageCropPage> {
   }
 
   double _getCropWidth() {
-    final maxWidthBasedCropHeight = _containerSize.width / aspectRatio;
-    final maxHeightBasedCropWidth = _containerSize.height * aspectRatio;
+    final maxWidthBasedCropHeight = _containerSize.width / widget.aspectRatio;
+    final maxHeightBasedCropWidth = _containerSize.height * widget.aspectRatio;
     if (maxWidthBasedCropHeight <= _containerSize.height) {
       return _containerSize.width;
     } else {
@@ -70,7 +74,7 @@ class _ImageCropPageState extends State<ImageCropPage> {
   }
 
   double _getCropHeight() {
-    return _getCropWidth() / aspectRatio;
+    return _getCropWidth() / widget.aspectRatio;
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -245,8 +249,8 @@ class _ImageCropPageState extends State<ImageCropPage> {
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.black87,
-            child: const Text(
-              'Drag the frame to select the area you want to crop (16:9 aspect ratio)',
+            child: Text(
+              'Drag the frame to select the area you want to crop (${widget.aspectRatio.toStringAsFixed(2)} ratio)',
               style: TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),

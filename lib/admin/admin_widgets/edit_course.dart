@@ -43,6 +43,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
+        aspectRatio: 4 / 3,
       );
 
       // If user completed cropping, use the cropped image
