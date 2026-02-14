@@ -6,6 +6,7 @@ import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/course_model.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
+import 'package:learningapp/utils/image_preview.dart';
 
 class EditCourse extends ConsumerStatefulWidget {
   final Course course;
@@ -46,6 +47,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
         aspectRatio: _aspectRatio,
       );
 
+      // If user completed cropping, use the cropped image
       if (croppedImagePath != null) {
         setState(() {
           newCourseImage = croppedImagePath;
@@ -159,40 +161,11 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   Widget _buildImageWidget() {
     if (newCourseImage != null) {
       return Center(
-        child: AspectRatio(
+        child: AspectRatioImageField(
+          imagePath: newCourseImage!,
           aspectRatio: _aspectRatio,
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.file(
-                  File(newCourseImage!),
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  onTap: () => _removeImage(),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          onPick: _pickFile,
+          onRemove: () => setState(() => newCourseImage = ""),
         ),
       );
     }

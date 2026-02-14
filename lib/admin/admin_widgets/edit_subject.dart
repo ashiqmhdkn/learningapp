@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/subject_model.dart';
 import 'package:learningapp/providers/subject_provider.dart';
+import 'package:learningapp/utils/image_preview.dart';
 
 class EditSubject extends ConsumerStatefulWidget {
   final Subject subject;
@@ -169,33 +170,13 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   Widget _buildImageWidget() {
     // If new image is selected, show it
     if (newSubjectImage != null) {
-      return Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(newSubjectImage!),
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: GestureDetector(
-              onTap: _removeImage,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Icon(Icons.close, color: Colors.white, size: 20),
-              ),
-            ),
-          ),
-        ],
+      return Center(
+        child: AspectRatioImageField(
+          imagePath: newSubjectImage!,
+          aspectRatio: _aspectRatio,
+          onPick: _pickFile,
+          onRemove: () => setState(() => newSubjectImage = ""),
+        ),
       );
     }
 
