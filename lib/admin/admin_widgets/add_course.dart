@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
+import 'package:learningapp/utils/image_preview.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
 
@@ -18,7 +18,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool _isUploading = false;
-
+  final double _aspectRatio = 4 / 3;
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -28,7 +28,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
-        aspectRatio: 4 / 3,
+        aspectRatio: _aspectRatio,
       );
 
       if (croppedImagePath != null) {
@@ -37,37 +37,6 @@ class _AddCourseState extends ConsumerState<AddCourse> {
         });
       }
     }
-  }
-
-  Widget _imagePreview() {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.file(
-            File(courseImage),
-            height: 160,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: GestureDetector(
-            onTap: () => setState(() => courseImage = ""),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.close, size: 18, color: Colors.white),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -82,7 +51,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(12, 12, 12, bottomInset + 12),
+      padding: EdgeInsets.fromLTRB(12, 0, 12, bottomInset + 12),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,31 +99,14 @@ class _AddCourseState extends ConsumerState<AddCourse> {
             const Text("File"),
             const SizedBox(height: 8),
 
-            courseImage.isEmpty
-                ? GestureDetector(
-                    onTap: _pickFile,
-                    child: Container(
-                      height: 160,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.cloud_upload_outlined, size: 40),
-                          SizedBox(height: 8),
-                          const Text("Select Image for the Course"),
-                          const Text(
-                            "or Browse",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : _imagePreview(),
+            Center(
+              child: AspectRatioImageField(
+                imagePath: courseImage,
+                aspectRatio: _aspectRatio,
+                onPick: _pickFile,
+                onRemove: () => setState(() => courseImage = ""),
+              ),
+            ),
 
             const SizedBox(height: 24),
 

@@ -22,7 +22,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   late TextEditingController _descriptionController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
-
+  final double _aspectRatio = 4 / 3;
   @override
   void initState() {
     super.initState();
@@ -43,10 +43,9 @@ class _EditCourseState extends ConsumerState<EditCourse> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
-        aspectRatio: 4 / 3,
+        aspectRatio: _aspectRatio,
       );
 
-      // If user completed cropping, use the cropped image
       if (croppedImagePath != null) {
         setState(() {
           newCourseImage = croppedImagePath;
@@ -159,33 +158,42 @@ class _EditCourseState extends ConsumerState<EditCourse> {
 
   Widget _buildImageWidget() {
     if (newCourseImage != null) {
-      return Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              File(newCourseImage!),
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: GestureDetector(
-              onTap: _removeImage,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(20),
+      return Center(
+        child: AspectRatio(
+          aspectRatio: _aspectRatio,
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.file(
+                  File(newCourseImage!),
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
                 ),
-                child: const Icon(Icons.close, color: Colors.white, size: 20),
               ),
-            ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: GestureDetector(
+                  onTap: () => _removeImage(),
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       );
     }
 

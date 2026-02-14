@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/subject_model.dart';
 import 'package:learningapp/providers/subject_provider.dart';
 
@@ -19,7 +20,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   late TextEditingController _titleController;
   bool _isUploading = false;
   bool _keepExistingImage = true; // Flag to track if we keep the network image
-
+  final double _aspectRatio = 4 / 3;
   @override
   void initState() {
     super.initState();
@@ -27,13 +28,24 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
     _titleController = TextEditingController(text: widget.subject.title);
   }
 
-  Future<void> _pickFile(BuildContext context) async {
+  Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
     if (result != null && result.files.single.path != null) {
-      setState(() {
-        newSubjectImage = result.files.single.path!;
-        _keepExistingImage = false; // New image selected, don't keep old one
-      });
+      final String pickedImagePath = result.files.single.path!;
+
+      final String? croppedImagePath = await ImageCropHelper.cropImage(
+        context,
+        pickedImagePath,
+        aspectRatio: _aspectRatio,
+      );
+
+      if (croppedImagePath != null) {
+        setState(() {
+          newSubjectImage = croppedImagePath;
+          _keepExistingImage = false;
+        });
+      }
     }
   }
 
@@ -194,7 +206,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-               widget.subject.subject_image,
+              widget.subject.subject_image,
               height: 160,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -242,7 +254,7 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
       );
     }
     return GestureDetector(
-      onTap: () => _pickFile(context),
+      onTap: () => _pickFile(),
       child: Container(
         height: 160,
         width: double.infinity,
@@ -264,18 +276,14 @@ class _EditSubjectState extends ConsumerState<EditSubject> {
   }
 
   Future<void> _handleUpdate() async {
-    if ( _titleController.text.isEmpty) {
-     ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(
-    content: const Text("Please fill all required fields."),
-    behavior: SnackBarBehavior.floating,
-    margin: const EdgeInsets.only(
-      top: 50,
-      left: 16,
-      right: 16,
-    ),
-  ),
-);
+    if (_titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Please fill all required fields."),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(top: 50, left: 16, right: 16),
+        ),
+      );
 
       return;
     }

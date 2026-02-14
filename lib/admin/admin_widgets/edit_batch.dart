@@ -18,7 +18,7 @@ class _EditBatchState extends ConsumerState<EditBatch> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   bool _isUploading = false;
-
+  final double _aspectRatio = 1 / 1;
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -28,7 +28,7 @@ class _EditBatchState extends ConsumerState<EditBatch> {
       final String? croppedImagePath = await ImageCropHelper.cropImage(
         context,
         pickedImagePath,
-        aspectRatio: 1 / 1,
+        aspectRatio: _aspectRatio,
       );
 
       if (croppedImagePath != null) {
@@ -40,33 +40,38 @@ class _EditBatchState extends ConsumerState<EditBatch> {
   }
 
   Widget _imagePreview() {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.file(
-            File(courseImage),
-            height: 160,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: GestureDetector(
-            onTap: () => setState(() => courseImage = ""),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
+    return Center(
+      child: AspectRatio(
+        aspectRatio: _aspectRatio,
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.file(
+                File(courseImage),
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
               ),
-              child: const Icon(Icons.close, size: 18, color: Colors.white),
             ),
-          ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () => setState(() => courseImage = ""),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.close, size: 18, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -89,7 +94,7 @@ class _EditBatchState extends ConsumerState<EditBatch> {
           children: [
             const Center(
               child: const Text(
-                "Add Batch",
+                "Edit Batch",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
