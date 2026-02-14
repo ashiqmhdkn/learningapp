@@ -36,15 +36,19 @@ class _BatchCourseViewState extends ConsumerState<BatchCourseview> {
                         title: course.title,
                         description: course.description,
                       ),
-                       OTap: () {
-                        Navigator.of(context).push(
-MaterialPageRoute(
-  builder: (context) => Adminbatch(
-    courseId: course.course_id!,
-    courseName: course.title,
-  ),
-));
-                       }
+OTap: () {
+  print("Tapped: ${course.course_id}");
+  
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (ctx) => Adminbatch(
+        courseId: course.course_id!,
+        courseName: course.title,
+      ),
+    ),
+  );
+},
+
                     ),
                   ),
                 ),
