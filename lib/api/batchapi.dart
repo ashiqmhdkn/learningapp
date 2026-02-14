@@ -53,7 +53,7 @@ const String baseUrl = 'https://api.crescentlearning.org/courses/batch';
     required String courseId
   }) async {
     try {
-        final uri = Uri.parse(baseUrl);
+        final uri = Uri.parse('$baseUrl?course_id=$courseId');
       final response = await http.get(
         uri,
         headers: _headers(token),
@@ -86,7 +86,7 @@ const String baseUrl = 'https://api.crescentlearning.org/courses/batch';
     String? imagePath,
   }) async {
     try {
-      var uri = Uri.parse(baseUrl);
+      var uri = Uri.parse('$baseUrl?batch_id=$batchId');
 
       var request = http.MultipartRequest("PUT", uri);
 
@@ -121,7 +121,7 @@ const String baseUrl = 'https://api.crescentlearning.org/courses/batch';
     required String batchId,
   }) async {
     try {
-      final uri = Uri.parse(baseUrl);
+      var uri = Uri.parse('$baseUrl?batch_id=$batchId');
 
       final response = await http.delete(
         uri,

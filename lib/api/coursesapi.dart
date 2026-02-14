@@ -85,7 +85,7 @@ Future<bool> coursesPut({
   required String courseId,
   required String title,
   required String description,
-  required String courseImage,
+  required String?courseImage,
 }) async {
   final uri = Uri.parse('$baseUrl/courses?course_id=$courseId');
   try {

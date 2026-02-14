@@ -49,7 +49,7 @@ class CoursesNotifier extends AsyncNotifier<List<Course>> {
     required String courseId,
     required String title,
     required String description,
-    required String courseImage,
+    required String?courseImage,
   }) async {
     final token = await ref.read(authTokenProvider.future);
 

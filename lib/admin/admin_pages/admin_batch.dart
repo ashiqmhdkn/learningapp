@@ -72,35 +72,35 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
               // );
             },
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: CustomSlidingSegmentedControl<int>(
-              initialValue: _selectedIndex,
-              children: const {0: Text("Batchs"), 1: Text("Exams")},
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.black12),
-              ),
-              thumbDecoration: BoxDecoration(
-                color: colorScheme.primary,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              onValueChanged: (value) {
-                setState(() => _selectedIndex = value);
-                _pageController.animateToPage(
-                  value,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                );
-              },
-            ),
-          ),
-        ),
-      ),
+        ],),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(60),
+        //   child: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        //     child: CustomSlidingSegmentedControl<int>(
+        //       initialValue: _selectedIndex,
+        //       children: const {0: Text("Batchs"), 1: Text("Exams")},
+        //       decoration: BoxDecoration(
+        //         color: colorScheme.surface,
+        //         borderRadius: BorderRadius.circular(15),
+        //         border: Border.all(color: Colors.black12),
+        //       ),
+        //       thumbDecoration: BoxDecoration(
+        //         color: colorScheme.primary,
+        //         borderRadius: BorderRadius.circular(15),
+        //       ),
+        //       onValueChanged: (value) {
+        //         setState(() => _selectedIndex = value);
+        //         _pageController.animateToPage(
+        //           value,
+        //           duration: const Duration(milliseconds: 300),
+        //           curve: Curves.easeOut,
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // ),
+      // ),
       body: PageView(
         controller: _pageController,
         physics: const BouncingScrollPhysics(),

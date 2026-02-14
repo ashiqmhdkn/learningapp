@@ -60,7 +60,6 @@ class Coursecard1 extends StatelessWidget {
       ),
       onTap: () {
         OTap();
-        // context.push('/units/Class 9/${subject.title}');
       },
     );
   }
