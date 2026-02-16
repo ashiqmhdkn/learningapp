@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:learningapp/providers/videoupload_provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:learningapp/controller/authcontroller.dart';
+import 'package:learningapp/providers/videoupload_provider.dart'; 
 
 class AddVideo extends ConsumerStatefulWidget {
   final String unitid;
@@ -18,24 +16,10 @@ class _AddVideoState extends ConsumerState<AddVideo> {
   File? videoFile;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  
   bool _isUploading = false;
   bool _isLoadingDuration = false;
-
-  // Get video duration in seconds
-  Future<int?> getVideoDurationInSeconds(File videoFile) async {
-    VideoPlayerController? controller;
-    try {
-      controller = VideoPlayerController.file(videoFile);
-      await controller.initialize();
-      final durationInSeconds = controller.value.duration.inSeconds;
-      return durationInSeconds;
-    } catch (e) {
-      print('Error getting video duration: $e');
-      return null;
-    } finally {
-      await controller?.dispose();
-    }
-  }
+  double _uploadProgress = 0.0; // Tracks 0.0 to 1.0
 
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.video);
@@ -43,15 +27,8 @@ class _AddVideoState extends ConsumerState<AddVideo> {
     if (result != null && result.files.single.path != null) {
       setState(() {
         videoFile = File(result.files.single.path!);
-        _isLoadingDuration = true;
+        _uploadProgress = 0.0;
       });
-
-      // Get video duration      
-      setState(() {
-        _isLoadingDuration = false;
-      });
-
-  
     }
   }
 
@@ -60,52 +37,43 @@ class _AddVideoState extends ConsumerState<AddVideo> {
         _titleController.text.isEmpty ||
         _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please fill all fields and select a video file."),
-        ),
+        const SnackBar(content: Text("Please fill all fields and select a video.")),
       );
       return;
     }
 
-
-    setState(() => _isUploading = true);
+    setState(() {
+      _isUploading = true;
+      _uploadProgress = 0.0;
+    });
 
     try {
-      // Get token
-      final token = await ref.read(authControllerProvider.notifier).getToken();
-      
-      if (token == null) {
-        throw Exception('Authentication token not found');
-      }
-
-      // Upload using repository
-      final repository = ref.read(videoServiceProvider);
-      final result = await repository.uploadVideo(
-        videoFile: videoFile!,
-        title: _titleController.text,
-        unitId: widget.unitid,
-        description: _descriptionController.text,
-      );
+  
+      final result = await ref.read(videosNotifierProvider.notifier).uploadVideo(
+            videoFile: videoFile!,
+            title: _titleController.text,
+            description: _descriptionController.text,
+            onProgress: (sent, total) {
+              setState(() {
+                _uploadProgress = sent / total;
+              });
+            },
+          );
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result ? "Video uploaded successfully" : "Failed to upload video",
-          ),
-          backgroundColor: result ? Colors.green : Colors.red,
-        ),
-      );
-
-      if (result) Navigator.pop(context);
+      if (result) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Video uploaded successfully"), backgroundColor: Colors.green),
+        );
+        Navigator.pop(context);
+      } else {
+        throw Exception("Upload returned false");
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Upload failed: $e"),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text("Upload failed: $e"), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -137,28 +105,22 @@ class _AddVideoState extends ConsumerState<AddVideo> {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
-             
             ],
           ),
         ),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: GestureDetector(
-            onTap: () => setState(() {
-              videoFile = null;
-            }),
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
+        if (!_isUploading) // Don't allow removing file while uploading
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: () => setState(() => videoFile = null),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                child: const Icon(Icons.close, size: 18, color: Colors.white),
               ),
-              child: const Icon(Icons.close, size: 18, color: Colors.white),
             ),
           ),
-        ),
       ],
     );
   }
@@ -186,46 +148,37 @@ class _AddVideoState extends ConsumerState<AddVideo> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-
             const SizedBox(height: 16),
-
             const Text("Name"),
             const SizedBox(height: 6),
             TextField(
               controller: _titleController,
+              enabled: !_isUploading,
               decoration: InputDecoration(
                 hintText: "Enter Video name",
                 filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
-
             const SizedBox(height: 16),
-
             const Text("Description"),
             const SizedBox(height: 6),
             TextField(
               controller: _descriptionController,
+              enabled: !_isUploading,
               maxLines: 3,
               decoration: InputDecoration(
                 hintText: "Enter Video Description",
                 filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
               ),
             ),
-
             const SizedBox(height: 16),
-
             const Text("Video File"),
             const SizedBox(height: 8),
-
             videoFile == null
                 ? GestureDetector(
-                    onTap: _isLoadingDuration ? null : _pickFile,
+                    onTap: _pickFile,
                     child: Container(
                       height: 160,
                       width: double.infinity,
@@ -233,87 +186,63 @@ class _AddVideoState extends ConsumerState<AddVideo> {
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.grey),
                       ),
-                      child: _isLoadingDuration
-                          ? const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(),
-                                SizedBox(height: 8),
-                                Text("Processing video..."),
-                              ],
-                            )
-                          : const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.video_library_outlined, size: 40),
-                                SizedBox(height: 8),
-                                Text("Select Video File"),
-                                Text(
-                                  "or Browse",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ],
-                            ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.video_library_outlined, size: 40),
+                          SizedBox(height: 8),
+                          Text("Select Video File"),
+                          Text("or Browse", style: TextStyle(color: Colors.blue)),
+                        ],
+                      ),
                     ),
                   )
                 : _videoPreview(),
+            
+            // --- PROGRESS SECTION ---
+            if (_isUploading) ...[
+              const SizedBox(height: 20),
+              LinearProgressIndicator(
+                value: _uploadProgress,
+                backgroundColor: Colors.grey[200],
+                minHeight: 8,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  "${(_uploadProgress * 100).toStringAsFixed(1)}% Uploaded",
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
 
             const SizedBox(height: 24),
-
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    onPressed: (_isUploading || _isLoadingDuration)
-                        ? null
-                        : _submit,
+                    onPressed: (_isUploading || _isLoadingDuration) ? null : _submit,
                     child: _isUploading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            "Upload",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                        ? const Text("Uploading...", style: TextStyle(color: Colors.white))
+                        : const Text("Upload", style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                        Theme.of(context).colorScheme.tertiary,
-                      ),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    onPressed: _isUploading
-                        ? null
-                        : () {
-                            Navigator.pop(context);
-                          },
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    onPressed: _isUploading ? null : () => Navigator.pop(context),
+                    child: const Text("Cancel", style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

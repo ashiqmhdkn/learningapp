@@ -34,27 +34,23 @@ class VideoService {
     return await videosGet(token, unitId);
   }
 
-  // Upload video (4 steps combined)
   Future<bool> uploadVideo({
     required File videoFile,
     required String unitId,
     required String title,
     required String description,
+    void Function(int sent, int total)? onProgress,
   }) async {
-    try {
-      final duration = await videoFile.lengthSync();
-      return await videoUpload(
-        token: token,
-        videoFile: videoFile,
-        duration: duration,
-        unit_id: unitId,
-        title: title,
-        description: description,
-      );
-    } catch (e) {
-      print('❌ Upload error: $e');
-      return false;
-    }
+    final duration = await getVideoDuration(videoFile) ?? 0;
+    return await videoUpload(
+      token: token,
+      videoFile: videoFile,
+      duration: duration,
+      unit_id: unitId,
+      title: title,
+      description: description,
+      onProgress: onProgress,
+    );
   }
 }
 
@@ -62,7 +58,6 @@ class VideoService {
 //   Future<bool> deleteVideo(String videoId) async {
 //     return await videoDelete(token: token, videoId: videoId);
 //   }
- 
 
 final videoServiceProvider = Provider<VideoService>((ref) {
   final token = ref.watch(authTokenProvider).value;
@@ -76,7 +71,7 @@ class VideoProvider extends AsyncNotifier<List<Video>> {
   @override
   Future<List<Video>> build() async {
     if (unitId.isEmpty) return [];
-    
+
     final service = ref.read(videoServiceProvider);
     return service.fetchVideos(unitId);
   }
@@ -90,7 +85,7 @@ class VideoProvider extends AsyncNotifier<List<Video>> {
   // Reload videos from server
   Future<void> refresh() async {
     if (unitId.isEmpty) return;
-    
+
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final service = ref.read(videoServiceProvider);
@@ -103,25 +98,26 @@ class VideoProvider extends AsyncNotifier<List<Video>> {
     required File videoFile,
     required String title,
     required String description,
+    void Function(int sent, int total)? onProgress, // 👈 Add this
   }) async {
     final service = ref.read(videoServiceProvider);
-    
     final success = await service.uploadVideo(
       videoFile: videoFile,
       unitId: unitId,
       title: title,
       description: description,
+      onProgress: onProgress, // 👈 Pass it down
     );
 
     if (success) await refresh();
     return success;
   }
-  }
+}
 
 //   // Delete video
 //   Future<bool> deleteVideo(String videoId) async {
 //     final service = ref.read(videoServiceProvider);
-    
+
 //     final success = await service.deleteVideo(videoId);
 
 //     if (success) await refresh();
@@ -130,6 +126,6 @@ class VideoProvider extends AsyncNotifier<List<Video>> {
 // }
 
 final videosNotifierProvider =
-    AsyncNotifierProvider<VideoProvider, List<Video>>(
-  () => VideoProvider(),
-);
+    AsyncNotifierProvider<VideoProvider, List<Video>>(() => VideoProvider());
+
+
