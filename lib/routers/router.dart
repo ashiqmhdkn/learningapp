@@ -77,13 +77,7 @@ final router = GoRouter(
         return UpdateProfilePage(user: user);
       },
     ),
-    GoRoute(
-      path: "/subjects/:courseName",
-      builder: (context, state) {
-        final courseName = state.pathParameters['courseName']!;
-        return Subjectspage(courseName: courseName);
-      },
-    ),
+   
     GoRoute(
       path: "/addunits",
       builder: (context, state) {

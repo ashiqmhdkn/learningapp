@@ -10,7 +10,6 @@ class QuestionModel {
   int marks;
   bool isRequired;
 
-  // MCQ
   List<TextEditingController> optionControllers;
   int? correctOptionIndex;
 

@@ -1,61 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/models/course_info_model.dart';
 import 'package:learningapp/pages/course_info_page.dart';
+import 'package:learningapp/pages/subjectsPage.dart';
+import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/widgets/course_card_new.dart';
-import 'package:learningapp/widgets/course_card_new1.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
-import 'package:learningapp/widgets/practiceTIle2.dart';
 
-class CourseSubjectPage extends StatelessWidget {
+class CourseSubjectPage extends ConsumerWidget {
   const CourseSubjectPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final coursesAsync = ref.watch(coursesNotifierProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: Customappbar(title: "Username"),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CourseCardNew1(
-              course: dummyCourse,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) {
-                      return CourseInfoPage(
-                        course: dummyCourse,
-                        onTap: () {
-                          context.push('/subjects/Class 9');
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+        child: coursesAsync.when(
+          data: (courses) {
+            if (courses.isEmpty) {
+              return const Center(child: Text("No Courses Available"));
+            }
 
-            CourseCard(
-              course: dummyCourse,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) {
-                      return CourseInfoPage(
-                        course: dummyCourse,
-                        onTap: () {
-                          context.push('/subjects/Class 12');
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+            return AnimationLimiter(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: courses.length,
+                itemBuilder: (context, index) {
+                  final course = courses[index];
+
+                  final courseInfo = CourseInfoModel(
+                    id: course.course_id!,
+                    title: course.title,
+                    subtitle: "Full Course",
+                    languageTag: "ENG",
+                    categoryTag: "COURSE",
+                    bannerImageUrl: course.course_image,
+                    educators: [],
+                    batchStartDate: DateTime.now(),
+                    enrollmentEndDate: DateTime.now(),
+                    about: CourseAbout(description: "", highlights: []),
+                    stats: CourseStats(liveClasses: 0, teachingLanguages: []),
+                    pricing: CoursePricing(
+                      price: 0,
+                      currency: "₹",
+                      isFree: true,
+                    ),
+                    isEnrolled: false,
+                  );
+
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    child: SlideAnimation(
+                      duration: const Duration(milliseconds: 400),
+                      child: FadeInAnimation(
+                        child: CourseCard(
+                          course: courseInfo,
+
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CourseInfoPage(
+                                  course: courseInfo,
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Subjectspage(
+                                          courseName: course.title,
+                                          courseId: course.course_id as String,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
         ),
       ),
     );

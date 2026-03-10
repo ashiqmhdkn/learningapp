@@ -14,11 +14,11 @@ Future<bool> videoUpload({
   required String title,
   required String unit_id,
   required String description,
+  void Function(int sent, int total)? onProgress,
 }) async {
   final uri = Uri.parse('$baseUrl/upload/video');
 
   try {
-    // Step 1: Get upload URL and video ID from your server
     final response = await http.post(
       uri,
       headers: {
@@ -30,39 +30,25 @@ Future<bool> videoUpload({
       },
       body: jsonEncode({
         "title": title,
-        "description":description,
-        "unit_id":unit_id,
+        "description": description,
+        "unit_id": unit_id,
       }),
     );
 
-    print('Get upload URL Status: ${response.statusCode}');
-    print('Response Body: ${response.body}');
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to get upload URL: ${response.body}');
-    }
+    if (response.statusCode != 200) throw Exception('Failed to get upload URL');
 
     final data = jsonDecode(response.body);
-
-    if (!data.containsKey('upload_url') || !data.containsKey('video_id')) {
-      throw Exception('upload_url or video_id missing in response');
-    }
-
     final uploadUrl = data['upload_url'];
-    final videoId = data['video_id'];
 
-    print('✅ Successfully received upload URL and video ID');
-
-    // Step 2: Upload video using TUSC (TUS protocol)
-   await uploadVideoTUSC(
+    await uploadVideoTUSC(
       uploadUrl: uploadUrl,
       videoFile: videoFile,
       token: token,
+      onProgress: onProgress, 
     );
+
     return true;
-    // Step 3: Update your database table
   } catch (e) {
-    print('❌ Error in video upload: $e');
     rethrow;
   }
 }
@@ -71,44 +57,22 @@ Future<void> uploadVideoTUSC({
   required String uploadUrl,
   required File videoFile,
   required String token,
+  void Function(int sent, int total)? onProgress,
 }) async {
-  try {
-    // Initialize TUSC client
-    final client = TusClient(
-      url:uploadUrl,
-      file:XFile(videoFile.path),
-        chunkSize: 20 * 1024 * 1024, // Use memory store for upload state
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
+  final client = TusClient(
+    url: uploadUrl,
+    file: XFile(videoFile.path),
+    chunkSize: 5 * 1024 * 1024, // 5MB chunks for smoother progress
+    headers: {'Authorization': 'Bearer $token'},
+  );
 
-    print('Starting TUS upload...');
-    
-    // Start upload with progress tracking
-    await  client.startUpload(
-      onProgress: (count, total, response) {
-        final percent = (count / total) * 100;
-        print('Upload Progress: ${percent.toStringAsFixed(2)}% ($count/$total)');
-      },
-      onComplete: (response) {
-        print('✅ Upload completed successfully!');
-        print('Stream URL: ${client.uploadUrl}');
-      },
-      onError: (error) {
-        print('❌ Upload failed: ${error.message}'
-      );
-        if (error.response != null) {
-          print('Server Response: ${error.response!.body}');
-        }
-        throw Exception('TUS upload failed: ${error.message}');
-      },
-    );
-    
-  } catch (e) {
-    print('❌ Upload failed: $e');
-    rethrow;
-  }
+  await client.startUpload(
+    onProgress: (count, total, response) {
+      if (onProgress != null) onProgress(count, total); // 👈 Trigger UI update
+    },
+    onComplete: (response) => print('Upload Complete'),
+    onError: (error) => throw Exception(error.message),
+  );
 }
 
 Future<List<Video>> videosGet(String token, String unit_id) async {
@@ -117,10 +81,7 @@ Future<List<Video>> videosGet(String token, String unit_id) async {
   try {
     final response = await http.get(
       uri,
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     print('Videos API Status: ${response.statusCode}');

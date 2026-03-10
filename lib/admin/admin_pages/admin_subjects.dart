@@ -25,7 +25,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
   @override
   void initState() {
     super.initState();
-    // Set courseId only once when widget is created
+
     Future.microtask(() {
       ref.read(subjectsNotifierProvider.notifier).setcourse_id(widget.courseid);
     });
@@ -65,7 +65,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjects> {
                     duration: const Duration(milliseconds: 400),
                     child: FadeInAnimation(
                       child: CourseTile(
-                        onDelete: () async {
+                        onDelete: () async { 
                           final confirm = await showModalBottomSheet<bool>(
                             context: context,
                             shape: const RoundedRectangleBorder(

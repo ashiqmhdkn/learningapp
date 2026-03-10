@@ -7,7 +7,7 @@ import 'package:chewie/chewie.dart';
 
 class Videoplayback extends StatefulWidget {
   final String url;
-  const Videoplayback({super.key,required this.url});
+  const Videoplayback({super.key, required this.url});
 
   @override
   State<Videoplayback> createState() => _VideoplaybackState();
@@ -22,9 +22,7 @@ class _VideoplaybackState extends State<Videoplayback> {
     super.initState();
 
     _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(
-        widget.url,
-      ),
+      Uri.parse(widget.url),
     );
     _videoPlayerController.initialize().then((_) {
       setState(() {});
@@ -61,7 +59,25 @@ class _VideoplaybackState extends State<Videoplayback> {
             if (_videoPlayerController.value.isInitialized)
               AspectRatio(
                 aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: Chewie(controller: _chewieController),
+                child: GestureDetector(
+                  onDoubleTapDown: (details) {
+                    final width = MediaQuery.of(context).size.width;
+                    final dx = details.localPosition.dx;
+
+                    if (dx < width / 2) {
+                      _videoPlayerController.seekTo(
+                        _videoPlayerController.value.position -
+                            const Duration(seconds: 10),
+                      );
+                    } else {
+                      _videoPlayerController.seekTo(
+                        _videoPlayerController.value.position +
+                            const Duration(seconds: 10),
+                      );
+                    }
+                  },
+                  child: Chewie(controller: _chewieController),
+                ),
               )
             else
               Container(
@@ -166,7 +182,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );
@@ -180,7 +196,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );
@@ -194,7 +210,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );
@@ -208,7 +224,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );
@@ -222,7 +238,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );
@@ -236,7 +252,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) {
-                                return Videoplayback(url: widget.url,);
+                                return Videoplayback(url: widget.url);
                               },
                             ),
                           );

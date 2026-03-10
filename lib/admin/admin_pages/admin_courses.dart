@@ -27,7 +27,7 @@ class AdminCourses extends ConsumerWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
             builder: (context) {
-              return const AddCourse(); // NO padding here
+              return const AddCourse(); 
             },
           );
         },

@@ -1,38 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learningapp/providers/subject_provider.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/practiceTIle2.dart';
 
-class Subjectspage extends StatelessWidget {
+class Subjectspage extends ConsumerStatefulWidget {
   final String courseName;
+  final String courseId;
 
-  const Subjectspage({super.key, required this.courseName});
+  const Subjectspage({
+    super.key,
+    required this.courseName,
+    required this.courseId,
+  });
+
+  @override
+  ConsumerState<Subjectspage> createState() => _SubjectspageState();
+}
+
+class _SubjectspageState extends ConsumerState<Subjectspage> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(subjectsNotifierProvider.notifier).setcourse_id(widget.courseId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> practiceList = [
-      {"title": "Maths", "image": 'lib/assets/maths.jpeg'},
-      {"title": "Physics", "image": 'lib/assets/physics.jpeg'},
-      {"title": "biology", "image": 'lib/assets/biology.jpeg'},
-      {"title": "Maths", "image": 'lib/assets/maths.jpeg'},
-    ];
-    return Scaffold(
-      appBar: Customappbar(title: courseName),
-      body: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: practiceList.length,
-        itemBuilder: (context, index) {
-          final item = practiceList[index];
+    final subjectsState = ref.watch(subjectsNotifierProvider);
 
-          return PracticeTile2(
-            title: item["title"]!,
-            backGroundImage: item["image"]!,
-            onTap: () {
-              context.push('/chapters/${item['title']}');
-            },
+    return Scaffold(
+      appBar: Customappbar(title: widget.courseName),
+
+      body: subjectsState.when(
+        data: (subjects) {
+          if (subjects.isEmpty) {
+            return const Center(child: Text("No Subjects Available"));
+          }
+
+          return AnimationLimiter(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: subjects.length,
+              itemBuilder: (context, index) {
+                final subject = subjects[index];
+
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  child: SlideAnimation(
+                    duration: const Duration(milliseconds: 400),
+                    child: FadeInAnimation(
+                      child: PracticeTile2(
+                        title: subject.title,
+                        backGroundImage: subject.subject_image,
+                        onTap: () {
+                          context.push(
+                            '/chapters/${subject.title}',
+                            extra: subject.subject_id,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           );
         },
+
+        loading: () => const Center(child: CircularProgressIndicator()),
+
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }

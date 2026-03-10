@@ -14,7 +14,7 @@ class CourseInfoPage extends StatelessWidget {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        body: Stack(
+        body: Stack( 
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 90),

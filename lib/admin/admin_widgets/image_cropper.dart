@@ -35,9 +35,7 @@ class ImageCropPage extends StatefulWidget {
 class _ImageCropPageState extends State<ImageCropPage> {
   final GlobalKey _imageKey = GlobalKey();
   Offset _cropPosition = Offset.zero;
-  Size _imageSize = Size.zero;
   Size _containerSize = Size.zero;
-  double _scale = 1.0;
   bool _isProcessing = false;
 
   @override
