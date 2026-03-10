@@ -26,7 +26,7 @@ class PracticeTile2 extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(backGroundImage, fit: BoxFit.fill),
+                Image.network(backGroundImage, fit: BoxFit.fill),
                 Positioned(
                   bottom: 0,
                   left: 0,
