@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:learningapp/models/course_info_model.dart';
 import 'package:learningapp/pages/course_info_page.dart';
 import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/widgets/course_card_new.dart';
+import 'package:learningapp/widgets/course_card_new1.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 
 class CourseSubjectPage extends ConsumerWidget {
@@ -59,7 +59,7 @@ class CourseSubjectPage extends ConsumerWidget {
                     child: SlideAnimation(
                       duration: const Duration(milliseconds: 400),
                       child: FadeInAnimation(
-                        child: CourseCard(
+                        child: CourseCardNew1(
                           course: courseInfo,
 
                           onTap: () {
