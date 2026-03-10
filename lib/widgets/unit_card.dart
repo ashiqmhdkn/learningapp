@@ -14,22 +14,33 @@ class LessonCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: Theme.of(
+              context,
+            ).colorScheme.tertiary.withValues(alpha: 0.50),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Stack(
             children: [
-              Expanded(child: Image.asset(lesson.thumbnail, fit: BoxFit.fill)),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  lesson.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+              Positioned.fill(
+                child: Image.asset(lesson.thumbnail, fit: BoxFit.fill),
+              ),
+
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  color: Colors.black.withValues(alpha: 0.2),
+                  child: Text(
+                    lesson.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
