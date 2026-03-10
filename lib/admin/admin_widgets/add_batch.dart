@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
+import 'package:learningapp/providers/batch_provider.dart';
 import 'package:learningapp/utils/image_preview.dart';
 import 'package:learningapp/providers/courses_provider.dart';
 import 'package:learningapp/utils/app_snackbar.dart';
@@ -137,11 +138,11 @@ class _AddBatchState extends ConsumerState<AddBatch> {
                               });
 
                               final result = await ref
-                                  .read(coursesNotifierProvider.notifier)
-                                  .createCourse(
+                                  .read(batchsNotifierProvider.notifier)
+                                  .createBatch(
                                     title: _titleController.text,
-                                    courseImage: courseImage,
-                                    description: _descriptionController.text,
+                                    batchImage: courseImage,
+                                    duration: _descriptionController.text,
                                   );
 
                               setState(() {
