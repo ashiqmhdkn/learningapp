@@ -50,7 +50,6 @@ class _SubjectspageState extends ConsumerState<Subjectspage> {
               itemCount: subjects.length,
               itemBuilder: (context, index) {
                 final subject = subjects[index];
-
                 return AnimationConfiguration.staggeredList(
                   position: index,
                   child: SlideAnimation(

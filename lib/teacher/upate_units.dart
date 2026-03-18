@@ -109,7 +109,10 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [_buildUnitsGrid(), const StudentExams()],
+        children: [
+          _buildUnitsGrid(),
+          const StudentExams(unitId: ''),
+        ],
       ),
     );
   }
@@ -146,7 +149,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                       child: EditUnitCard(
                         title: unit.title,
                         image: unit.unit_image,
-                         onDelete: () async {
+                        onDelete: () async {
                           final confirm = await showModalBottomSheet<bool>(
                             context: context,
                             shape: const RoundedRectangleBorder(
@@ -223,8 +226,10 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                           );
                         },
                         onTap: () {
-                          // Navigate to lessons page
-                          context.push('/adminunits/${unit.title}',extra: unit.unit_id);
+                          context.push(
+                            '/adminunits/${unit.title}',
+                            extra: unit.unit_id,
+                          );
                         },
                       ),
                     ),

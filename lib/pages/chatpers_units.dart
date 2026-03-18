@@ -1,28 +1,23 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/pages/student_exams.dart';
+import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/widgets/unit_card.dart';
 
-final List<Lesson> lessons = List.generate(
-  16,
-  (index) => Lesson(
-    title: 'Linear Algebra',
-    part: 'Part ${index + 1}',
-    thumbnail: 'lib/assets/physics.jpeg',
-  ),
-);
-
-class ChatpersUnits extends StatefulWidget {
+class ChatpersUnits extends ConsumerStatefulWidget {
   final String name;
-  const ChatpersUnits({super.key, required this.name});
+  final String subjectId;
+
+  const ChatpersUnits({super.key, required this.name, required this.subjectId});
 
   @override
-  State<ChatpersUnits> createState() => _ChatpersUnitsState();
+  ConsumerState<ChatpersUnits> createState() => _ChatpersUnitsState();
 }
 
-class _ChatpersUnitsState extends State<ChatpersUnits> {
+class _ChatpersUnitsState extends ConsumerState<ChatpersUnits> {
   int _selectedIndex = 0;
   late final PageController _pageController;
 
@@ -30,6 +25,11 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+
+    // same as admin — load units based on subject
+    Future.microtask(() {
+      ref.read(unitsNotifierProvider.notifier).setsubject_id(widget.subjectId);
+    });
   }
 
   @override
@@ -59,9 +59,7 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
               decoration: BoxDecoration(
                 color: colorScheme.surface,
                 borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
+                border: Border.all(color: colorScheme.tertiary),
               ),
               thumbDecoration: BoxDecoration(
                 color: colorScheme.primary,
@@ -85,42 +83,88 @@ class _ChatpersUnitsState extends State<ChatpersUnits> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [_unitsGrid(context), StudentExams()],
+        children: [
+          _unitsGrid(context),
+          const StudentExams(unitId: ''),
+        ],
       ),
     );
   }
 
   Widget _unitsGrid(BuildContext context) {
+    final unitsAsync = ref.watch(unitsNotifierProvider);
+
     return Padding(
       padding: const EdgeInsets.all(12),
-      child: AnimationLimiter(
-        child: GridView.builder(
-          physics: const BouncingScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1,
-          ),
-          itemCount: lessons.length,
-          itemBuilder: (context, index) {
-            return AnimationConfiguration.staggeredGrid(
-              position: index,
-              columnCount: 2,
-              duration: const Duration(milliseconds: 500),
-              child: SlideAnimation(
-                verticalOffset: 50,
-                child: FadeInAnimation(
-                  child: LessonCard(
-                    lesson: lessons[index],
-                    onTap: () {
-                      context.push('/units/${lessons[index].title}');
-                    },
-                  ),
-                ),
+      child: unitsAsync.when(
+        data: (units) {
+          if (units.isEmpty) {
+            return const Center(child: Text('No units available'));
+          }
+
+          return AnimationLimiter(
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1,
               ),
-            );
-          },
+              itemCount: units.length,
+              itemBuilder: (context, index) {
+                final unit = units[index];
+
+                return AnimationConfiguration.staggeredGrid(
+                  position: index,
+                  columnCount: 2,
+                  duration: const Duration(milliseconds: 500),
+                  child: SlideAnimation(
+                    verticalOffset: 50,
+                    child: FadeInAnimation(
+                      child: LessonCard(
+                        lesson: Lesson(
+                          title: unit.title,
+                          part: '',
+                          thumbnail: unit.unit_image,
+                        ),
+                        onTap: () {
+                          context.push(
+                            '/units/${unit.title}',
+                            extra: unit.unit_id,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+
+        loading: () => const Center(child: CircularProgressIndicator()),
+
+        error: (error, stack) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                'Error: $error',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.red),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(unitsNotifierProvider);
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
       ),
     );

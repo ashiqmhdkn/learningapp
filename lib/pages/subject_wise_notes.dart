@@ -5,7 +5,8 @@ import 'package:learningapp/widgets/videoSelectionCard.dart';
 
 class SubjectWiseNotes extends StatelessWidget {
   final String unitName;
-  const SubjectWiseNotes({super.key, required this.unitName});
+  final String unitId;
+  const SubjectWiseNotes({super.key, required this.unitName, required this.unitId});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class SubjectWiseNotes extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(url:"hi"),
+                            builder: (_) => const Videoplayback(url:"hi",title: "",description: "",),
                           ),
                         );
                       },

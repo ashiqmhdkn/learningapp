@@ -51,7 +51,7 @@ class _AdminSubjectsState extends ConsumerState<AdminSubjectVideos>{
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (_) =>  Videoplayback(url: video.video_url,),
+                              builder: (_) =>  Videoplayback(url: video.video_url,title: "",description: "",),
                             ),
                           );
                         },

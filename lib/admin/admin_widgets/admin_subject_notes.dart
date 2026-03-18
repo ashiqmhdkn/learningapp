@@ -40,7 +40,7 @@ class AdminSubjectNotes extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(url:""),
+                            builder: (_) => const Videoplayback(url:"",title: "",description: "",),
                           ),
                         );
                       },

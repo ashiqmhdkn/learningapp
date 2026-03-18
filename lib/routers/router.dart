@@ -58,15 +58,16 @@ final router = GoRouter(
       path: "/units/:unitname",
       builder: (context, state) {
         final unitname = state.pathParameters['unitname']!;
-        return Unitspage(unitName: unitname);
+        final unitId = state.extra as String;
+        return Unitspage(unitName: unitname, unitId: unitId);
       },
     ),
     GoRoute(
       path: "/adminunits/:unitname",
       builder: (context, state) {
         final unitname = state.pathParameters['unitname']!;
-        final unitId=state.extra as String;
-        return AdminVide0NotesExam(unitName: unitname,unitId: unitId,);
+        final unitId = state.extra as String;
+        return AdminVide0NotesExam(unitName: unitname, unitId: unitId);
       },
     ),
 
@@ -77,7 +78,7 @@ final router = GoRouter(
         return UpdateProfilePage(user: user);
       },
     ),
-   
+
     GoRoute(
       path: "/addunits",
       builder: (context, state) {
@@ -88,7 +89,8 @@ final router = GoRouter(
       path: "/chapters/:name",
       builder: (context, state) {
         final name = state.pathParameters['name']!;
-        return ChatpersUnits(name: name);
+        final subjectId = state.extra as String;
+        return ChatpersUnits(name: name, subjectId: subjectId);
       },
     ),
     GoRoute(

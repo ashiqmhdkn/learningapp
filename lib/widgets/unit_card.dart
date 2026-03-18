@@ -22,7 +22,7 @@ class LessonCard extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(
-                child: Image.asset(lesson.thumbnail, fit: BoxFit.fill),
+                child: Image.network(lesson.thumbnail, fit: BoxFit.fill),
               ),
 
               Positioned(

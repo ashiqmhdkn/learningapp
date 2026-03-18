@@ -3,7 +3,8 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/widgets/exam_list_tile.dart';
 
 class StudentExams extends StatelessWidget {
-  const StudentExams({super.key});
+  final String unitId;
+  const StudentExams({super.key, required this.unitId});
 
   @override
   Widget build(BuildContext context) {
