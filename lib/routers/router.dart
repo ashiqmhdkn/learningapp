@@ -1,17 +1,16 @@
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_navbar.dart';
 import 'package:learningapp/admin/admin_pages/admin_vide0_notes_exam.dart';
+import 'package:learningapp/login/new_login_page.dart';
+import 'package:learningapp/login/new_register_page.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_student_individual.dart';
 import 'package:learningapp/mentor/mentorPages/mentor_video_access.dart';
 import 'package:learningapp/mentor/mentorPages/new_batch_creation.dart';
 import 'package:learningapp/mentor/mentorWidgets/mentor_nav_bar.dart';
 import 'package:learningapp/models/user_model.dart';
 import 'package:learningapp/pages/chatpers_units.dart';
-import 'package:learningapp/pages/login_page.dart';
 import 'package:learningapp/pages/profilePage.dart';
-import 'package:learningapp/pages/register_page.dart';
 import 'package:learningapp/pages/splash.dart';
-import 'package:learningapp/pages/subjectsPage.dart';
 import 'package:learningapp/pages/unitsPage.dart';
 import 'package:learningapp/pages/update_profile_page.dart';
 import 'package:learningapp/teacher/upate_units.dart';
@@ -33,8 +32,11 @@ final router = GoRouter(
     ),
 
     /// UNITS PAGE
-    GoRoute(path: "/login", builder: (context, state) => LoginPage()),
-    GoRoute(path: "/register", builder: (context, state) => const Register()),
+    GoRoute(path: "/login", builder: (context, state) => const NewLoginPage()),
+    GoRoute(
+      path: "/register",
+      builder: (context, state) => const NewRegisterPage(),
+    ),
     GoRoute(path: "/adminnav", builder: (context, state) => const Adminnav()),
     GoRoute(path: "/test", builder: (context, state) => const Test()),
 

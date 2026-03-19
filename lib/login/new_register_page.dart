@@ -7,15 +7,15 @@ import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
-class Register extends ConsumerStatefulWidget {
-  const Register({super.key});
+class NewRegisterPage extends ConsumerStatefulWidget {
+  const NewRegisterPage({super.key});
 
   @override
-  ConsumerState<Register> createState() => _RegisterState();
+  ConsumerState<NewRegisterPage> createState() => _RegisterState();
 }
 
-class _RegisterState extends ConsumerState<Register> {
-  final TextEditingController _emailcontroller = TextEditingController();
+class _RegisterState extends ConsumerState<NewRegisterPage> {
+  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -29,7 +29,7 @@ class _RegisterState extends ConsumerState<Register> {
 
   @override
   void dispose() {
-    _emailcontroller.dispose();
+    _phoneNumberController.dispose();
     _namecontroller.dispose();
     _passwordcontroller.dispose();
     _confirmPasswordController.dispose();
@@ -91,9 +91,9 @@ class _RegisterState extends ConsumerState<Register> {
               const SizedBox(height: 15),
 
               Customtextbox(
-                hinttext: 'Email',
-                textController: _emailcontroller,
-                textFieldIcon: Icons.alternate_email_rounded,
+                hinttext: 'Phone number',
+                textController: _phoneNumberController,
+                textFieldIcon: Icons.phone,
               ),
 
               const SizedBox(height: 15),
@@ -102,6 +102,7 @@ class _RegisterState extends ConsumerState<Register> {
                 obscureText: _obscurePassword,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.black),
                   hintText: "Password",
                   prefixIcon: const Icon(
                     Icons.lock_outline_rounded,
@@ -134,6 +135,7 @@ class _RegisterState extends ConsumerState<Register> {
                 obscureText: _obscureConfirmPassword,
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.black),
                   hintText: "Confirm Password",
                   prefixIcon: const Icon(
                     Icons.lock_reset_rounded,
@@ -164,20 +166,19 @@ class _RegisterState extends ConsumerState<Register> {
 
               Custombuttonone(
                 text: 'Sign Up',
-                onTap: () async 
-                {
-                  if(_emailcontroller.text.isEmpty){
-                       ScaffoldMessenger.of(context).showSnackBar(
+                onTap: () async {
+                  if (_phoneNumberController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("email field free")),
                     );
                     return;
-                    }
-                  if(_namecontroller.text.isEmpty){
-                       ScaffoldMessenger.of(context).showSnackBar(
+                  }
+                  if (_namecontroller.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("name field free")),
                     );
                     return;
-                    }
+                  }
                   if (_selectedRole == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Please select a role")),
@@ -198,12 +199,14 @@ class _RegisterState extends ConsumerState<Register> {
                       _passwordcontroller.text,
                       "y6SsdIR",
                     );
-                    await ref.read(authControllerProvider.notifier)
-                    .register(
-                    email: _emailcontroller.text, 
-                    name: _namecontroller.text,
-                    role:_selectedRole!,
-                    password: hashedPassword,);
+                    await ref
+                        .read(authControllerProvider.notifier)
+                        .register(
+                          email: _phoneNumberController.text,
+                          name: _namecontroller.text,
+                          role: _selectedRole!,
+                          password: hashedPassword,
+                        );
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Registration successful')),

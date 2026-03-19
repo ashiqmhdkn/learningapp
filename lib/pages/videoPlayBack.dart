@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
+import 'package:better_player/better_player.dart';
 import 'package:learningapp/models/comment_model.dart';
 import 'package:learningapp/widgets/comment.dart';
 
@@ -21,38 +20,41 @@ class Videoplayback extends StatefulWidget {
 }
 
 class _VideoplaybackState extends State<Videoplayback> {
-  late VideoPlayerController _videoPlayerController;
-  ChewieController? _chewieController;
+  BetterPlayerController? _betterPlayerController;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(widget.url),
+    _initializePlayer();
+  }
+
+  void _initializePlayer() {
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.network,
+      widget.url,
+      liveStream: false,
+      useAsmsTracks: true, 
     );
 
-    _videoPlayerController.initialize().then((_) {
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
+    _betterPlayerController = BetterPlayerController(
+      BetterPlayerConfiguration(
         autoPlay: true,
         looping: false,
-        showControls: true,
-        materialProgressColors: ChewieProgressColors(
-          playedColor: Colors.red,
-          handleColor: Colors.red,
-          bufferedColor: Colors.grey,
-          backgroundColor: Colors.white24,
+        aspectRatio: 16 / 9,
+        fit: BoxFit.contain,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          enableQualities: true, 
+          enablePlaybackSpeed: true,
+          enableSubtitles: true,
         ),
-      );
-
-      setState(() {});
-    });
+      ),
+      betterPlayerDataSource: dataSource,
+    );
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController?.dispose();
+    _betterPlayerController?.dispose();
     super.dispose();
   }
 
@@ -65,13 +67,9 @@ class _VideoplaybackState extends State<Videoplayback> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AspectRatio(
-              aspectRatio: _videoPlayerController.value.isInitialized
-                  ? _videoPlayerController.value.aspectRatio
-                  : 16 / 9,
-              child:
-                  _chewieController != null &&
-                      _videoPlayerController.value.isInitialized
-                  ? Chewie(controller: _chewieController!)
+              aspectRatio: 16 / 9,
+              child: _betterPlayerController != null
+                  ? BetterPlayer(controller: _betterPlayerController!)
                   : const Center(child: CircularProgressIndicator()),
             ),
 
@@ -84,12 +82,13 @@ class _VideoplaybackState extends State<Videoplayback> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Theme(
-                  data: Theme.of(
-                    context,
-                  ).copyWith(dividerColor: Colors.transparent),
+                  data: Theme.of(context)
+                      .copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    tilePadding:
+                        const EdgeInsets.symmetric(horizontal: 16),
+                    childrenPadding:
+                        const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     title: Text(
                       widget.title,
                       style: const TextStyle(
@@ -138,7 +137,7 @@ class _VideoplaybackState extends State<Videoplayback> {
                       ),
                     ],
                     onSend: (text) {
-                      print("New comment: $text");
+                      debugPrint("New comment: $text");
                     },
                   );
                 },

@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  better_player: ^0.0.84
   chewie: ^1.7.5
   crop_your_image: ^2.0.0
   cross_file: ^0.3.5+2
