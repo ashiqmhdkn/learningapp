@@ -24,7 +24,7 @@ class EditUnitCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary,
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -34,29 +34,31 @@ class EditUnitCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.network(image, fit: BoxFit.fill),
                     ),
-
-                    // Edit & Delete buttons
                     Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.green),
-                            onPressed: onEdit,
-                            splashRadius: 20,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: onDelete,
-                            splashRadius: 20,
-                          ),
-                        ],
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildActionButton(icon: Icons.edit, onTap: onEdit),
+                            Container(
+                              height: 24,
+                              width: 1,
+                              color: Colors.white.withOpacity(0.5),
+                            ),
+                            _buildActionButton(
+                              icon: Icons.delete,
+                              onTap: onDelete,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -77,6 +79,19 @@ class EditUnitCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Icon(icon, size: 20, color: Colors.white),
       ),
     );
   }

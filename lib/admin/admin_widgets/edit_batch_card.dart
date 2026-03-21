@@ -15,7 +15,7 @@ class EditBatchCard extends StatelessWidget {
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
-    required this.onGenerate
+    required this.onGenerate,
   });
 
   @override
@@ -36,10 +36,7 @@ class EditBatchCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.network(image, fit: BoxFit.fill),
                     ),
 
                     // Edit & Delete buttons
@@ -49,7 +46,10 @@ class EditBatchCard extends StatelessWidget {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.green),
+                            icon: Icon(
+                              Icons.edit,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                             onPressed: onEdit,
                             splashRadius: 20,
                           ),
@@ -58,8 +58,11 @@ class EditBatchCard extends StatelessWidget {
                             onPressed: onDelete,
                             splashRadius: 20,
                           ),
-                           IconButton(
-                            icon: const Icon(Icons.sports_handball, color: Colors.blue),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.sports_handball,
+                              color: Colors.blue,
+                            ),
                             onPressed: onGenerate,
                             splashRadius: 20,
                           ),

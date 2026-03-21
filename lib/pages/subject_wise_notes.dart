@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
+import 'package:learningapp/widgets/notes_card.dart';
 import 'package:learningapp/widgets/videoSelectionCard.dart';
 
 class SubjectWiseNotes extends StatelessWidget {
   final String unitName;
   final String unitId;
-  const SubjectWiseNotes({super.key, required this.unitName, required this.unitId});
+  const SubjectWiseNotes({
+    super.key,
+    required this.unitName,
+    required this.unitId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +39,17 @@ class SubjectWiseNotes extends StatelessWidget {
                 child: SlideAnimation(
                   duration: const Duration(milliseconds: 400),
                   child: FadeInAnimation(
-                    child: Videoselectioncard(
+                    child: NotesCard(
                       title: video["title"]!,
                       subtitle: video["subtitle"]!,
-                      imagelocation: video["image"]!,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(url:"hi",title: "",description: "",),
+                            builder: (_) => const Videoplayback(
+                              url: "hi",
+                              title: "",
+                              description: "",
+                            ),
                           ),
                         );
                       },

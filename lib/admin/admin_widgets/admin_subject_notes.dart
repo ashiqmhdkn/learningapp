@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:learningapp/admin/admin_widgets/admin_subject_notes_card.dart';
 import 'package:learningapp/pages/videoPlayBack.dart';
 import 'package:learningapp/widgets/videoSelectionCard.dart';
 
@@ -33,17 +34,22 @@ class AdminSubjectNotes extends StatelessWidget {
                 child: SlideAnimation(
                   duration: const Duration(milliseconds: 400),
                   child: FadeInAnimation(
-                    child: Videoselectioncard(
+                    child: AdminSubjectNotesCard(
                       title: video["title"]!,
                       subtitle: video["subtitle"]!,
-                      imagelocation: video["image"]!,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const Videoplayback(url:"",title: "",description: "",),
+                            builder: (_) => const Videoplayback(
+                              url: "",
+                              title: "",
+                              description: "",
+                            ),
                           ),
                         );
                       },
+                      onDelete: () {},
+                      onEdit: () {},
                     ),
                   ),
                 ),

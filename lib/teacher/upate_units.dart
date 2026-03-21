@@ -7,7 +7,7 @@ import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
 import 'package:learningapp/teacher/editUnit.dart';
-import 'package:learningapp/widgets/edit_unit_card.dart';
+import 'package:learningapp/admin/admin_widgets/edit_unit_card.dart';
 
 class Chatpersteachers extends ConsumerStatefulWidget {
   final String subjectId;

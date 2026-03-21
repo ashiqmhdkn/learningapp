@@ -94,11 +94,11 @@ class _UnitspageState extends State<Unitspage> {
             unitId: widget.unitId, 
           ),
           StudentExams(
-            unitId: widget.unitId, // ⚠️ update this class if not present
+            unitId: widget.unitId, 
           ),
           SubjectWiseNotes(
             unitName: widget.unitName,
-            unitId: widget.unitId, // ✅ pass ID
+            unitId: widget.unitId, 
           ),
         ],
       ),

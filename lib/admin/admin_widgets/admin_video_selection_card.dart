@@ -45,7 +45,7 @@ class AdminVideoSelectionCard extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(imagelocation, fit: BoxFit.cover),
+                        child: Image.network(imagelocation, fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -84,13 +84,16 @@ class AdminVideoSelectionCard extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: onEdit,
-                    icon: Icon(Icons.edit),
-                    iconSize: 15,
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    iconSize: 20,
                   ),
 
                   IconButton(
-                    onPressed: onEdit,
-                    icon: Icon(Icons.delete, color: Colors.red, size: 15),
+                    onPressed: onDelete,
+                    icon: Icon(Icons.delete, color: Colors.red, size: 20),
                   ),
                 ],
               ),
