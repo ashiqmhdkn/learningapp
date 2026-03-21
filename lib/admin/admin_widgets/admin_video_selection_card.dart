@@ -112,7 +112,7 @@ class AdminVideoSelectionCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
         child: Icon(icon, size: 20, color: Colors.white),
       ),
     );

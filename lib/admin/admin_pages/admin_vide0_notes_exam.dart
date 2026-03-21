@@ -3,12 +3,17 @@ import 'package:custom_sliding_segmented_control/custom_sliding_segmented_contro
 import 'package:learningapp/admin/admin_widgets/admin_subject_exams.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_notes.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_videos.dart';
+import 'package:learningapp/admin/admin_widgets/bottomsheets/add_Notes.dart';
 import 'package:learningapp/teacher/addVideo.dart';
 
 class AdminVide0NotesExam extends StatefulWidget {
   final String unitName;
   final String unitId;
-  const AdminVide0NotesExam({super.key, required this.unitName,required this.unitId});
+  const AdminVide0NotesExam({
+    super.key,
+    required this.unitName,
+    required this.unitId,
+  });
 
   @override
   State<AdminVide0NotesExam> createState() => _AdminVide0NotesExamState();
@@ -79,20 +84,7 @@ class _AdminVide0NotesExamState extends State<AdminVide0NotesExam> {
         ),
         actions: [
           ElevatedButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) {
-                  return AddVideo(unitid: widget.unitId,); // NO padding here
-                },
-              );
-            },
+            onPressed: _openBottomSheet,
 
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(
@@ -116,11 +108,42 @@ class _AdminVide0NotesExamState extends State<AdminVide0NotesExam> {
           });
         },
         children: [
-          AdminSubjectVideos(unitName: widget.unitName,unit_id:widget.unitId),
+          AdminSubjectVideos(unitName: widget.unitName, unit_id: widget.unitId),
           AdminSubjectExams(),
           AdminSubjectNotes(unitName: widget.unitName),
         ],
       ),
+    );
+  }
+
+  void _openBottomSheet() {
+    Widget sheet;
+    switch (_selectedIndex) {
+      case 0:
+        sheet = AddVideo(unitid: widget.unitId);
+        break;
+
+      case 1:
+        sheet = const Center(child: Text("Add Exam UI here"));
+        break;
+
+      case 2:
+        sheet = AddNotes(unitId: widget.unitId);
+        break;
+
+      default:
+        sheet = const SizedBox();
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => sheet,
     );
   }
 }
