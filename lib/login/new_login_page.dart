@@ -30,6 +30,7 @@ class _LoginPageState extends ConsumerState<NewLoginPage> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: const Text(
           "Login",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
