@@ -7,7 +7,7 @@ import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/unit_provider.dart';
 import 'package:learningapp/teacher/add_units.dart';
 import 'package:learningapp/teacher/editUnit.dart';
-import 'package:learningapp/widgets/edit_unit_card.dart';
+import 'package:learningapp/admin/admin_widgets/edit_unit_card.dart';
 
 class Chatpersteachers extends ConsumerStatefulWidget {
   final String subjectId;
@@ -109,7 +109,10 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
         onPageChanged: (index) {
           setState(() => _selectedIndex = index);
         },
-        children: [_buildUnitsGrid(), const StudentExams()],
+        children: [
+          _buildUnitsGrid(),
+          const StudentExams(unitId: ''),
+        ],
       ),
     );
   }
@@ -146,7 +149,7 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                       child: EditUnitCard(
                         title: unit.title,
                         image: unit.unit_image,
-                         onDelete: () async {
+                        onDelete: () async {
                           final confirm = await showModalBottomSheet<bool>(
                             context: context,
                             shape: const RoundedRectangleBorder(
@@ -223,8 +226,10 @@ class _ChatpersteachersState extends ConsumerState<Chatpersteachers> {
                           );
                         },
                         onTap: () {
-                          // Navigate to lessons page
-                          context.push('/adminunits/${unit.title}',extra: unit.unit_id);
+                          context.push(
+                            '/adminunits/${unit.title}',
+                            extra: unit.unit_id,
+                          );
                         },
                       ),
                     ),

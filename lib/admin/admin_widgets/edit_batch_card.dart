@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-class EditUnitCard extends StatelessWidget {
+class EditBatchCard extends StatelessWidget {
   final String title;
   final String image;
   final VoidCallback onTap;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback onGenerate;
 
-  const EditUnitCard({
+  const EditBatchCard({
     super.key,
     required this.title,
     required this.image,
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
+    required this.onGenerate,
   });
 
   @override
@@ -34,10 +36,7 @@ class EditUnitCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: Image.network(
-                        image,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.network(image, fit: BoxFit.fill),
                     ),
 
                     // Edit & Delete buttons
@@ -47,13 +46,24 @@ class EditUnitCard extends StatelessWidget {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.green),
+                            icon: Icon(
+                              Icons.edit,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                             onPressed: onEdit,
                             splashRadius: 20,
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: onDelete,
+                            splashRadius: 20,
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.sports_handball,
+                              color: Colors.blue,
+                            ),
+                            onPressed: onGenerate,
                             splashRadius: 20,
                           ),
                         ],

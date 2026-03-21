@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Videoplayback(url: "widget.url,");
+                          return Videoplayback(url: "widget.url,",title: "",description: "",);
                         },
                       ),
                     );
@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Videoplayback(url: "widget.url,");
+                          return Videoplayback(url: "widget.url,",title: "",description: "",);
                         },
                       ),
                     );
@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (ctx) {
-                          return Videoplayback(url: "widget.url,");
+                          return Videoplayback(url: "widget.url,",title: "",description: "",);
                         },
                       ),
                     );

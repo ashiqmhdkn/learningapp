@@ -18,7 +18,6 @@ class CourseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -33,25 +32,25 @@ class CourseTile extends StatelessWidget {
               children: [
                 Image.network(backGroundImage, fit: BoxFit.cover),
                 Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildCircleButton(
-                        context,
-                        icon: Icons.edit,
-                        color: Theme.of(context).colorScheme.primary,
-                        onTap: onEdit,
-                      ),
-                      const SizedBox(width: 8),
-                      _buildCircleButton(
-                        context,
-                        icon: Icons.delete_outline,
-                        color: Colors.red,
-                        onTap: onDelete,
-                      ),
-                    ],
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildActionButton(icon: Icons.edit, onTap: onEdit),
+                        Container(
+                          height: 24,
+                          width: 1,
+                          color: Colors.white.withOpacity(0.5),
+                        ),
+                        _buildActionButton(icon: Icons.delete, onTap: onDelete),
+                      ],
+                    ),
                   ),
                 ),
                 Positioned(
@@ -83,21 +82,15 @@ class CourseTile extends StatelessWidget {
     );
   }
 
-  Widget _buildCircleButton(
-    BuildContext context, {
+  Widget _buildActionButton({
     required IconData icon,
-    required Color color,
     required VoidCallback onTap,
   }) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.35),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(icon, size: 20, color: color),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Icon(icon, size: 20, color: Colors.white),
       ),
     );
   }

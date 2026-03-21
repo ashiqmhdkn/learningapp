@@ -5,9 +5,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_widgets/add_batch.dart';
 import 'package:learningapp/admin/admin_widgets/edit_batch.dart';
+import 'package:learningapp/admin/admin_widgets/edit_batch_card.dart';
 import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/batch_provider.dart';
-import 'package:learningapp/widgets/edit_unit_card.dart';
+import 'package:learningapp/providers/request_provider.dart';
+import 'package:learningapp/admin/admin_widgets/edit_unit_card.dart';
 
 class Adminbatch extends ConsumerStatefulWidget {
   final String courseId;
@@ -96,9 +98,14 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
                   child: SlideAnimation(
                     verticalOffset: 50,
                     child: FadeInAnimation(
-                      child: EditUnitCard(
+                      child: EditBatchCard(
                         title: batch.name,
                         image: batch.batchImage,
+                        onGenerate: () async{
+                          ref.read(batchCodeProvider.notifier).setBatchId(batch.batchId);
+                          final code = await ref.read(batchCodeProvider.notifier).generateCode();   
+                          print(code);
+                        },
                         onDelete: () async {
                           final confirm = await showModalBottomSheet<bool>(
                             context: context,

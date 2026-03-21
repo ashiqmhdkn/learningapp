@@ -309,7 +309,7 @@ class _EditCourseState extends ConsumerState<EditCourse> {
           courseId: widget.course.course_id!,
           title: _titleController.text,
           courseImage:
-              newCourseImage , // null if keeping existing image
+              newCourseImage , 
           description: _descriptionController.text,
         );
 

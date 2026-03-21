@@ -14,7 +14,7 @@ class Customtextbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: TextStyle(color: Colors.black),
+      style: TextStyle(color: Colors.black), 
       controller: textController,
       decoration: InputDecoration(
         prefixIcon: Icon(
