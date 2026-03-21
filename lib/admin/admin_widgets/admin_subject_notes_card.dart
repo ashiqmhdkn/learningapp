@@ -69,28 +69,42 @@ class AdminSubjectNotesCard extends StatelessWidget {
             ),
 
             Positioned(
-              top: 4,
-              right: 4,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: onEdit,
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.secondary,
+              top: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildActionButton(icon: Icons.edit, onTap: onEdit),
+                    Container(
+                      height: 24,
+                      width: 1,
+                      color: Colors.white.withOpacity(0.5),
                     ),
-                    iconSize: 20,
-                  ),
-
-                  IconButton(
-                    onPressed: onDelete,
-                    icon: Icon(Icons.delete, color: Colors.red, size: 20),
-                  ),
-                ],
+                    _buildActionButton(icon: Icons.delete, onTap: onDelete),
+                  ],
+                ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Icon(icon, size: 20, color: Colors.white),
       ),
     );
   }
