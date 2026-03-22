@@ -5,6 +5,7 @@ import 'package:learningapp/admin/admin_widgets/admin_subject_notes.dart';
 import 'package:learningapp/admin/admin_widgets/admin_subject_videos.dart';
 import 'package:learningapp/admin/admin_widgets/bottomsheets/add_Notes.dart';
 import 'package:learningapp/teacher/addVideo.dart';
+import 'package:learningapp/teacher/quiz/quiz_creation.dart';
 
 class AdminVide0NotesExam extends StatefulWidget {
   final String unitName;
@@ -117,14 +118,18 @@ class _AdminVide0NotesExamState extends State<AdminVide0NotesExam> {
   }
 
   void _openBottomSheet() {
+    if (_selectedIndex == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => QuizCreation(unitId: widget.unitId)),
+      );
+      return;
+    }
     Widget sheet;
+
     switch (_selectedIndex) {
       case 0:
         sheet = AddVideo(unitid: widget.unitId);
-        break;
-
-      case 1:
-        sheet = const Center(child: Text("Add Exam UI here"));
         break;
 
       case 2:

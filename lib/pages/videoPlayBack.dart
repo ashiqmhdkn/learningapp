@@ -33,7 +33,7 @@ class _VideoplaybackState extends State<Videoplayback> {
       BetterPlayerDataSourceType.network,
       widget.url,
       liveStream: false,
-      useAsmsTracks: true, 
+      useAsmsTracks: true,
     );
 
     _betterPlayerController = BetterPlayerController(
@@ -43,9 +43,12 @@ class _VideoplaybackState extends State<Videoplayback> {
         aspectRatio: 16 / 9,
         fit: BoxFit.contain,
         controlsConfiguration: const BetterPlayerControlsConfiguration(
-          enableQualities: true, 
+          enableQualities: true,
           enablePlaybackSpeed: true,
-          enableSubtitles: true,
+          enableSubtitles: false,
+          playIcon: Icons.play_arrow,
+          pauseIcon: Icons.pause_rounded,
+          enableAudioTracks: false,
         ),
       ),
       betterPlayerDataSource: dataSource,
@@ -82,13 +85,12 @@ class _VideoplaybackState extends State<Videoplayback> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                  data: Theme.of(
+                    context,
+                  ).copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
-                    tilePadding:
-                        const EdgeInsets.symmetric(horizontal: 16),
-                    childrenPadding:
-                        const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                    childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                     title: Text(
                       widget.title,
                       style: const TextStyle(

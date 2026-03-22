@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:learningapp/admin/admin_widgets/image_cropper.dart';
 import 'package:learningapp/models/quiz_model.dart';
 import 'package:learningapp/teacher/quiz/question_typesheet.dart';
 import 'package:learningapp/teacher/quiz/quiz_review_page.dart';
@@ -9,7 +12,8 @@ import 'package:learningapp/widgets/customButtonOne.dart';
 import 'package:learningapp/widgets/customTextBox.dart';
 
 class QuizCreation extends StatefulWidget {
-  const QuizCreation({super.key});
+  final String unitId;
+  const QuizCreation({super.key, required this.unitId});
 
   @override
   State<QuizCreation> createState() => _QuizCreationState();
@@ -21,31 +25,17 @@ class _QuizCreationState extends State<QuizCreation> {
 
   final List<QuestionModel> _questions = [];
 
-  void _openEditor(QuestionModel q, int index) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) {
-        if (q.type == QuestionType.multipleChoice) {
-          return MCQQuestionEditorSheet(
-            question: q,
-            onUpdate: () => setState(() {}),
-            onDelete: () {
-              Navigator.pop(context);
-              setState(() => _questions.removeAt(index));
-            },
-          );
-        }
-        return TextQuestionEditorSheet(
-          question: q,
-          onUpdate: () => setState(() {}),
-          onDelete: () {
-            Navigator.pop(context);
-            setState(() => _questions.removeAt(index));
-          },
-        );
-      },
+  void _openEditor(QuestionModel q, int index) async {
+    final updatedQuestion = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => QuestionEditorPage(question: q)),
     );
+
+    if (updatedQuestion != null) {
+      setState(() {
+        _questions[index] = updatedQuestion;
+      });
+    }
   }
 
   @override
@@ -88,26 +78,34 @@ class _QuizCreationState extends State<QuizCreation> {
 
               Custombuttonone(
                 text: "Add New",
-                onTap: () {
-                  showModalBottomSheet(
+                onTap: () async {
+                  final type = await showModalBottomSheet<QuestionType>(
                     context: context,
                     builder: (_) => QuestionTypeSheet(
                       onSelect: (type) {
-                        Navigator.pop(context);
-                        setState(() {
-                          _questions.add(
-                            QuestionModel(
-                              type: type,
-                              options: type == QuestionType.multipleChoice
-                                  ? ['']
-                                  : [],
-                              correctOptionIndex: 0,
-                            ),
-                          );
-                        });
+                        Navigator.pop(context, type);
                       },
                     ),
                   );
+
+                  if (type == null) return;
+
+                  final newQuestion = QuestionModel(
+                    type: type,
+                    options: type == QuestionType.multipleChoice ? [''] : [],
+                    correctOptionIndexes: [],
+                  );
+
+                  final created = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => QuestionEditorPage(question: newQuestion),
+                    ),
+                  );
+
+                  if (created != null) {
+                    setState(() => _questions.add(created));
+                  }
                 },
               ),
               const SizedBox(height: 10),
@@ -185,9 +183,22 @@ class TextQuestionCard extends StatelessWidget {
                   style: const TextStyle(color: Colors.grey),
                 ),
               const SizedBox(height: 8),
+              if (question.imagePath != null) ...[
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    File(question.imagePath!),
+                    height: 120,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
               Text(
                 question.type == QuestionType.multipleChoice
-                    ? "${question.optionControllers.length} options"
+                    ? "${question.correctOptionIndexes.length} correct / ${question.optionControllers.length} options"
                     : "Answer: ${question.answer.isEmpty ? "Not specified" : question.answer}",
                 style: const TextStyle(color: Colors.redAccent),
               ),
@@ -220,39 +231,110 @@ class TextQuestionCard extends StatelessWidget {
   }
 }
 
-class TextQuestionEditorSheet extends StatelessWidget {
+class QuestionEditorPage extends StatefulWidget {
   final QuestionModel question;
-  final VoidCallback onUpdate;
-  final VoidCallback onDelete;
 
-  const TextQuestionEditorSheet({
-    super.key,
-    required this.question,
-    required this.onUpdate,
-    required this.onDelete,
-  });
+  const QuestionEditorPage({super.key, required this.question});
+
+  @override
+  State<QuestionEditorPage> createState() => _QuestionEditorPageState();
+}
+
+class _QuestionEditorPageState extends State<QuestionEditorPage> {
+  late QuestionModel question;
+
+  @override
+  void initState() {
+    super.initState();
+    question = widget.question;
+  }
+
+  void _save() {
+    if (question.title.isEmpty && question.imagePath == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Add text or image")));
+      return;
+    }
+    if (question.type == QuestionType.multipleChoice &&
+        question.correctOptionIndexes.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Select at least one correct option")),
+      );
+      return;
+    }
+
+    Navigator.pop(context, question);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BaseEditor(
-      title: "Edit Question",
-      onDelete: onDelete,
-      children: [
-        (s) => field("Title", question.title, (v) {
-          question.title = v;
-          onUpdate();
-        }),
-        (s) => field("Description", question.description, (v) {
-          question.description = v;
-          onUpdate();
-        }),
-        (s) => field("Answer", question.answer, (v) {
-          question.answer = v;
-          onUpdate();
-        }),
-        (s) => marks(question, onUpdate),
-        (s) => required(question, onUpdate, s),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Question"),
+        actions: [IconButton(icon: const Icon(Icons.check), onPressed: _save)],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            field("Title", question.title, (v) {
+              setState(() => question.title = v);
+            }),
+
+            field("Description", question.description, (v) {
+              setState(() => question.description = v);
+            }),
+
+            buildImageSection(
+              context,
+              question,
+              () => setState(() {}),
+              (fn) => setState(fn),
+            ),
+
+            const SizedBox(height: 10),
+
+            if (question.type == QuestionType.multipleChoice)
+              buildMCQEditor(
+                question: question,
+                onUpdate: () => setState(() {}),
+                setSheetState: (fn) => setState(fn),
+              )
+            else
+              field("Answer", question.answer, (v) {
+                setState(() => question.answer = v);
+              }),
+
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "Marks",
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (v) {
+                      question.marks = int.tryParse(v) ?? 0;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const Text("Required"),
+                Switch(
+                  value: question.isRequired,
+                  onChanged: (v) {
+                    setState(() => question.isRequired = v);
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -273,44 +355,6 @@ Widget required(
   );
 }
 
-class MCQQuestionEditorSheet extends StatelessWidget {
-  final QuestionModel question;
-  final VoidCallback onUpdate;
-  final VoidCallback onDelete;
-
-  const MCQQuestionEditorSheet({
-    super.key,
-    required this.question,
-    required this.onUpdate,
-    required this.onDelete,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BaseEditor(
-      title: "Edit Multiple Choice",
-      onDelete: onDelete,
-      children: [
-        (s) => field("Title", question.title, (v) {
-          question.title = v;
-          onUpdate();
-        }),
-        (s) => field("Description", question.description, (v) {
-          question.description = v;
-          onUpdate();
-        }),
-        (s) => buildMCQEditor(
-          question: question,
-          onUpdate: onUpdate,
-          setSheetState: s,
-        ),
-        (s) => marks(question, onUpdate),
-        (s) => required(question, onUpdate, s),
-      ],
-    );
-  }
-}
-
 Widget buildMCQEditor({
   required QuestionModel question,
   required VoidCallback onUpdate,
@@ -319,24 +363,30 @@ Widget buildMCQEditor({
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text("Options (Remember to Select one)"),
+      const Text("Options (Select one or more)"),
       const SizedBox(height: 10),
+
       ...List.generate(
         question.optionControllers.length,
         (i) => Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Row(
             children: [
-              Radio<int>(
-                value: i,
-                groupValue: question.correctOptionIndex,
+              Checkbox(
+                value: question.correctOptionIndexes.contains(i),
                 onChanged: (v) {
                   setSheetState(() {
-                    question.correctOptionIndex = v;
+                    if (v == true &&
+                        !question.correctOptionIndexes.contains(i)) {
+                      question.correctOptionIndexes.add(i);
+                    } else {
+                      question.correctOptionIndexes.remove(i);
+                    }
                   });
                   onUpdate();
                 },
               ),
+
               Expanded(
                 child: TextField(
                   controller: question.optionControllers[i],
@@ -348,14 +398,19 @@ Widget buildMCQEditor({
                   ),
                 ),
               ),
+
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
                   setSheetState(() {
                     question.optionControllers.removeAt(i);
-                    if (question.correctOptionIndex == i) {
-                      question.correctOptionIndex = null;
-                    }
+
+                    // ⚠️ adjust indexes after deletion
+                    question.correctOptionIndexes = question
+                        .correctOptionIndexes
+                        .where((index) => index != i)
+                        .map((index) => index > i ? index - 1 : index)
+                        .toList();
                   });
                   onUpdate();
                 },
@@ -364,6 +419,7 @@ Widget buildMCQEditor({
           ),
         ),
       ),
+
       TextButton.icon(
         icon: const Icon(Icons.add),
         label: const Text("Add option"),
@@ -378,65 +434,99 @@ Widget buildMCQEditor({
   );
 }
 
-class BaseEditor extends StatelessWidget {
-  final String title;
-  final List<Widget Function(void Function(void Function()))> children;
+Future<void> pickAndCropImage(
+  BuildContext context,
+  QuestionModel question,
+  void Function(void Function()) setSheetState,
+  VoidCallback onUpdate,
+) async {
+  final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-  final VoidCallback onDelete;
+  if (result != null && result.files.single.path != null) {
+    final pickedPath = result.files.single.path!;
 
-  const BaseEditor({
-    super.key,
-    required this.title,
-    required this.children,
-    required this.onDelete,
-  });
+    final croppedPath = await ImageCropHelper.cropImage(
+      context,
+      pickedPath,
+      aspectRatio: 4 / 3,
+    );
 
-  @override
-  Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (context, setSheetState) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    if (croppedPath != null) {
+      setSheetState(() {
+        question.imagePath = croppedPath;
+      });
+      onUpdate();
+    }
+  }
+}
+
+Widget buildImageSection(
+  BuildContext context,
+  QuestionModel question,
+  VoidCallback onUpdate,
+  void Function(void Function()) setSheetState,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 12),
+      const Text("Question Image"),
+
+      const SizedBox(height: 8),
+
+      if (question.imagePath == null)
+        GestureDetector(
+          onTap: () =>
+              pickAndCropImage(context, question, setSheetState, onUpdate),
+          child: Container(
+            height: 120,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey),
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ...children.map((builder) => builder(setSheetState)),
-
-                TextButton.icon(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  label: const Text(
-                    "Delete",
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  onPressed: onDelete,
-                ),
-                Center(
-                  child: Custombuttonone(
-                    text: "Save",
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
+                Icon(Icons.add_photo_alternate, size: 40),
+                SizedBox(height: 8),
+                Text("Add Image"),
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        )
+      else
+        Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.file(
+                File(question.imagePath!),
+                height: 140,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () {
+                  setSheetState(() {
+                    question.imagePath = null;
+                  });
+                  onUpdate();
+                },
+                child: const CircleAvatar(
+                  radius: 12,
+                  backgroundColor: Colors.red,
+                  child: Icon(Icons.close, size: 16, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      SizedBox(height: 10),
+    ],
+  );
 }
