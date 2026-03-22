@@ -200,7 +200,7 @@ class _MentorLandingPageState extends State<MentorLandingPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (ctx) {
-                        return QuizCreation();
+                        return QuizCreation(unitId: "");
                       },
                     ),
                   );

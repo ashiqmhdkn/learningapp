@@ -31,8 +31,8 @@ class Videoselectioncard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                 child: Container(
-                  height: 70,
-                  width: 120,
+                  height: 80,
+                  width: 130,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.green,

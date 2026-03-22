@@ -38,8 +38,6 @@ class EditBatchCard extends StatelessWidget {
                     Positioned.fill(
                       child: Image.network(image, fit: BoxFit.fill),
                     ),
-
-                    // Edit & Delete buttons
                     Positioned(
                       top: 8,
                       right: 8,

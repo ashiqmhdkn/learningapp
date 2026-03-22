@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:learningapp/models/quiz_model.dart';
 import 'package:learningapp/widgets/customBoldText.dart';
@@ -50,7 +52,23 @@ class QuizReviewPage extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    if (q.description.isNotEmpty) Text(q.description),
+                    if (q.description.isNotEmpty) ...[
+                      Text(q.description),
+                      const SizedBox(height: 8),
+                    ],
+
+                    if (q.imagePath != null) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.file(
+                          File(q.imagePath!),
+                          width: double.infinity,
+                          height: 180,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                     const SizedBox(height: 8),
 
                     if (q.type == QuestionType.multipleChoice)
@@ -79,10 +97,11 @@ class QuizReviewPage extends StatelessWidget {
   Widget _buildMCQPreview(QuestionModel q) {
     return Column(
       children: List.generate(q.optionControllers.length, (i) {
-        bool isCorrect = q.correctOptionIndex == i;
+        bool isCorrect = q.correctOptionIndexes.contains(i);
+
         return Container(
-          margin: const EdgeInsets.symmetric(vertical: 2),
-          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: isCorrect
                 ? Colors.green.withOpacity(0.1)
@@ -95,16 +114,17 @@ class QuizReviewPage extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                isCorrect ? Icons.check_circle : Icons.circle_outlined,
+                isCorrect ? Icons.check_box : Icons.check_box_outline_blank,
                 color: isCorrect ? Colors.green : Colors.grey,
                 size: 20,
               ),
               const SizedBox(width: 10),
-              Text(q.optionControllers[i].text),
-              if (isCorrect) const Spacer(),
+
+              Expanded(child: Text(q.optionControllers[i].text)),
+
               if (isCorrect)
                 const Text(
-                  "Correct Answer",
+                  "Correct",
                   style: TextStyle(color: Colors.green, fontSize: 12),
                 ),
             ],
@@ -127,9 +147,10 @@ class QuizReviewPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Answer ",
+            "Answer",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
+          const SizedBox(height: 4),
           Text(q.answer.isEmpty ? "No answer provided." : q.answer),
         ],
       ),

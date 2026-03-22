@@ -27,7 +27,6 @@ class _EditCourseState extends ConsumerState<EditCourse> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing course data
     _titleController = TextEditingController(text: widget.course.title);
     _descriptionController = TextEditingController(
       text: widget.course.description,
@@ -115,13 +114,9 @@ class _EditCourseState extends ConsumerState<EditCourse> {
             const SizedBox(height: 16),
             const Text("Image"),
             const SizedBox(height: 8),
-
-            // Image display logic
             _buildImageWidget(),
 
             const SizedBox(height: 12),
-
-            // Buttons
             Row(
               children: [
                 Expanded(
