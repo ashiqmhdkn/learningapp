@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
+import 'package:flutter/material.dart';
 import 'package:learningapp/models/comment_model.dart';
 import 'package:learningapp/widgets/comment.dart';
 

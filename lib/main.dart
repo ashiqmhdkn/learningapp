@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/routers/router.dart';
 import 'package:learningapp/state/themeState.dart';
-void main(){
-   runApp(const ProviderScope(child: MyApp()));
+
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -20,4 +21,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
- 

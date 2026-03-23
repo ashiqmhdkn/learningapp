@@ -1,5 +1,6 @@
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,7 @@ import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/batch_provider.dart';
 import 'package:learningapp/providers/request_provider.dart';
 import 'package:learningapp/admin/admin_widgets/edit_unit_card.dart';
+import 'package:learningapp/widgets/customButtonOne.dart';
 
 class Adminbatch extends ConsumerStatefulWidget {
   final String courseId;
@@ -101,10 +103,92 @@ class _AdminbatchState extends ConsumerState<Adminbatch> {
                       child: EditBatchCard(
                         title: batch.name,
                         image: batch.batchImage,
-                        onGenerate: () async{
-                          ref.read(batchCodeProvider.notifier).setBatchId(batch.batchId);
-                          final code = await ref.read(batchCodeProvider.notifier).generateCode();   
-                          print(code);
+                        onGenerate: () async {
+                          ref
+                              .read(batchCodeProvider.notifier)
+                              .setBatchId(batch.batchId);
+                          final code = await ref
+                              .read(batchCodeProvider.notifier)
+                              .generateCode();
+
+                          if (!context.mounted) return;
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                title: const Text(
+                                  "Referral Code",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SelectableText(
+                                      code ?? "No code generated",
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        letterSpacing: 2,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    ElevatedButton.icon(
+                                      style: ButtonStyle(
+                                        backgroundColor: WidgetStatePropertyAll(
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
+                                        ),
+                                        shape: WidgetStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              15,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        await Clipboard.setData(
+                                          ClipboardData(text: code.toString()),
+                                        );
+
+                                        Navigator.pop(context);
+
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              "Code copied to clipboard",
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.copy,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.tertiary,
+                                      ),
+                                      label: Text(
+                                        "Copy",
+                                        style: TextStyle(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.tertiary,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
                         },
                         onDelete: () async {
                           final confirm = await showModalBottomSheet<bool>(
