@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learningapp/admin/admin_widgets/batch_courseview.dart';
 import 'package:learningapp/admin/admin_widgets/paymentCountContainer.dart';
-import 'package:learningapp/controller/authcontroller.dart';
 import 'package:learningapp/widgets/customAppBar.dart';
 import 'package:learningapp/widgets/customBoldText.dart';
 class AdminDashboard extends ConsumerWidget {

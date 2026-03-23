@@ -1,15 +1,11 @@
-import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:learningapp/admin/admin_widgets/add_batch.dart';
 import 'package:learningapp/admin/admin_widgets/edit_batch.dart';
 import 'package:learningapp/admin/admin_widgets/edit_batch_card.dart';
-import 'package:learningapp/pages/student_exams.dart';
 import 'package:learningapp/providers/batch_provider.dart';
 import 'package:learningapp/providers/request_provider.dart';
-import 'package:learningapp/admin/admin_widgets/edit_unit_card.dart';
 
 class Adminbatch extends ConsumerStatefulWidget {
   final String courseId;
